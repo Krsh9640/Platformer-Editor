@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92da7ccc338d027428879043bbf52216, type: 3}
   m_Name: InvinciblePotion
   m_EditorClassIdentifier: 
-  category: 0
+  category: {fileID: 11400000, guid: 322e7c5fb35d1654a989b38c2997efee, type: 2}
   tileBase: {fileID: 0}
+  placeType: 0
