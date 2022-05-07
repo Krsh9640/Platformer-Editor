@@ -65,6 +65,16 @@ public class TilesCreator : Singleton<TilesCreator>
         }
     }
 
+    private Tilemap tilemap{
+        get{
+            if (selectedTile != null && selectedTile.Category != null && selectedTile.Category.Tilemap != null){
+                return selectedTile.Category.Tilemap;
+            }
+        
+            return defaultMap;
+        }
+    }
+
     private void Update(){
         pointerOverUI = !EventSystem.current.IsPointerOverGameObject(-1);
 
@@ -139,7 +149,7 @@ public class TilesCreator : Singleton<TilesCreator>
         if(selectedTile != null && pointerOverUI){
             switch (selectedTile.PlaceType){
                 case PlaceType.Rectangle:
-                    DrawBounds(defaultMap);
+                    DrawBounds(tilemap);
                     previewMap.ClearAllTiles();
                     break;
             }
@@ -167,6 +177,6 @@ public class TilesCreator : Singleton<TilesCreator>
     }
 
     private void DrawItem(){
-        defaultMap.SetTile (currentGridPosition, tileBase);
+        tilemap.SetTile (currentGridPosition, tileBase);
     }
 }

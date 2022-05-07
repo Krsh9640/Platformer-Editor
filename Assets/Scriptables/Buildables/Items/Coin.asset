@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92da7ccc338d027428879043bbf52216, type: 3}
   m_Name: Coin
   m_EditorClassIdentifier: 
-  category: 0
+  category: {fileID: 11400000, guid: 322e7c5fb35d1654a989b38c2997efee, type: 2}
   tileBase: {fileID: 11400000, guid: 40e6f00de8bda2b4980282a1ecef76dc, type: 2}
-  placetype: 0
+  placeType: 1

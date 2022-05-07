@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum Category{
-    Terrains,
-    Items,
-    Enemies,
-    Extras
-}
+// public enum Category{
+//     Terrains,
+//     Items,
+//     Enemies,
+//     Extras
+// }
 
-public enum PlaceType{
-    Single,
-    Rectangle
-}
+// public enum PlaceType{
+//     None,
+//     Single,
+//     Rectangle
+// }
 
 [CreateAssetMenu(fileName = "Buildable", menuName = "TilesObjects/Create Buildable")]
 public class TilesObject : ScriptableObject
 {
-    [SerializeField] Category category;
+    [SerializeField] TileCategory category;
     [SerializeField] TileBase tileBase;
-    [SerializeField] PlaceType placetype;
+    [SerializeField] PlaceType placeType;
 
     public TileBase TileBase{
         get{
@@ -30,11 +31,11 @@ public class TilesObject : ScriptableObject
 
     public PlaceType PlaceType{
         get{
-            return placetype;
+            return placeType == PlaceType.None ? category.PlaceType : placeType;
         }
     }
      
-    public Category Category{
+    public TileCategory Category{
         get{
             return category;
         }
