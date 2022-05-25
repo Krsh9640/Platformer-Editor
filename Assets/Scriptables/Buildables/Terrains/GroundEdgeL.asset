@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: GroundEdgeL
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 46830e01175aa524190ee82cb79ab212, type: 2}
-  tileBase: {fileID: 0}
+  tileBase: {fileID: 11400000, guid: d36adc3a1bb764a44957a255420a57bf, type: 2}
   placeType: 2

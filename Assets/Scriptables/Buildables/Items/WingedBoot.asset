@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: WingedBoot
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 322e7c5fb35d1654a989b38c2997efee, type: 2}
-  tileBase: {fileID: 0}
+  tileBase: {fileID: 11400000, guid: 0fa3876d9442b634fb1d8b736392591f, type: 2}
   placeType: 0
