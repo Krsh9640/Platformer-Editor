@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-// public enum Category{
-//     Terrains,
-//     Items,
-//     Enemies,
-//     Extras
-// }
+public enum Category{
+    Terrains,
+    Items,
+    Enemies,
+    Extras
+}
 
 // public enum PlaceType{
 //     None,

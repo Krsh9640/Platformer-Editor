@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Bee
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: cbb7d9e8798c13541a964fb986522b53, type: 2}
-  tileBase: {fileID: 0}
+  tileBase: {fileID: 11400000, guid: a65bbcbb0f2dddc48bf7b8a64fc9b6c1, type: 2}
   placeType: 0

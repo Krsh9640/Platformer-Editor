@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SilverBlock
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 46830e01175aa524190ee82cb79ab212, type: 2}
-  tileBase: {fileID: 0}
+  tileBase: {fileID: 11400000, guid: 25d18b49265a0c647963c062a63a265d, type: 2}
   placeType: 2

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SandEdgeL
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 46830e01175aa524190ee82cb79ab212, type: 2}
-  tileBase: {fileID: 0}
+  tileBase: {fileID: 11400000, guid: 2290ed5668eb52e4b91ececbf826b374, type: 2}
   placeType: 2

@@ -76,7 +76,7 @@ public class TilesCreator : Singleton<TilesCreator>
     }
 
     private void Update(){
-        pointerOverUI = !EventSystem.current.IsPointerOverGameObject(-1);
+        pointerOverUI = !EventSystem.current.IsPointerOverGameObject();
 
         if (selectedTile != null){
         Vector3 pos = _camera.ScreenToWorldPoint (mousePos);
@@ -132,7 +132,7 @@ public class TilesCreator : Singleton<TilesCreator>
     }
 
     private void HandleDrawing(){
-        if(selectedTile != null && pointerOverUI){
+        if(selectedTile != null){
             switch (selectedTile.PlaceType){
                 case PlaceType.Single:
                 default: 

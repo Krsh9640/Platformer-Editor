@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CheckpointFlag
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 322e7c5fb35d1654a989b38c2997efee, type: 2}
-  tileBase: {fileID: 0}
+  tileBase: {fileID: 11400000, guid: e8fce454b1449204993762a91ab05d00, type: 2}
   placeType: 0

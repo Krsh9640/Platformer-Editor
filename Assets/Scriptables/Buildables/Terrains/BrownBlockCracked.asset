@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: BrownBlockCracked
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 46830e01175aa524190ee82cb79ab212, type: 2}
-  tileBase: {fileID: 0}
+  tileBase: {fileID: 11400000, guid: f1120a90637c111409048d87b3a4031b, type: 2}
   placeType: 2
