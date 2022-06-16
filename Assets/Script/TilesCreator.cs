@@ -32,27 +32,29 @@ public class TilesCreator : Singleton<TilesCreator>
     }
 
     private void OnEnable(){
-        playerInput.Enable();
+        if(playerInput != null){
+            playerInput.Enable();
+            playerInput.Gameplay.MousePosition.performed += OnMouseMove;
 
-        playerInput.Gameplay.MousePosition.performed += OnMouseMove;
+            playerInput.Gameplay.MouseLeftClick.performed += OnLeftClick;
+            playerInput.Gameplay.MouseLeftClick.started += OnLeftClick;
+            playerInput.Gameplay.MouseLeftClick.canceled += OnLeftClick;
 
-        playerInput.Gameplay.MouseLeftClick.performed += OnLeftClick;
-        playerInput.Gameplay.MouseLeftClick.started += OnLeftClick;
-        playerInput.Gameplay.MouseLeftClick.canceled += OnLeftClick;
-
-        playerInput.Gameplay.MouseRightClick.performed += OnRightClick;
+            playerInput.Gameplay.MouseRightClick.performed += OnRightClick;
+        }
     }
 
     private void OnDisable(){
-        playerInput.Disable();
+        if(playerInput != null){
+            playerInput.Disable();
+            playerInput.Gameplay.MousePosition.performed -= OnMouseMove;
 
-        playerInput.Gameplay.MousePosition.performed -= OnMouseMove;
+            playerInput.Gameplay.MouseLeftClick.performed -= OnLeftClick;
+            playerInput.Gameplay.MouseLeftClick.started -= OnLeftClick;
+            playerInput.Gameplay.MouseLeftClick.canceled -= OnLeftClick;
 
-        playerInput.Gameplay.MouseLeftClick.performed -= OnLeftClick;
-        playerInput.Gameplay.MouseLeftClick.started -= OnLeftClick;
-        playerInput.Gameplay.MouseLeftClick.canceled -= OnLeftClick;
-
-        playerInput.Gameplay.MouseRightClick.performed -= OnRightClick;
+            playerInput.Gameplay.MouseRightClick.performed -= OnRightClick;
+        }
     }
 
     private TilesObject SelectedTile{
@@ -178,5 +180,6 @@ public class TilesCreator : Singleton<TilesCreator>
 
     private void DrawItem(){
         tilemap.SetTile (currentGridPosition, tileBase);
+        Debug.Log(tileBase);
     }
 }
