@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Frog
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: cbb7d9e8798c13541a964fb986522b53, type: 2}
-  tileBase: {fileID: 0}
-  placeType: 0
+  tileBase: {fileID: 11400000, guid: 2749ef441d8a28f4a8fb2d4d526c0dfd, type: 2}
+  placeType: 1
