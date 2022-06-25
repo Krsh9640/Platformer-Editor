@@ -17,7 +17,6 @@ public class TilesButtonHandler : MonoBehaviour
     }
 
     private void ButtonClicked(){
-        Debug.Log ("Button was clicked: " + item.name);
         tilesCreator.TileSelected(item);
     }
 }

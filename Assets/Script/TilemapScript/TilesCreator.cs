@@ -25,6 +25,8 @@ public class TilesCreator : Singleton<TilesCreator>
 
     BoundsInt bounds;
 
+    public GameObject mushroom, bee, frog;
+
     protected override void Awake(){
         base.Awake();
         playerInput = new PlayerInput();
@@ -60,7 +62,6 @@ public class TilesCreator : Singleton<TilesCreator>
     private TilesObject SelectedTile{
         set {
             selectedTile = value;
-
             tileBase = selectedTile != null ? selectedTile.TileBase : null;
 
             UpdatePreview();
@@ -76,7 +77,7 @@ public class TilesCreator : Singleton<TilesCreator>
             return defaultMap;
         }
     }
-
+    
     private void Update(){
         pointerOverUI = !EventSystem.current.IsPointerOverGameObject();
 
@@ -179,7 +180,17 @@ public class TilesCreator : Singleton<TilesCreator>
     }
 
     private void DrawItem(){
-        tilemap.SetTile (currentGridPosition, tileBase);
-        Debug.Log(tileBase);
+        if(tileBase.name == "MushroomIdle1"){
+            GameObject instMush = Instantiate(mushroom, currentGridPosition, transform.rotation);
+            instMush.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
+        } else if(tileBase.name == "BeeIdle1"){        
+            GameObject instBee = Instantiate(bee,  currentGridPosition, transform.rotation); 
+            instBee.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
+        } else if(tileBase.name == "FrogIdle1"){
+            GameObject instFrog = Instantiate(frog, currentGridPosition, transform.rotation);
+            instFrog.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
+        } else {
+            tilemap.SetTile (currentGridPosition, tileBase);
+        }
     }
 }

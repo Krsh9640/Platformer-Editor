@@ -7,7 +7,7 @@ public class GameState : MonoBehaviour
 {
     public GameObject character;
     public GameObject tileTabs;
-    public GameObject coinCounter;
+    public GameObject coinCounter, timeCounter;
     public GameObject stopButton, pauseButton;
     private GameObject playButton;
 
@@ -16,11 +16,9 @@ public class GameState : MonoBehaviour
     private Animator playerAnimator;
     
     public GameObject[] enemies;
-    
-    private MushroomBehaviour mushroomBehaviour;
-    private Animator mushroomAnimator;
-    private Animator beeAnimator;
+
     private bool isPaused;
+    public bool isPlay = false;
 
     private void Awake() {
         controller = character.GetComponent<CharacterController2D>();
@@ -30,43 +28,31 @@ public class GameState : MonoBehaviour
         playButton = this.gameObject;
     }
     
-    void Start() {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach(GameObject i in enemies){
-            if(enemies != null){
-                mushroomAnimator = enemies[0].gameObject.GetComponent<Animator>();
-                mushroomBehaviour = enemies[0].gameObject.GetComponent<MushroomBehaviour>();            
-                beeAnimator = enemies[1].gameObject.GetComponent<Animator>();
-            }
-        }
-        
+    void Start() {    
         Button stpBtn = stopButton.GetComponent<Button>();
         Button pauBtn = pauseButton.GetComponent<Button>();
 
         stpBtn.onClick.AddListener(StopPlaying);
         pauBtn.onClick.AddListener(PauseGame);
     }
-    
+
+    void Update() {
+            enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    }
+
     public void BtnPlay()
     {
+        isPlay = true;
+
+        GetComponentEnemy(true);
+
         controller.enabled = true;
         movement.enabled = true;
         playerAnimator.enabled = true;
         
-        if(mushroomAnimator != null){
-            mushroomAnimator.enabled= true;
-        }
-        
-        if(mushroomBehaviour != null){
-            mushroomBehaviour.enabled = true;
-        }
-               
-        if(beeAnimator != null){
-            beeAnimator.enabled= true;
-        }
-        
         tileTabs.SetActive(false);
         coinCounter.SetActive(true);
+        timeCounter.SetActive(true);
         pauseButton.SetActive(true);
         stopButton.SetActive(true);
         playButton.SetActive(false);
@@ -78,27 +64,47 @@ public class GameState : MonoBehaviour
         Time.timeScale = isPaused ? 0 : 1;
     }
 
-    public void StopPlaying(){
+    public void StopPlaying()
+    {   
+        isPlay = false;
+
+        GetComponentEnemy(false);
+        
         controller.enabled = false;
         movement.enabled = false;
         playerAnimator.enabled = false;
 
-        if(mushroomAnimator != null){
-                mushroomAnimator.enabled= false;
-        }
-
-        if(mushroomBehaviour != null){
-                mushroomBehaviour.enabled = false;
-        }
-
-        if(beeAnimator != null){
-                beeAnimator.enabled= false;
-        }
-
         tileTabs.SetActive(true);
         coinCounter.SetActive(false);
+        timeCounter.SetActive(false);
         pauseButton.SetActive(false);
         playButton.SetActive(true);
         stopButton.SetActive(false);
     }
+
+    public void GetComponentEnemy(bool isEnabled){
+        foreach(GameObject i in enemies){
+            if(i != null){
+                if(i.TryGetComponent(out MushroomBehaviour mushroom)){
+                    mushroom.enabled = isEnabled;
+                    i.GetComponent<Animator>().enabled = isEnabled;
+                    if(isEnabled == true){
+                        i.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+                    } else {
+                        i.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                    }
+                } else if(i.TryGetComponent(out FrogBehaviour frog)){
+                    frog.enabled = isEnabled;
+                    i.GetComponent<Animator>().enabled = isEnabled;
+                    if(isEnabled == true){
+                        i.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+                    } else {
+                        i.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                    }
+                } else if(i.TryGetComponent(out Animator animator)){ 
+                     animator.enabled = isEnabled;                
+                }
+            }
+        }
+    }   
 }
