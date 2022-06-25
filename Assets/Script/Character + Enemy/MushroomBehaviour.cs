@@ -12,6 +12,8 @@ public class MushroomBehaviour : MonoBehaviour
    public Transform groundDetection;
    public LayerMask platformLayer;
 
+   bool isGrounded = false;
+
    public Collider2D bodyCollider;
 
    public Animator animator;
@@ -22,7 +24,7 @@ public class MushroomBehaviour : MonoBehaviour
    }
 
    void Update(){
-       if(mustPatrol == true){
+       if(mustPatrol == true && isGrounded == true){
            Patrol();
        }
    }
@@ -34,14 +36,14 @@ public class MushroomBehaviour : MonoBehaviour
    }
 
     private void LateUpdate() {
-       animator.SetFloat("Speed", rb.velocity.magnitude);
+        if(isGrounded == true){
+            animator.SetFloat("Speed", rb.velocity.magnitude);
+        }
    }
 
    void Patrol(){
        rb.velocity = new Vector2(walkSpeed * Time.fixedDeltaTime, rb. velocity.y);
-
-      
-       if(mustFlip == true|| bodyCollider.IsTouchingLayers(platformLayer)){
+       if(mustFlip == true || bodyCollider.IsTouchingLayers(platformLayer)){
            Flip();
        }
    }
@@ -58,5 +60,9 @@ public class MushroomBehaviour : MonoBehaviour
        if(collision.gameObject.tag == "Enemy" && collision != null){
            Flip();
        }
+
+       if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Platform")){
+            isGrounded = true;
+        }
    }
 }

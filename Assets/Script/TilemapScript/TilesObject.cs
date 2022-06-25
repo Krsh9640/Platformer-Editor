@@ -10,12 +10,6 @@ public enum Category{
     Extras
 }
 
-// public enum PlaceType{
-//     None,
-//     Single,
-//     Rectangle
-// }
-
 [CreateAssetMenu(fileName = "Buildable", menuName = "TilesObjects/Create Buildable")]
 public class TilesObject : ScriptableObject
 {
