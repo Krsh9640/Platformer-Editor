@@ -12,18 +12,19 @@ public class TimeCounter : MonoBehaviour
 
     public GameState gameState;
 
-    // Update is called once per frame
     void Update()
     {
+        gameState.GetComponent<GameState>();
+        
         if(gameState.isPlay == true){
             currentTime += Time.deltaTime;
-            timeSeconds = (int)(currentTime % 60);
+            timeSeconds = (int)(currentTime);
             
             if(timeText.text != timeSeconds.ToString()){
                 timeText.text = timeSeconds.ToString();
-            } else if(gameState.isPlay == false){
-                currentTime = 0;
-            }
+            } 
+        } else if(gameState.isPlay == false){
+            timeSeconds = 0;
         }
     }
 }

@@ -8,23 +8,21 @@ public class PlayerStomp : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    private float bounceForce = 10f;
-    
-    // Start is called before the first frame update
+    private float bounceForce = 12f;
+
     void Start()
     {
         rb = transform.parent.GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void OnTriggerEnter2D(Collider2D other) {
+        PlayerMovement movement = transform.parent.GetComponent<PlayerMovement>();
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.gameObject.tag == "Enemy"){
-            other.gameObject.GetComponent<EnemyHP>().TakeDamage(damageToDeal);
+        if(other.tag == "Enemy"){
+            other.GetComponent<EnemyHP>().TakeDamage(damageToDeal);
+            rb.AddForce(transform.up * bounceForce, ForceMode2D.Impulse);
+        } else if(other.tag == "Extras" && movement.isGrounded == false){
+            bounceForce = 20f;
             rb.AddForce(transform.up * bounceForce, ForceMode2D.Impulse);
         }
     }

@@ -7,41 +7,56 @@ public class GameState : MonoBehaviour
 {
     public GameObject character;
     public GameObject tileTabs;
-    public GameObject coinCounter, timeCounter;
-    public GameObject stopButton, pauseButton;
-    private GameObject playButton;
+    public GameObject coinCounter, timeCounter, healthCounter, keyIcon, potionIcon;
+    public GameObject stopButton, pauseButton, playButton;
 
     private CharacterController2D controller;
     private PlayerMovement movement;
     private Animator playerAnimator;
     
     public GameObject[] enemies;
+    public GameObject[] items;
 
     private bool isPaused;
     public bool isPlay = false;
+
+    public GameObject particle1, particle2;
 
     private void Awake() {
         controller = character.GetComponent<CharacterController2D>();
         movement = character.GetComponent<PlayerMovement>();
         playerAnimator = character.GetComponent<Animator>();
-
-        playButton = this.gameObject;
     }
     
     void Start() {    
         Button stpBtn = stopButton.GetComponent<Button>();
         Button pauBtn = pauseButton.GetComponent<Button>();
+        Button plyBtn = playButton.GetComponent<Button>();
 
+        plyBtn.onClick.AddListener(BtnPlay);
         stpBtn.onClick.AddListener(StopPlaying);
         pauBtn.onClick.AddListener(PauseGame);
+
+
+        particle1.GetComponent<ParticleSystem>().Stop();
+        particle2.GetComponent<ParticleSystem>().Stop();
     }
 
-    void Update() {
-            enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    void FixedUpdate() {
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        items = GameObject.FindGameObjectsWithTag("Items");
+    }
+        
+    void LateUpdate() {
+        if(movement.currentHealth <= 0){
+            StopPlaying();
+            movement.currentHealth = 3;
+        }
     }
 
     public void BtnPlay()
     {
+        
         isPlay = true;
 
         GetComponentEnemy(true);
@@ -53,6 +68,7 @@ public class GameState : MonoBehaviour
         tileTabs.SetActive(false);
         coinCounter.SetActive(true);
         timeCounter.SetActive(true);
+        healthCounter.SetActive(true);
         pauseButton.SetActive(true);
         stopButton.SetActive(true);
         playButton.SetActive(false);
@@ -67,7 +83,7 @@ public class GameState : MonoBehaviour
     public void StopPlaying()
     {   
         isPlay = false;
-
+        
         GetComponentEnemy(false);
         
         controller.enabled = false;
@@ -77,34 +93,42 @@ public class GameState : MonoBehaviour
         tileTabs.SetActive(true);
         coinCounter.SetActive(false);
         timeCounter.SetActive(false);
+        healthCounter.SetActive(false);
         pauseButton.SetActive(false);
         playButton.SetActive(true);
         stopButton.SetActive(false);
+
+        particle1.GetComponent<ParticleSystem>().Stop();
+        particle2.GetComponent<ParticleSystem>().Stop();
     }
 
     public void GetComponentEnemy(bool isEnabled){
-        foreach(GameObject i in enemies){
-            if(i != null){
-                if(i.TryGetComponent(out MushroomBehaviour mushroom)){
+        foreach(GameObject e in enemies){
+            if(e != null){
+                if(e.TryGetComponent(out MushroomBehaviour mushroom)){
                     mushroom.enabled = isEnabled;
-                    i.GetComponent<Animator>().enabled = isEnabled;
+                    e.GetComponent<Animator>().enabled = isEnabled;
                     if(isEnabled == true){
-                        i.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+                        e.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                     } else {
-                        i.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                        e.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
                     }
-                } else if(i.TryGetComponent(out FrogBehaviour frog)){
+                } else if(e.TryGetComponent(out FrogBehaviour frog)){
                     frog.enabled = isEnabled;
-                    i.GetComponent<Animator>().enabled = isEnabled;
+                    e.GetComponent<Animator>().enabled = isEnabled;
                     if(isEnabled == true){
-                        i.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+                        e.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
                     } else {
-                        i.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                        e.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
                     }
-                } else if(i.TryGetComponent(out Animator animator)){ 
+                } else if(e.TryGetComponent(out Animator animator)){ 
                      animator.enabled = isEnabled;                
                 }
             }
         }
-    }   
+    }
+
+    public void GetComponentExtras(bool isEnabled){
+        
+    } 
 }

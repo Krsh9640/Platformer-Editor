@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92da7ccc338d027428879043bbf52216, type: 3}
-  m_Name: FireTrap
+  m_Name: Burner
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: e1ac414c14ad68044b31f24bbb9e5f4d, type: 2}
   tileBase: {fileID: 11400000, guid: 0c71a21b550e55440aab90e34270611a, type: 2}
