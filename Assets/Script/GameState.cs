@@ -8,11 +8,12 @@ public class GameState : MonoBehaviour
     public GameObject character;
     public GameObject tileTabs;
     public GameObject coinCounter, timeCounter, healthCounter, keyIcon, potionIcon;
-    public GameObject stopButton, pauseButton, playButton;
+    public GameObject stopButton, pauseButton, panel;
 
     private CharacterController2D controller;
     private PlayerMovement movement;
     private Animator playerAnimator;
+    private SaveHandler saveHandler;
     
     public GameObject[] enemies;
     public GameObject[] items;
@@ -22,25 +23,19 @@ public class GameState : MonoBehaviour
 
     public GameObject particle1, particle2;
 
-    private void Awake() {
+    private void Start() {
         controller = character.GetComponent<CharacterController2D>();
         movement = character.GetComponent<PlayerMovement>();
         playerAnimator = character.GetComponent<Animator>();
+        saveHandler = GetComponent<SaveHandler>();
+        
+        if(isPlay == false){
+            if(particle1 != null && particle2 != null)
+            particle1.GetComponent<ParticleSystem>().Stop();
+            particle2.GetComponent<ParticleSystem>().Stop();
+        }
     }
     
-    void Start() {    
-        Button stpBtn = stopButton.GetComponent<Button>();
-        Button pauBtn = pauseButton.GetComponent<Button>();
-        Button plyBtn = playButton.GetComponent<Button>();
-
-        plyBtn.onClick.AddListener(BtnPlay);
-        stpBtn.onClick.AddListener(StopPlaying);
-        pauBtn.onClick.AddListener(PauseGame);
-
-
-        particle1.GetComponent<ParticleSystem>().Stop();
-        particle2.GetComponent<ParticleSystem>().Stop();
-    }
 
     void FixedUpdate() {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -56,7 +51,6 @@ public class GameState : MonoBehaviour
 
     public void BtnPlay()
     {
-        
         isPlay = true;
 
         GetComponentEnemy(true);
@@ -71,7 +65,9 @@ public class GameState : MonoBehaviour
         healthCounter.SetActive(true);
         pauseButton.SetActive(true);
         stopButton.SetActive(true);
-        playButton.SetActive(false);
+        panel.SetActive(false);
+
+        saveHandler.OnSave();
     }
 
     public void PauseGame(){
@@ -95,7 +91,7 @@ public class GameState : MonoBehaviour
         timeCounter.SetActive(false);
         healthCounter.SetActive(false);
         pauseButton.SetActive(false);
-        playButton.SetActive(true);
+        panel.SetActive(true);
         stopButton.SetActive(false);
 
         particle1.GetComponent<ParticleSystem>().Stop();
@@ -130,5 +126,9 @@ public class GameState : MonoBehaviour
 
     public void GetComponentExtras(bool isEnabled){
         
-    } 
+
+        
+    }
+    
+     
 }

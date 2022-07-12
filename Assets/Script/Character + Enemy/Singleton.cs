@@ -30,12 +30,12 @@ public abstract class Singleton<T> : MonoBehaviour where T : Component {
      * */
 
     protected virtual void Awake () {
-        if (instance == null) {
-            instance = this as T;
-            if (DontDestroy) DontDestroyOnLoad (gameObject);
-        } else if (instance != this as T) {
-            Destroy (gameObject);
-        } else if (DontDestroy) { DontDestroyOnLoad (gameObject); }
+        // if (instance == null) {
+        //     instance = this as T;
+        //     if (DontDestroy) DontDestroyOnLoad (gameObject);
+        // } else if (instance != this as T) {
+        //     Destroy (gameObject);
+        // } else if (DontDestroy) { DontDestroyOnLoad (gameObject); }
     }
 
     private void OnApplicationQuit () {

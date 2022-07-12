@@ -30,10 +30,15 @@ public class TilesCreator : Singleton<TilesCreator>
     BoundsInt bounds;
 
     public GameObject mushroom, bee, frog;
-    public GameObject coin, key, potion, boots, flag, burner, 
-                      cannon, buzzsaw, spikeball, spring, unlockedDoor;
+    public GameObject coin, key, potion, boots, flag, burner, cannon, 
+                      buzzsaw, spikeball, spring, unlockedDoor, lockedDoor;
     
     public List<Tilemap> tilemaps = new List<Tilemap>();
+
+    private GameObject manager;
+    private GameState gameState;
+
+    int UILayer;
 
     protected override void Awake(){
         base.Awake();
@@ -44,6 +49,11 @@ public class TilesCreator : Singleton<TilesCreator>
     void Start() {
         List<Tilemap> maps = FindObjectsOfType<Tilemap>().ToList();
 
+        manager = GameObject.Find("Manager");
+        gameState = manager.GetComponent<GameState>();
+
+        UILayer = LayerMask.NameToLayer("UI");
+
         maps.ForEach(map => {
             if(map.name != "previewMap"){
                 if(map.name != "defaultMap"){
@@ -51,6 +61,37 @@ public class TilesCreator : Singleton<TilesCreator>
                 } 
             }
         });    
+    }
+
+    public void ClearTiles(){
+        tilemaps.ForEach(map => {
+            map.ClearAllTiles();
+        });
+    }
+
+    public bool IsPointerOverUIElement()
+    {
+        return IsPointerOverUIElement(GetEventSystemRaycastResults());
+    }
+ 
+    private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+    {
+        for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+        {
+            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+            if (curRaysastResult.gameObject.layer == UILayer)
+                return true;
+        }
+        return false;
+    }
+ 
+    static List<RaycastResult> GetEventSystemRaycastResults()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raysastResults);
+        return raysastResults;
     }
 
     private void OnEnable(){
@@ -99,11 +140,10 @@ public class TilesCreator : Singleton<TilesCreator>
     }
     
     private void Update(){
-        
-
-        if (selectedTile != null){
-        Vector3 pos = _camera.ScreenToWorldPoint (mousePos);
-        Vector3Int gridPos = previewMap.WorldToCell (pos);
+        if(gameState.isPlay == false){
+            if (selectedTile != null){
+                Vector3 pos = _camera.ScreenToWorldPoint (mousePos);
+                Vector3Int gridPos = previewMap.WorldToCell (pos);
 
             if(gridPos != currentGridPosition){
                 lastGridPosition = currentGridPosition;
@@ -115,19 +155,21 @@ public class TilesCreator : Singleton<TilesCreator>
                     HandleDrawing();
                 }
             }
+            }
+
+            if(gameState.isPlay == true){
+                selectedTile = null;
+            }
         }
     }
-
-    private bool isMouseOverUI(){
-        return EventSystem.current.IsPointerOverGameObject();
-    }    
 
     private void OnMouseMove(InputAction.CallbackContext ctx){
         mousePos = ctx.ReadValue<Vector2>();
     }
 
     private void OnLeftClick(InputAction.CallbackContext ctx){
-        if(selectedTile != null && !isMouseOverUI()){
+        if(gameState.isPlay == false){
+            if(selectedTile != null && !IsPointerOverUIElement()){
             if(ctx.phase == InputActionPhase.Started){
                  holdActive = true;
                 if(ctx.interaction is TapInteraction) {
@@ -142,6 +184,7 @@ public class TilesCreator : Singleton<TilesCreator>
                 }
             }
         }
+        }
     }
     
 
@@ -149,12 +192,13 @@ public class TilesCreator : Singleton<TilesCreator>
         Vector3 pos = _camera.ScreenToWorldPoint (mousePos);
         Vector3Int gridPos = previewMap.WorldToCell (pos);
 
-        if(selectedTile != null){
-            SelectedTile = null;    
-        } else {
-            Eraser(gridPos);
+        if(gameState.isPlay == false){
+            if(selectedTile != null){
+                SelectedTile = null;    
+            } else {
+                Eraser(gridPos);
+            }
         }
-        
     }
 
     public void Eraser(Vector3Int position){
@@ -258,8 +302,11 @@ public class TilesCreator : Singleton<TilesCreator>
             GameObject instSpring = Instantiate(spring, currentGridPosition, transform.rotation);
             instSpring.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y - 0.024f, 0);
         } else if(tileBase.name == "UnlockedDoor1"){
-            GameObject instUnlokcedDoor = Instantiate(unlockedDoor, currentGridPosition, transform.rotation);
-            instUnlokcedDoor.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.75f, 0);
+            GameObject instUnlockedDoor = Instantiate(unlockedDoor, currentGridPosition, transform.rotation);
+            instUnlockedDoor.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.75f, 0);
+        } else if(tileBase.name == "LockedDoor"){
+            GameObject instLockedDoor = Instantiate(lockedDoor, currentGridPosition, transform.rotation);
+            instLockedDoor.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.75f, 0);
         }
         else {
             tilemap.SetTile (position, tileBase);
