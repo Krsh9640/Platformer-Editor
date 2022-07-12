@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public CharacterController2D controller;
     public Animator animator;
+    public GameObject manager;
+    private GameState gameState;
 
     float horizontalMove = 0f;
     public float runSpeed = 100f;
@@ -22,8 +24,18 @@ public class PlayerMovement : MonoBehaviour
     public GameObject blink;
     public TMP_Text healthText;
 
+    private Rigidbody2D rb;
+
+    private float jumpTime;
+    private float jumpTimeCounter;
+    private bool isJumping = false;
+    private float jumpForce = 10f;
+
     void Awake() {
         currentHealth = playerHealth;
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        manager = GameObject.Find("Manager");
+        gameState = manager.GetComponent<GameState>();
     }
 
     void Update()
@@ -36,9 +48,22 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
         
         if (Input.GetButtonDown("Jump") && isGrounded == true){
-            jump = true;
             isGrounded = false;
+            isJumping = true;
+            jumpTimeCounter = jumpTime;
+            jump = true;
             animator.SetBool("isJumping", true);                
+        }
+
+        if(isJumping == true){
+            if(jumpTimeCounter > 0){
+                rb.velocity = Vector2.up * jumpForce;
+                jumpTimeCounter  -= Time.deltaTime;
+            }
+        }
+
+        if(Input.GetButtonDown("Jump")){
+            isJumping = false;
         }
     }
 
@@ -89,5 +114,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void DisableBlink(){
         blink.GetComponent<SpriteRenderer>().enabled = false;
+    }
+
+    private void OnBecameInvisible() {
+        if(this.gameObject.tag == "Player"){
+            if(gameState.isPlay == true){
+                gameState.StopPlaying();
+            }
+        }
     }
 }

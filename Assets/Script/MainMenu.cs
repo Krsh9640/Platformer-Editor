@@ -2,21 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using System.Linq;
+using UnityEngine.Tilemaps;
 
 public class MainMenu : MonoBehaviour
 {
     public GameObject BtnsMainMenu, BtnMakeaLevel, BtnOption;
     public GameObject PnlLevels, PnlOption;
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
 
     //Exit Button//
     public void Exit()
@@ -52,5 +44,9 @@ public class MainMenu : MonoBehaviour
     public void closeOption(){
         PnlOption.SetActive(false);
         BtnsMainMenu.SetActive(true);
+    }
+
+    public void HomeButton(){
+        SceneManager.LoadSceneAsync("Main Menu");
     }
 }

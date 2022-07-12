@@ -3,26 +3,48 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
+using System.Linq;
+using System.IO;
 
-public class SaveHandler : MonoBehaviour
+public class SaveHandler : Singleton<SaveHandler>
 {
     Dictionary<string, Tilemap> tilemaps = new Dictionary<string, Tilemap>();
+    Dictionary<TileBase, TilesObject> tileBaseToTilesObject = new Dictionary<TileBase, TilesObject>();
+    Dictionary<String, TileBase> guidToTileBase = new Dictionary<string, TileBase>();
     [SerializeField] BoundsInt bounds;
     [SerializeField] string filename = "tilemapData.json";
 
     private void Start() {
         initTilemaps();
+        initTileReference();
+    }
+
+    private void initTileReference(){
+        TilesObject[] buildables = Resources.LoadAll<TilesObject>("Scriptables/Buildables");
+
+        foreach(TilesObject buildable in buildables){
+            if(!tileBaseToTilesObject.ContainsKey(buildable.TileBase)){
+                tileBaseToTilesObject.Add(buildable.TileBase, buildable);
+                guidToTileBase.Add(buildable.name, buildable.TileBase);
+            } else{
+                Debug.LogError("TileBase " + buildable.TileBase.name + " is already in use by " + tileBaseToTilesObject[buildable.TileBase].name);
+            }
+        }
     }
 
     private void initTilemaps(){
         Tilemap[] maps = FindObjectsOfType<Tilemap>();
 
         foreach(var map in maps) {
-            tilemaps.Add(map.name, map);
+            if(map.name != "previewMap"){
+                if(map.name != "defaultMap"){
+                    tilemaps.Add(map.name, map);
+                }
+            }
         }
     }
 
-    public void onSave(){
+    public void OnSave(){
         List<TilemapData> data = new List<TilemapData>();
 
         foreach(var mapObj in tilemaps){
@@ -31,13 +53,15 @@ public class SaveHandler : MonoBehaviour
 
             BoundsInt boundsForThisMap = mapObj.Value.cellBounds;
 
-            for(int x = boundsForThisMap.xMin; x < boundsForThisMap.xMin; x++){
+            for(int x = boundsForThisMap.xMin; x < boundsForThisMap.xMax; x++){
                 for(int y = boundsForThisMap.yMin; y < boundsForThisMap.yMax; y++){
                     Vector3Int pos = new Vector3Int(x, y, 0);
                     TileBase tile = mapObj.Value.GetTile(pos);
 
-                    if(tile != null){
-                        TileInfo ti = new TileInfo(tile, pos);
+                    if(tile != null && tileBaseToTilesObject.ContainsKey(tile)){
+                        string guid = tileBaseToTilesObject[tile].name;
+                        TileInfo ti = new TileInfo(pos, guid);
+                        Debug.Log("TileInfo : " + ti);
                         mapData.tiles.Add(ti);
                     }
                 }
@@ -48,7 +72,7 @@ public class SaveHandler : MonoBehaviour
         FileHandler.SaveToJSON<TilemapData>(data, filename);
     }
 
-    public void onLoad(){
+    public void OnLoad(){
         List<TilemapData> data = FileHandler.ReadListFromJSON<TilemapData>(filename);
 
         foreach(var mapData in data){
@@ -61,8 +85,12 @@ public class SaveHandler : MonoBehaviour
             map.ClearAllTiles();
 
             if(mapData.tiles != null && mapData.tiles.Count > 0){
-                foreach(TileInfo tile in mapData.tiles){
-                    map.SetTile(tile.position, tile.tile);
+                foreach(var tile in mapData.tiles){
+                    if(guidToTileBase.ContainsKey(tile.guidForBuildable)){
+                        map.SetTile(tile.position, guidToTileBase[tile.guidForBuildable]);
+                    } else{
+                        Debug.LogError("Reference " + tile.guidForBuildable + " could not be found");
+                    }
                 }
             }
         }
@@ -76,12 +104,12 @@ public class TilemapData{
 }
 
 [Serializable]
-public class TileInfo{
-    public TileBase tile;
+public class TileInfo{ 
+    public string guidForBuildable;
     public Vector3Int position;
 
-    public TileInfo(TileBase tile, Vector3Int pos){
-        this.tile = tile;
+    public TileInfo(Vector3Int pos, string guid){
         position = pos;
+        guidForBuildable = guid;
     }
 }
