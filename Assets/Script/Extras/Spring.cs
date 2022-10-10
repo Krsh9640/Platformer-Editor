@@ -7,6 +7,7 @@ public class Spring : MonoBehaviour
     private float bounceForce = 15f;
     public Animator animator;
     public GameObject manager;
+    private GameState gameState;
 
     public bool isJumped = false;
 
@@ -16,38 +17,51 @@ public class Spring : MonoBehaviour
     private void Update() {
         animator = this.gameObject.GetComponent<Animator>();
 
-        manager= GameObject.Find("Manager");
+        manager = GameObject.Find("Manager");
+        gameState = manager.GetComponent<GameState>();
 
         timeElapsed += Time.deltaTime;
     }
     
     private void OnCollisionEnter2D(Collision2D other) {
-        if(other.transform.CompareTag("Player")){
-            if(isJumped == false){
-                animator.SetBool("isJumping", true);
+        if(gameState.isPlay == true)
+        {
+            if (other.transform.CompareTag("Player"))
+            {
+                if (isJumped == false)
+                {
+                    animator.SetBool("isJumping", true);
 
-                Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
-                rb.AddForce(transform.up * bounceForce, ForceMode2D.Impulse);
+                    Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
+                    rb.AddForce(transform.up * bounceForce, ForceMode2D.Impulse);
 
-                isJumped = !isJumped;
-            } else {
-                animator.SetBool("isJumping", false);
+                    isJumped = !isJumped;
+                }
+                else
+                {
+                    animator.SetBool("isJumping", false);
 
-                Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
-                rb.AddForce(transform.up * bounceForce, ForceMode2D.Impulse);
+                    Rigidbody2D rb = other.gameObject.GetComponent<Rigidbody2D>();
+                    rb.AddForce(transform.up * bounceForce, ForceMode2D.Impulse);
 
-                animator.SetBool("isJumping", true);
+                    animator.SetBool("isJumping", true);
+                }
             }
         }
     }
 
     private void OnCollisionExit2D(Collision2D other) {
-        if(other.transform.CompareTag("Player")){
-            if(timeElapsed > 1 || isJumped == true){
-                animator.SetBool("isJumping", false);
-                
-                timeElapsed = 0;    
-                isJumped = !isJumped;
+        if(gameState.isPlay == true)
+        {
+            if (other.transform.CompareTag("Player"))
+            {
+                if (timeElapsed > 1 || isJumped == true)
+                {
+                    animator.SetBool("isJumping", false);
+
+                    timeElapsed = 0;
+                    isJumped = !isJumped;
+                }
             }
         }
     }

@@ -10,16 +10,24 @@ public enum Category{
     Extras
 }
 
-[CreateAssetMenu(fileName = "Buildable", menuName = "TilesObjects/Create Buildable")]
+[CreateAssetMenu(fileName = "TileBuildable", menuName = "TilesObjects/Create Buildable")]
 public class TilesObject : ScriptableObject
 {
     [SerializeField] TileCategory category;
     [SerializeField] TileBase tileBase;
+    [SerializeField] GameObject prefabObject;
     [SerializeField] PlaceType placeType;
 
     public TileBase TileBase{
         get{
             return tileBase;
+        }
+    }
+
+    public GameObject GameObject{
+        get
+        {
+            return prefabObject;
         }
     }
 

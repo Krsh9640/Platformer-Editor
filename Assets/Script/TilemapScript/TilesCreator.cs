@@ -38,6 +38,8 @@ public class TilesCreator : Singleton<TilesCreator>
     private GameObject manager;
     private GameState gameState;
 
+    GameObject instantiatedPrefab;
+
     int UILayer;
 
     protected override void Awake(){
@@ -67,6 +69,13 @@ public class TilesCreator : Singleton<TilesCreator>
         tilemaps.ForEach(map => {
             map.ClearAllTiles();
         });
+
+        GameObject[] prefabsObject = FindGameObjectWithinLayer(8);
+
+        foreach(GameObject go in prefabsObject)
+        {
+            Destroy(go);
+        }
     }
 
     public bool IsPointerOverUIElement()
@@ -129,18 +138,18 @@ public class TilesCreator : Singleton<TilesCreator>
         }
     }
 
+
     private Tilemap tilemap{
         get{
-            if (selectedTile != null && selectedTile.Category != null && selectedTile.Category.Tilemap != null){
+            if (selectedTile != null && selectedTile.Category != null && selectedTile.Category.Tilemap != null) {
                 return selectedTile.Category.Tilemap;
-            }
-        
+            } 
             return defaultMap;
         }
     }
     
     private void Update(){
-        if(gameState.isPlay == false){
+        if (gameState.isPlay == false){
             if (selectedTile != null){
                 Vector3 pos = _camera.ScreenToWorldPoint (mousePos);
                 Vector3Int gridPos = previewMap.WorldToCell (pos);
@@ -194,7 +203,7 @@ public class TilesCreator : Singleton<TilesCreator>
 
         if(gameState.isPlay == false){
             if(selectedTile != null){
-                SelectedTile = null;    
+                SelectedTile = null;
             } else {
                 Eraser(gridPos);
             }
@@ -261,55 +270,43 @@ public class TilesCreator : Singleton<TilesCreator>
         }
     }
 
-    private void DrawItem(Tilemap map, Vector3Int position, TileBase tileBase){
-        if(tileBase.name == "MushroomIdle1"){
-            GameObject instMush = Instantiate(mushroom, currentGridPosition, transform.rotation);
-            instMush.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "BeeIdle1"){        
-            GameObject instBee = Instantiate(bee,  currentGridPosition, transform.rotation); 
-            instBee.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "FrogIdle1"){
-            GameObject instFrog = Instantiate(frog, currentGridPosition, transform.rotation);
-            instFrog.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "Key"){
-            GameObject instKey = Instantiate(key, currentGridPosition, transform.rotation);
-            instKey.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "Coin") {
-            GameObject instCoin = Instantiate(coin, currentGridPosition, transform.rotation);
-            instCoin.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "WingedShoes"){
-            GameObject instBoots = Instantiate(boots, currentGridPosition, transform.rotation);
-            instBoots.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "InvinciblePotion"){
-            GameObject instPotion = Instantiate(potion, currentGridPosition, transform.rotation);
-            instPotion.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "CheckpointFlag1"){
-            GameObject instFlag = Instantiate(flag, currentGridPosition, transform.rotation);
-            instFlag.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        }else if(tileBase.name == "Burner"){
-            GameObject instBurner = Instantiate(burner, currentGridPosition, transform.rotation);
-            instBurner.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "Cannon"){
-            GameObject instCannon = Instantiate(cannon, currentGridPosition, transform.rotation);
-            instCannon.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "Buzzsaw"){
-            GameObject instBuzzsaw = Instantiate(buzzsaw, currentGridPosition, transform.rotation);
-            instBuzzsaw.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "Spikeball"){
-            GameObject instSpikeball = Instantiate(spikeball, currentGridPosition, transform.rotation);
-            instSpikeball.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
-        } else if(tileBase.name == "Spring2"){
-            GameObject instSpring = Instantiate(spring, currentGridPosition, transform.rotation);
-            instSpring.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y - 0.024f, 0);
-        } else if(tileBase.name == "UnlockedDoor1"){
-            GameObject instUnlockedDoor = Instantiate(unlockedDoor, currentGridPosition, transform.rotation);
-            instUnlockedDoor.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.75f, 0);
-        } else if(tileBase.name == "LockedDoor"){
-            GameObject instLockedDoor = Instantiate(lockedDoor, currentGridPosition, transform.rotation);
-            instLockedDoor.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.75f, 0);
+    private void DrawItem(Tilemap map, Vector3Int position, TileBase tileBase)
+    {
+        if (selectedTile.GameObject != null)
+        {
+            instantiatedPrefab = Instantiate(selectedTile.GameObject, currentGridPosition, transform.rotation);
+
+            if(selectedTile.GameObject.name == "LockedDoor" || selectedTile.GameObject.name == "UnlockedDoor")
+            {
+                instantiatedPrefab.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.74f, 0);
+            } else
+            {
+                instantiatedPrefab.transform.position = new Vector3(currentGridPosition.x + 0.5f, currentGridPosition.y + 0.5f, 0);
+            }
+
+        } else
+        {
+            tilemap.SetTile(position, tileBase);
         }
-        else {
-            tilemap.SetTile (position, tileBase);
+    }
+
+    public GameObject[] FindGameObjectWithinLayer(int layer)
+    {
+        GameObject[] goArray = FindObjectsOfType(typeof(GameObject)) as GameObject[];
+
+        List<GameObject> goList = new List<GameObject>();
+
+        for (int i = 0; i < goArray.Length; i++)
+        {
+            if (goArray[i].layer == layer)
+            {
+                goList.Add(goArray[i]);
+            }
         }
+        if (goList.Count == 0)
+        {
+            return null;
+        }
+        return goList.ToArray();
     }
 }

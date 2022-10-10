@@ -11,12 +11,24 @@ public class SaveHandler : Singleton<SaveHandler>
     Dictionary<string, Tilemap> tilemaps = new Dictionary<string, Tilemap>();
     Dictionary<TileBase, TilesObject> tileBaseToTilesObject = new Dictionary<TileBase, TilesObject>();
     Dictionary<String, TileBase> guidToTileBase = new Dictionary<string, TileBase>();
+
+    Dictionary<GameObject, TilesObject> PrefabstoTilesObject = new Dictionary<GameObject, TilesObject>();
+    Dictionary<String, GameObject> guidToPrefabObject = new Dictionary<string, GameObject>();
+
     [SerializeField] BoundsInt bounds;
     [SerializeField] string filename = "tilemapData.json";
+
+    private GameObject[] prefabsObject;
 
     private void Start() {
         initTilemaps();
         initTileReference();
+        initPrefabReference();
+    }
+
+    private void Update()
+    {
+        prefabsObject = FindGameObjectWithinLayer(8);
     }
 
     private void initTileReference(){
@@ -44,10 +56,36 @@ public class SaveHandler : Singleton<SaveHandler>
         }
     }
 
+    public void initPrefabReference(){
+        TilesObject[] prefabs = Resources.LoadAll<TilesObject>("Scriptables/Buildables");
+        
+        foreach(TilesObject tilePrefab in prefabs){
+            if(!PrefabstoTilesObject.ContainsKey(tilePrefab.GameObject)){
+                PrefabstoTilesObject.Add(tilePrefab.GameObject, tilePrefab);
+                guidToPrefabObject.Add(tilePrefab.name, tilePrefab.GameObject);
+            } else{
+                Debug.LogError("GameObject " + tilePrefab.GameObject.name + " is already in use by " + PrefabstoTilesObject[tilePrefab.GameObject].name);
+            }
+        }
+    }
+
     public void OnSave(){
         List<TilemapData> data = new List<TilemapData>();
 
-        foreach(var mapObj in tilemaps){
+        foreach (GameObject prefab in prefabsObject)
+        {
+            Vector3 pos = prefab.transform.position;
+
+            if (prefab != null && PrefabstoTilesObject.ContainsKey(prefab))
+            {
+                string guid = PrefabstoTilesObject[prefab].name;
+                PrefabInfo pi = new PrefabInfo(pos, guid);
+
+            }
+
+        }
+
+        foreach (var mapObj in tilemaps){
             TilemapData mapData = new TilemapData();
             mapData.key = mapObj.Key;
 
@@ -58,10 +96,9 @@ public class SaveHandler : Singleton<SaveHandler>
                     Vector3Int pos = new Vector3Int(x, y, 0);
                     TileBase tile = mapObj.Value.GetTile(pos);
 
-                    if(tile != null && tileBaseToTilesObject.ContainsKey(tile)){
+                    if (tile != null && tileBaseToTilesObject.ContainsKey(tile)){
                         string guid = tileBaseToTilesObject[tile].name;
                         TileInfo ti = new TileInfo(pos, guid);
-                        Debug.Log("TileInfo : " + ti);
                         mapData.tiles.Add(ti);
                     }
                 }
@@ -95,6 +132,21 @@ public class SaveHandler : Singleton<SaveHandler>
             }
         }
     }
+
+    public GameObject[] FindGameObjectWithinLayer(int layer){
+        GameObject[] goArray = FindObjectsOfType(typeof(GameObject)) as GameObject[]; 
+
+        List<GameObject> goList = new List<GameObject>(); 
+        
+        for (int i = 0; i < goArray.Length; i++) { 
+            if(goArray[i].layer == layer){ 
+                goList.Add(goArray[i]);
+            }
+        }if(goList.Count == 0) { 
+            return null;
+        } 
+        return goList.ToArray();
+    }
 }
 
 [Serializable]
@@ -111,5 +163,16 @@ public class TileInfo{
     public TileInfo(Vector3Int pos, string guid){
         position = pos;
         guidForBuildable = guid;
+    }
+}
+
+[Serializable]
+public class PrefabInfo{
+    public string guidForPrefabs;
+    public Vector3 position;
+
+    public PrefabInfo(Vector3 pos, string guid){
+        position = pos;
+        guidForPrefabs = guid;
     }
 }
