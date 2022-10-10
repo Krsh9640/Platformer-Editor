@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: e1ac414c14ad68044b31f24bbb9e5f4d, type: 2}
   tileBase: {fileID: 11400000, guid: bbbec0bafa27f374b8c8879a49068e0f, type: 2}
-  placeType: 0
+  prefabObject: {fileID: 7297867962425302698, guid: e8c8a5e69b3c67e47ae53f1a7b987d85, type: 3}
+  placeType: 1
