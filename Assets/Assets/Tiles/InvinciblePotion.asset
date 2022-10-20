@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: InvinciblePotion
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -461320212, guid: 6b265fe8c881fa64e8bcf5ef086defeb, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
@@ -31,6 +31,6 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  m_InstancedGameObject: {fileID: 0}
-  m_Flags: 1
+  m_InstancedGameObject: {fileID: 5528733270394682923, guid: c1cb30a120768a04790398e7d4a925d9, type: 3}
+  m_Flags: 4
   m_ColliderType: 1

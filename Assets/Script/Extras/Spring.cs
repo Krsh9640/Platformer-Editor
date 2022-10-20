@@ -47,6 +47,9 @@ public class Spring : MonoBehaviour
                     animator.SetBool("isJumping", true);
                 }
             }
+        }else
+        {
+
         }
     }
 

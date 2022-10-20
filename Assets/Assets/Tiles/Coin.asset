@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Coin
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -1713063269, guid: 6b265fe8c881fa64e8bcf5ef086defeb, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
@@ -31,6 +31,6 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  m_InstancedGameObject: {fileID: 0}
-  m_Flags: 1
+  m_InstancedGameObject: {fileID: 5574741395780784922, guid: a513383463f53e64c945090c6853a7d2, type: 3}
+  m_Flags: 4
   m_ColliderType: 1

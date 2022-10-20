@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: MushroomIdle1
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: -272032940, guid: e07e9ad3e56bb464bb6109766051e5b9, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
@@ -31,6 +31,6 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  m_InstancedGameObject: {fileID: 0}
-  m_Flags: 1
+  m_InstancedGameObject: {fileID: 5788015923402983686, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+  m_Flags: 4
   m_ColliderType: 1
