@@ -15,8 +15,8 @@ public class GameState : MonoBehaviour
     private Animator playerAnimator;
     private SaveHandler saveHandler;
     
-    public GameObject[] enemies;
-    public GameObject[] items;
+    private GameObject[] enemies;
+    private GameObject[] items;
 
     private bool isPaused;
     public bool isPlay = false;
