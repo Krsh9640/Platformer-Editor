@@ -70,6 +70,26 @@ public class GameState : MonoBehaviour
         saveHandler.OnSave();
     }
 
+    public void PlayMode()
+    {
+        isPlay = true;
+
+        GetComponentEnemy(true);
+
+        controller.enabled = true;
+        movement.enabled = true;
+        playerAnimator.enabled = true;
+
+        tileTabs.SetActive(false);
+        coinCounter.SetActive(true);
+        timeCounter.SetActive(true);
+        healthCounter.SetActive(true);
+        pauseButton.SetActive(true);
+        panel.SetActive(false);
+
+        saveHandler.OnSave();
+    }
+
     public void PauseGame(){
         Time.timeScale = 0f;
         isPaused = !isPaused;
@@ -122,13 +142,5 @@ public class GameState : MonoBehaviour
                 }
             }
         }
-    }
-
-    public void GetComponentExtras(bool isEnabled){
-        
-
-        
-    }
-    
-     
+    } 
 }

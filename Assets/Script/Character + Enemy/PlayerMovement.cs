@@ -31,11 +31,15 @@ public class PlayerMovement : MonoBehaviour
     private bool isJumping = false;
     private float jumpForce = 10f;
 
+    public Vector3 startingSpawnPos;
+
     void Awake() {
         currentHealth = playerHealth;
         rb = gameObject.GetComponent<Rigidbody2D>();
         manager = GameObject.Find("Manager");
         gameState = manager.GetComponent<GameState>();
+
+        startingSpawnPos = this.gameObject.transform.position;
     }
 
     void Update()
@@ -120,6 +124,8 @@ public class PlayerMovement : MonoBehaviour
         if(this.gameObject.tag == "Player"){
             if(gameState.isPlay == true){
                 gameState.StopPlaying();
+
+                this.gameObject.transform.position = startingSpawnPos;
             }
         }
     }

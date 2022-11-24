@@ -18,7 +18,7 @@ namespace EasyUI.Tabs {
 
       [Header ("Tabs customization :")]
       [SerializeField] private Color themeColor = Color.gray ;
-      [SerializeField] private float tabSpacing = 2f ;
+      [SerializeField] private float tabSpacing = 2f;
       [Space]
       [Header ("OnTabChange event :")]
       public TabsUIEvent OnTabChange ;

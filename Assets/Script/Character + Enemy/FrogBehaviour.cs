@@ -7,7 +7,7 @@ public class FrogBehaviour : MonoBehaviour
     public bool facingRight;
     public LayerMask whatIsGround;
 
-    public bool isGrounded;
+    public bool isGrounded = true;
     public bool isFalling;
     public bool isJumping;
 
@@ -61,7 +61,7 @@ public class FrogBehaviour : MonoBehaviour
         isGrounded = Physics2D.OverlapArea(new Vector2(transform.position.x - 0.5f, transform.position.y - 0.5f), 
         new Vector2(transform.position.x + 0.5f, transform.position.y + 0.5f), whatIsGround);
 
-        if(isGrounded && !isJumping){
+        if(isGrounded == true && isJumping == false){
             isFalling = false;
             isJumping = false;
             isIdle = true;
@@ -98,4 +98,5 @@ public class FrogBehaviour : MonoBehaviour
             anim.SetInteger("state", (int)newAnim);
         }
     }
+
 }

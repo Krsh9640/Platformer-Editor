@@ -44,6 +44,7 @@ Transform:
   - {fileID: 8264027166458583056}
   - {fileID: 3757809791255180049}
   - {fileID: 4329904587744182611}
+  - {fileID: 5777925104250229738}
   m_Father: {fileID: 8757602714283847605}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -179,6 +180,80 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
+--- !u!1001 &35036581947038440
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 4753337356289024304}
+    m_Modifications:
+    - target: {fileID: 5788015923402983681, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983686, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_Name
+      value: Mushroom
+      objectReference: {fileID: 0}
+    - target: {fileID: 5788015923402983686, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+--- !u!4 &5777925104250229738 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5788015923402983682, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
+  m_PrefabInstance: {fileID: 35036581947038440}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &383958886380261588
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1187,7 +1262,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 712904978861299527, guid: 43d9409605f1dc945b5459c6a422f4a7, type: 3}
   m_PrefabInstance: {fileID: 8394703294873664574}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8967644063366378361
+--- !u!114 &6395947479054011793
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

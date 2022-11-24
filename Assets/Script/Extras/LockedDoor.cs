@@ -26,7 +26,7 @@ public class LockedDoor : MonoBehaviour
         movement = player.GetComponent<PlayerMovement>();
         playerAnimator = player.GetComponent<Animator>();
         
-        key = GameObject.Find("Key(Clone)");
+        key = GameObject.Find("Key");
         if(key != null){
             keyScript = key.GetComponent<KeyScript>();
         }
