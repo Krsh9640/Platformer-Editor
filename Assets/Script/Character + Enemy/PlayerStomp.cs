@@ -8,7 +8,7 @@ public class PlayerStomp : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    private float bounceForce = 12f;
+    private float bounceForce = 5f;
 
     void Start()
     {
@@ -20,10 +20,9 @@ public class PlayerStomp : MonoBehaviour
 
         if(other.tag == "Enemy"){
             other.GetComponent<EnemyHP>().TakeDamage(damageToDeal);
-            rb.AddForce(transform.up * bounceForce, ForceMode2D.Impulse);
+            rb.AddForce(transform.up * bounceForce, ForceMode2D.Force);
         } else if(other.tag == "Extras" && movement.isGrounded == false){
-            bounceForce = 20f;
-            rb.AddForce(transform.up * bounceForce, ForceMode2D.Impulse);
+            rb.AddForce(transform.up * bounceForce, ForceMode2D.Force);
         }
     }
 }

@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.IO;
+using System.Linq;
+using TMPro;
 
 public class SaveHandler : Singleton<SaveHandler>
 {
     private Dictionary<string, Tilemap> tilemaps = new Dictionary<string, Tilemap>();
     private Dictionary<TileBase, TilesObject> tileBaseToTilesObject = new Dictionary<TileBase, TilesObject>();
     private Dictionary<String, TileBase> guidToTileBase = new Dictionary<string, TileBase>();
-
-    private Dictionary<GameObject, TilesObject> PrefabstoTilesObject = new Dictionary<GameObject, TilesObject>();
-    private Dictionary<String, GameObject> guidToPrefabObject = new Dictionary<string, GameObject>();
 
     [SerializeField] private BoundsInt bounds;
     [SerializeField] private string filename = "tilemapData.json";
@@ -19,6 +19,7 @@ public class SaveHandler : Singleton<SaveHandler>
     {
         initTilemaps();
         initTileReference();
+
     }
 
     private void initTileReference()
@@ -139,6 +140,7 @@ public class SaveHandler : Singleton<SaveHandler>
     //    }
     //    return goList.ToArray();
     //}
+
 }
 
 [Serializable]
@@ -146,7 +148,6 @@ public class TilemapData
 {
     public string key;
     public List<TileInfo> tiles = new List<TileInfo>();
-    public List<PrefabInfo> prefab = new List<PrefabInfo>();
 }
 
 [Serializable]
@@ -159,18 +160,5 @@ public class TileInfo
     {
         position = pos;
         guidForBuildable = guid;
-    }
-}
-
-[Serializable]
-public class PrefabInfo
-{
-    public string guidForPrefabs;
-    public Vector3 position;
-
-    public PrefabInfo(Vector3 pos, string guid)
-    {
-        position = pos;
-        guidForPrefabs = guid;
     }
 }

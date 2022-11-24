@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DestroyObject : MonoBehaviour
@@ -10,16 +8,23 @@ public class DestroyObject : MonoBehaviour
     private void Start()
     {
         manager = GameObject.Find("Manager");
-        gameState = manager.GetComponent<GameState>();
+
+        if (manager != null)
+        {
+            gameState = manager.GetComponent<GameState>();
+        }
     }
 
     private void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            if(gameState.isPlay == false)
+            if (gameState != null)
             {
-                Destroy(gameObject);
+                if (gameState.isPlay == false)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

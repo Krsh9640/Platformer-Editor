@@ -7,7 +7,7 @@ public class MushroomBehaviour : MonoBehaviour
    public float walkSpeed;
 
    public bool mustPatrol = true;
-   private bool mustFlip;
+   public bool mustFlip;
    public Rigidbody2D rb;
    public Transform groundDetection;
    public LayerMask platformLayer;
