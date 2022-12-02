@@ -44,6 +44,9 @@ public class TilesCreator : Singleton<TilesCreator>
 
     private int UILayer;
 
+    public AudioClip tilePlace, tileDelete, ClearAllTile;
+    public AudioSource audioSource;
+
     protected override void Awake()
     {
         base.Awake();
@@ -95,6 +98,8 @@ public class TilesCreator : Singleton<TilesCreator>
                 }
             }
         }
+
+        audioSource.PlayOneShot(ClearAllTile, 0.5f);
     }
 
     public bool IsPointerOverUIElement()
@@ -260,6 +265,7 @@ public class TilesCreator : Singleton<TilesCreator>
         tilemaps.ForEach(map =>
         {
             map.SetTile(position, null);
+            audioSource.PlayOneShot(tileDelete, 0.5f);
         });
     }
 
@@ -332,6 +338,7 @@ public class TilesCreator : Singleton<TilesCreator>
     private void DrawItem(Tilemap map, Vector3Int position, TileBase tileBase)
     {
         tilemap.SetTile(position, tileBase);
+        audioSource.PlayOneShot(tilePlace, 0.5f);
     }
 
     public GameObject[] FindGameObjectWithinLayer(int layer)
