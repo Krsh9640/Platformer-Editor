@@ -16,10 +16,9 @@ public class GameState : MonoBehaviour
     private SaveHandler saveHandler;
     
     private GameObject[] enemies;
-    private GameObject[] items;
 
     private bool isPaused;
-    public bool isPlay = false;
+    public bool isPlay = false, FromEditMode, FromPlayMode;
 
     public GameObject particle1, particle2;
 
@@ -39,7 +38,6 @@ public class GameState : MonoBehaviour
 
     void FixedUpdate() {
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        items = GameObject.FindGameObjectsWithTag("Items");
     }
         
     void LateUpdate() {
@@ -52,6 +50,7 @@ public class GameState : MonoBehaviour
     public void BtnPlay()
     {
         isPlay = true;
+        FromEditMode = true;
 
         GetComponentEnemy(true);
 
@@ -73,6 +72,7 @@ public class GameState : MonoBehaviour
     public void PlayMode()
     {
         isPlay = true;
+        FromPlayMode = true;
 
         GetComponentEnemy(true);
 

@@ -13,13 +13,38 @@ public class SaveHandler : Singleton<SaveHandler>
     private Dictionary<String, TileBase> guidToTileBase = new Dictionary<string, TileBase>();
 
     [SerializeField] private BoundsInt bounds;
-    [SerializeField] private string filename = "tilemapData.json";
+    [SerializeField] private string filename;
 
     private void Start()
     {
         initTilemaps();
         initTileReference();
 
+    }
+
+    public void Createjson(string filename)
+    {
+        List<TilemapData> data = new List<TilemapData>();
+
+        FileHandler.SaveToJSON<TilemapData>(data, filename);
+    }
+
+    public void Level1Json()
+    {
+        filename = "TilemapDataLevel1.json";
+        Createjson(filename);
+    }
+
+    public void Level2Json()
+    {
+        filename = "TilemapDataLevel2.json";
+        Createjson(filename);
+    }
+
+    public void Level3Json()
+    {
+        filename = "TilemapDataLevel3.json";
+        Createjson(filename);
     }
 
     private void initTileReference()

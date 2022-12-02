@@ -9,6 +9,8 @@ public class DownloadScene : MonoBehaviour
 {
     public string textFileURL;
 
+    public LoadingScreen loadScreen;
+
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -23,7 +25,6 @@ public class DownloadScene : MonoBehaviour
     {
         StartCoroutine(DownloadLevelTextFile(textFileURL));
         StartCoroutine(PlayLevelOrder());
-
     }
 
     private IEnumerator PlayLevelOrder()
@@ -40,7 +41,7 @@ public class DownloadScene : MonoBehaviour
         string filepath = Application.persistentDataPath + "/tilemapData.json";
         File.WriteAllText(filepath, www.downloadHandler.text);
 
-        SceneManager.LoadSceneAsync("Level Editor");
+        loadScreen.LoadScene("Loading Screen" ,"Level Editor");
         yield return new WaitForSeconds(1.0f);
         GameObject.Find("Manager").GetComponent<SaveHandler>().OnLoad();
     }

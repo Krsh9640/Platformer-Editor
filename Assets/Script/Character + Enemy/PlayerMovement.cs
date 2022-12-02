@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     public GameObject manager;
     private GameState gameState;
+    private SaveHandler saveHandler;
 
     float horizontalMove = 0f;
     public float runSpeed = 100f;
@@ -33,11 +34,20 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector3 startingSpawnPos;
 
+    private AudioSource audioSource;
+    public AudioClip jumpSound, deathSound;
+
+    public GameObject DeathInterval;
+    public TMP_Text DeathCounter;
+    private int DeathCounterVal;
+
     void Awake() {
         currentHealth = playerHealth;
         rb = gameObject.GetComponent<Rigidbody2D>();
         manager = GameObject.Find("Manager");
         gameState = manager.GetComponent<GameState>();
+        audioSource = manager.GetComponent<AudioSource>();
+        saveHandler = manager.GetComponent<SaveHandler>();
 
         startingSpawnPos = this.gameObject.transform.position;
     }
@@ -56,7 +66,8 @@ public class PlayerMovement : MonoBehaviour
             isJumping = true;
             jumpTimeCounter = jumpTime;
             jump = true;
-            animator.SetBool("isJumping", true);                
+            animator.SetBool("isJumping", true);
+            audioSource.PlayOneShot(jumpSound, 0.5f);
         }
 
         if(isJumping == true){
@@ -122,11 +133,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnBecameInvisible() {
         if(this.gameObject.tag == "Player"){
-            if(gameState.isPlay == true){
+            if(gameState.isPlay == true && gameState.FromEditMode == true){
                 gameState.StopPlaying();
 
                 this.gameObject.transform.position = startingSpawnPos;
+            }else if(gameState.isPlay == true && gameState.FromPlayMode == true)
+            {
+                StartCoroutine(DeathOrder());
+                audioSource.PlayOneShot(deathSound, 0.5f);
             }
         }
+    }
+
+    public IEnumerator DeathOrder()
+    {
+        audioSource.PlayOneShot(deathSound, 0.5f);
+
+        DeathInterval.SetActive(true);
+
+        if (DeathInterval.activeInHierarchy)
+        {
+            DeathCounterVal++;
+            DeathCounter.text = DeathCounterVal.ToString();
+            yield return new WaitForSeconds(2.0f);
+
+            DeathInterval.SetActive(false);
+            saveHandler.OnLoad();
+        }
+        
+        this.gameObject.transform.position = startingSpawnPos;
+
+        yield return null;
     }
 }

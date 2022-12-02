@@ -10,6 +10,15 @@ public class MainMenu : MonoBehaviour
     public GameObject BtnsMainMenu, BtnMakeaLevel, BtnOption;
     public GameObject PnlLevels, PnlOption;
 
+    private GameObject DownloadSceneManager;
+    private LoadingScreen loadingScreen;
+
+    private void Awake()
+    {
+        DownloadSceneManager = GameObject.Find("DownloadSceneManager");
+        loadingScreen = DownloadSceneManager.GetComponent<LoadingScreen>();
+    }
+
     //Exit Button//
     public void Exit()
     {
@@ -27,10 +36,10 @@ public class MainMenu : MonoBehaviour
     //Make a Level Button, go to Level Editor//
     public void MakeaLevel()
     {
-        SceneManager.LoadSceneAsync("Level Editor");
+        loadingScreen.LoadScene("Loading Screen", "Level Editor");
     }
 
     public void HomeButton(){
-        SceneManager.LoadSceneAsync("Main Menu");
+        loadingScreen.LoadScene("Loading Screen", "Main Menu");
     }
 }
