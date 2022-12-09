@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: SilverBlock
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 726479656, guid: 6b265fe8c881fa64e8bcf5ef086defeb, type: 3}
+  m_Sprite: {fileID: -1256085093, guid: d8c485b15a779804983fa2f580a1ca54, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

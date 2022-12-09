@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -22,9 +23,28 @@ public class LevelManager : MonoBehaviour
     public GameObject UItabs;
     public GameObject sidebar;
 
+    private GameObject DownloadSceneManager;
+    private SaveHandler saveHandler;
+
     private void Awake()
     {
         filePath = Application.persistentDataPath;
+
+        DownloadSceneManager = GameObject.Find("DownloadSceneManager");
+        saveHandler = DownloadSceneManager.GetComponent<SaveHandler>();
+
+        Scene scene = SceneManager.GetActiveScene();
+        Debug.Log(scene.name);
+    }
+
+    public void SaveButton()
+    {
+        saveHandler.OnSave();
+    }
+
+    public void LoadButton()
+    {
+        saveHandler.OnLoad();
     }
 
     public void CreateLevel()
@@ -50,7 +70,7 @@ public class LevelManager : MonoBehaviour
         UItabs.SetActive(false);
         sidebar.SetActive(false);
         ScreenCapture.CaptureScreenshot(filePath + "/Level-Screenshot.png");
-        GetComponent<SaveHandler>().OnSave();
+        saveHandler.OnSave();
     }
 
     private IEnumerator waitScreenshot()

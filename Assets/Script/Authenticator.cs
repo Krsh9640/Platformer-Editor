@@ -15,16 +15,17 @@ public class Authenticator : MonoBehaviour
 
     public TMP_InputField CreatorNameInput;
     [SerializeField] private string CreatorName;
+    [SerializeField] private string CreatorNameTemp;
 
     public GameObject allsignin, allsignup;
     public GameObject signinBtn, signupBtn;
 
-    public GameObject resetPasswordPnl, AuthenticatorPnl, HomeButtons, verivyNotifPnl;
+    public GameObject resetPasswordPnl, AuthenticatorPnl, HomeButtons,
+                      verivyNotifPnl, UsernamePnl;
 
     private bool signinActive, signupActive;
 
     private string hasNamed;
-    [SerializeField] private int hasNamedValue = 0;
 
     private void Awake()
     {
@@ -67,20 +68,16 @@ public class Authenticator : MonoBehaviour
     {
         email = EmailInput.text;
         password = PasswordInput.text;
-        CreatorName = CreatorNameInput.text;
+
+        PlayerPrefs.SetInt(hasNamed, 0);
 
         LootLockerSDKManager.WhiteLabelSignUp(email, password, (response) =>
         {
-            if (response.success)
-            {
-                PlayerPrefs.SetInt(hasNamed, 0);
-            }
-            else
+            if (!response.success)
             {
                 return;
             }
         });
-        
 
         verivyNotifPnl.SetActive(true);
         SignInTab();
@@ -106,22 +103,24 @@ public class Authenticator : MonoBehaviour
     public IEnumerator SigninOrder()
     {
         StartSession();
-        AuthenticatorPnl.SetActive(false);
-        HomeButtons.SetActive(true);
 
-        hasNamedValue = PlayerPrefs.GetInt(hasNamed);
+        yield return new WaitForSeconds(1.5f);
 
-        yield return new WaitForSeconds(1.0f);
-        if (hasNamedValue == 0)
+        GetPlayerName();
+
+        yield return new WaitForSeconds(1f);
+
+        if (CreatorName == CreatorNameTemp && CreatorName != null)
         {
-            SetPlayerName(CreatorName);
-            Debug.Log("Has Set Player Name");
-            
+            UsernamePnl.SetActive(true);
         }
-        else if(hasNamedValue == 1)
+        else
         {
+            AuthenticatorPnl.SetActive(false);
 
+            HomeButtons.SetActive(true);
         }
+
         yield return null;
     }
 
@@ -135,6 +134,7 @@ public class Authenticator : MonoBehaviour
             }
             else
             {
+                AuthenticatorPnl.SetActive(true);
             }
         });
     }
@@ -143,14 +143,24 @@ public class Authenticator : MonoBehaviour
     {
         LootLockerSDKManager.StartWhiteLabelSession((response) =>
         {
-            if (response.success)
-            {
-            }
-            else
+            if (!response.success)
             {
                 return;
             }
         });
+    }
+
+    public void SubmitUsernameBtn()
+    {
+        CreatorNameTemp = CreatorNameInput.text;
+
+        CreatorName = CreatorNameTemp;
+
+        SetPlayerName(CreatorName);
+
+        AuthenticatorPnl.SetActive(false);
+
+        HomeButtons.SetActive(true);
     }
 
     public void SetPlayerName(string playerName)
@@ -163,24 +173,22 @@ public class Authenticator : MonoBehaviour
             }
             else
             {
-                
+                Debug.Log("Error setting Player Name");
             }
         });
-
-        PlayerPrefs.SetInt(hasNamed, 1);
     }
 
     public void GetPlayerName()
     {
-        LootLockerSDKManager.GetPlayerName((response) => 
+        LootLockerSDKManager.GetPlayerName((response) =>
         {
             if (response.success)
             {
                 CreatorName = response.name;
+                Debug.Log(response.name);
             }
             else
             {
-
             }
         });
     }
@@ -202,17 +210,15 @@ public class Authenticator : MonoBehaviour
 
     public void Logout()
     {
-       LootLockerSDKManager.EndSession((response) =>
-       {
-           if (response.success)
-           {
-
-           }
-           else
-           {
-
-           }
-       });
+        LootLockerSDKManager.EndSession((response) =>
+        {
+            if (response.success)
+            {
+            }
+            else
+            {
+            }
+        });
 
         HomeButtons.SetActive(false);
         AuthenticatorPnl.SetActive(true);
