@@ -7,15 +7,18 @@ using UnityEngine.Tilemaps;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject BtnsMainMenu, BtnMakeaLevel, BtnOption;
-    public GameObject PnlLevels, PnlOption;
+    public GameObject BtnsMainMenu;
+    public GameObject PnlLevels;
 
     private GameObject DownloadSceneManager;
     private LoadingScreen loadingScreen;
 
+    private SaveHandler saveHandler;
+
     private void Awake()
     {
         DownloadSceneManager = GameObject.Find("DownloadSceneManager");
+        saveHandler = DownloadSceneManager.GetComponent<SaveHandler>();
         loadingScreen = DownloadSceneManager.GetComponent<LoadingScreen>();
     }
 
@@ -36,6 +39,8 @@ public class MainMenu : MonoBehaviour
     //Make a Level Button, go to Level Editor//
     public void MakeaLevel()
     {
+        saveHandler.filename = "TilemapDataLevel1.json";
+
         loadingScreen.LoadScene("Loading Screen", "Level Editor");
     }
 

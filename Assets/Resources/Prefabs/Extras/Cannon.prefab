@@ -60,8 +60,8 @@ Transform:
   m_GameObject: {fileID: 4932589916876788691}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4932589916865304074}
   - {fileID: 276492064797738340}
@@ -109,12 +109,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -919119354, guid: 6b265fe8c881fa64e8bcf5ef086defeb, type: 3}
+  m_Sprite: {fileID: -1177467758, guid: d8c485b15a779804983fa2f580a1ca54, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.0204082, y: 1.0204082}
+  m_Size: {x: 1.0204082, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -138,7 +138,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.0204082, y: 1}
-    newSize: {x: 1.0204082, y: 1.0204082}
+    newSize: {x: 1.0204082, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -252,6 +252,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8565973657420552662, guid: 2343761bbf3145a41bccc56eb9a88873, type: 3}
       propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8565973657420552663, guid: 2343761bbf3145a41bccc56eb9a88873, type: 3}
+      propertyPath: m_Size.x
+      value: 0.5714286
+      objectReference: {fileID: 0}
+    - target: {fileID: 8565973657420552663, guid: 2343761bbf3145a41bccc56eb9a88873, type: 3}
+      propertyPath: m_Size.y
+      value: 0.5714286
+      objectReference: {fileID: 0}
+    - target: {fileID: 8565973657420552663, guid: 2343761bbf3145a41bccc56eb9a88873, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1157725383, guid: d8c485b15a779804983fa2f580a1ca54, type: 3}
+    - target: {fileID: 8565973657420552663, guid: 2343761bbf3145a41bccc56eb9a88873, type: 3}
+      propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -81,25 +81,6 @@ public class TilesCreator : Singleton<TilesCreator>
         {
             map.ClearAllTiles();
         });
-
-        GameObject[] prefabsObject = FindGameObjectWithinLayer(8);
-
-        if (prefabsObject != null)
-        {
-            foreach (GameObject go in prefabsObject)
-            {
-                if (go != null)
-                {
-                    Destroy(go);
-                }
-                else
-                {
-                    Debug.Log("No Gameobject to be cleared");
-                }
-            }
-        }
-
-        audioSource.PlayOneShot(ClearAllTile, 0.5f);
     }
 
     public bool IsPointerOverUIElement()
@@ -253,7 +234,7 @@ public class TilesCreator : Singleton<TilesCreator>
             {
                 SelectedTile = null;
             }
-            else
+            else if (selectedTile == null)
             {
                 Eraser(gridPos);
             }
@@ -265,7 +246,6 @@ public class TilesCreator : Singleton<TilesCreator>
         tilemaps.ForEach(map =>
         {
             map.SetTile(position, null);
-            audioSource.PlayOneShot(tileDelete, 0.5f);
         });
     }
 

@@ -48,7 +48,8 @@ public class Burner : MonoBehaviour
     public IEnumerator shootFire(){
         while(true){
             animator.SetBool("isShooting", true);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(5);
+            animator.SetBool("isShooting", false);
         }
     }
 

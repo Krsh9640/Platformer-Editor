@@ -13,14 +13,10 @@ public class SaveHandler : Singleton<SaveHandler>
     private Dictionary<String, TileBase> guidToTileBase = new Dictionary<string, TileBase>();
 
     [SerializeField] private BoundsInt bounds;
-    [SerializeField] private string filename;
+    public string filename;
 
-    private void Start()
-    {
-        initTilemaps();
-        initTileReference();
-
-    }
+    public string level1Filename, level2Filename, level3Filename;
+    public TMP_Text level1Text, level2Text, level3Text;
 
     public void Createjson(string filename)
     {
@@ -29,25 +25,27 @@ public class SaveHandler : Singleton<SaveHandler>
         FileHandler.SaveToJSON<TilemapData>(data, filename);
     }
 
-    public void Level1Json()
-    {
-        filename = "TilemapDataLevel1.json";
-        Createjson(filename);
-    }
-
     public void Level2Json()
     {
         filename = "TilemapDataLevel2.json";
+        level2Filename = filename;
         Createjson(filename);
+
+        level2Text.text = "Level 2";
+        level2Text.fontSize = 35;
     }
 
     public void Level3Json()
     {
         filename = "TilemapDataLevel3.json";
+        level3Filename = filename;
         Createjson(filename);
+
+        level3Text.text = "Level 3";
+        level3Text.fontSize = 35;
     }
 
-    private void initTileReference()
+    public void initTileReference()
     {
         TilesObject[] buildables = Resources.LoadAll<TilesObject>("Scriptables/Buildables/");
 
@@ -65,9 +63,9 @@ public class SaveHandler : Singleton<SaveHandler>
         }
     }
 
-    private void initTilemaps()
+    public void initTilemaps()
     {
-        Tilemap[] maps = FindObjectsOfType<Tilemap>();
+         Tilemap[] maps = FindObjectsOfType<Tilemap>();
 
         foreach (var map in maps)
         {
