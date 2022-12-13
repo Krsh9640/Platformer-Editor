@@ -155,10 +155,9 @@ public class PlayerMovement : MonoBehaviour
         {
             DeathCounterVal++;
             DeathCounter.text = DeathCounterVal.ToString();
-            yield return new WaitForSeconds(2.0f);
 
             DeathInterval.SetActive(false);
-            saveHandler.OnLoad();
+            yield return new WaitForSeconds(2.0f);
         }
         
         this.gameObject.transform.position = startingSpawnPos;

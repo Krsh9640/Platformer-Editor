@@ -15,8 +15,12 @@ public class SaveHandler : Singleton<SaveHandler>
     [SerializeField] private BoundsInt bounds;
     public string filename;
 
-    public string level1Filename, level2Filename, level3Filename;
+    [SerializeField] private string level1Filename = "TilemapDataLevel1.json", 
+        level2Filename = "TilemapDataLevel2.json", 
+        level3Filename = "TilemapDataLevel3.json";
     public TMP_Text level1Text, level2Text, level3Text;
+
+    public bool level2isCreated, level3isCreated;
 
     public void Createjson(string filename)
     {
@@ -27,22 +31,22 @@ public class SaveHandler : Singleton<SaveHandler>
 
     public void Level2Json()
     {
-        filename = "TilemapDataLevel2.json";
-        level2Filename = filename;
-        Createjson(filename);
+        Createjson(level2Filename);
 
         level2Text.text = "Level 2";
         level2Text.fontSize = 35;
+
+        level2isCreated = true;
     }
 
     public void Level3Json()
     {
-        filename = "TilemapDataLevel3.json";
-        level3Filename = filename;
-        Createjson(filename);
+        Createjson(level3Filename);
 
         level3Text.text = "Level 3";
         level3Text.fontSize = 35;
+
+        level3isCreated = true;
     }
 
     public void initTileReference()

@@ -12,6 +12,7 @@ public class GameState : MonoBehaviour
     private Animator playerAnimator;
     private SaveHandler saveHandler;
     private GameObject DownloadSceneManager;
+    private TilesCreator tilesCreator;
 
     private GameObject[] enemies;
 
@@ -20,11 +21,15 @@ public class GameState : MonoBehaviour
 
     public GameObject particle1, particle2;
 
+    public int currentCoins { get; set; }
+    public int currentTimes { get; set; }
+
     private void Start()
     {
         controller = character.GetComponent<CharacterController2D>();
         movement = character.GetComponent<PlayerMovement>();
         playerAnimator = character.GetComponent<Animator>();
+        tilesCreator = GetComponent<TilesCreator>();
 
         DownloadSceneManager = GameObject.Find("DownloadSceneManager");
         saveHandler = DownloadSceneManager.GetComponent<SaveHandler>();
@@ -101,7 +106,19 @@ public class GameState : MonoBehaviour
 
     public void Restart()
     {
-        Coin.totalCoin = 0;
+        currentCoins = PlayerPrefs.GetInt("Coin");
+        Debug.Log(Coin.totalCoin);
+        currentTimes = PlayerPrefs.GetInt("Time");
+        Debug.Log(TimeCounter.timeSeconds);
+
+        tilesCreator.ClearTiles();
+        
+        character.transform.position = movement.startingSpawnPos;
+
+        saveHandler.OnLoad();
+        PauseGame();
+
+        vCamTrigger.IsEnabled = false;
     }
 
     public void PauseGame()
