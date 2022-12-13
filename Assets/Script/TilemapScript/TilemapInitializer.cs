@@ -34,10 +34,6 @@ public class TilemapInitializer : MonoBehaviour
             tc.usedByComposite = true;
 
             obj.transform.SetParent(grid);
-            if (obj.name == "Terrain")
-            {
-                obj.transform.SetAsLastSibling();
-            }
 
             tr.sortingOrder = category.SortingOrder;
 

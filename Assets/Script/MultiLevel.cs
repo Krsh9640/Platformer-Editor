@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class MultiLevel : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class MultiLevel : MonoBehaviour
 
     private SaveHandler saveHandler;
     private TilesCreator tilesCreator;
+
+    public TMP_Text levelVal;
+
+    public GameObject CreateLevel2or3Pnl;
 
     [SerializeField] private string level1filename = "TilemapDataLevel1.json", 
         level2filename = "TilemapDataLevel2.json", 
@@ -41,19 +46,33 @@ public class MultiLevel : MonoBehaviour
 
     public void Level2Load()
     {
-        StartCoroutine(LoadLevelOrder(level2filename));
+        if(saveHandler.level2isCreated == true)
+        {
+            StartCoroutine(LoadLevelOrder(level2filename));
+        }
+        else
+        {
+            levelVal.text = "Level 2";
+            CreateLevel2or3Pnl.SetActive(true);
+        }
     }
 
     public void Level3Load()
     {
-        StartCoroutine(LoadLevelOrder(level3filename));
+        if(saveHandler.level3isCreated == true)
+        {
+            StartCoroutine(LoadLevelOrder(level3filename));
+        }
+        else
+        {          
+            levelVal.text = "Level 3";
+            CreateLevel2or3Pnl.SetActive(true);
+        }
     }
 
     public IEnumerator LoadLevelOrder(string currentLevelName)
     {
         saveHandler.OnSave();
-
-        yield return new WaitForSeconds(1);
 
         saveHandler.filename = currentLevelName;
 
@@ -62,5 +81,36 @@ public class MultiLevel : MonoBehaviour
         saveHandler.OnLoad();
 
         yield return null;
+    }
+
+    public void CreateLevel()
+    {
+        if(levelVal.text == "Level 2")
+        {
+            saveHandler.Createjson(level2filename);
+            saveHandler.level2isCreated = true;
+        }else if(levelVal.text == "Level 3")
+        {
+            saveHandler.Createjson(level3filename);
+            saveHandler.level3isCreated = true;
+        }
+    }
+
+    public void LoadLevel()
+    {
+        if (levelVal.text == "Level 2")
+        {
+            saveHandler.filename = level2filename;
+            tilesCreator.ClearTiles();
+            saveHandler.OnLoad();
+            saveHandler.level2isCreated = true;
+        }
+        else if (levelVal.text == "Level 3")
+        {
+            saveHandler.filename = level2filename;
+            tilesCreator.ClearTiles();
+            saveHandler.OnLoad();
+            saveHandler.level3isCreated = true;
+        }
     }
 }

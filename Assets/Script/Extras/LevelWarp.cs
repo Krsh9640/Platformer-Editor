@@ -22,9 +22,11 @@ public class LevelWarp : MonoBehaviour
 
 	public BoxCollider2D boxCollider;
 
-	public static int currentCoin;
+	public static int currentCoin, currentTime;
 
 	[SerializeField] private string currentFilename;
+
+	public bool hasLoaded = true;
 
 	public enum FadeDirection
 	{
@@ -48,21 +50,22 @@ public class LevelWarp : MonoBehaviour
 
 		PlayerChar = GameObject.FindWithTag("Player");
 		playerMovement = PlayerChar.GetComponent<PlayerMovement>();
-    }
+	}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Player")
         {
-			Debug.Log("Collided");
             if(saveHandler.filename == "TilemapDataLevel1.json")
             {
 				NextLevelText.text = "Level 2";
-				StartCoroutine(MultiLevelLoad(saveHandler.filename, "TilemapDataLevel2.json"));			
+				StartCoroutine(MultiLevelLoad(saveHandler.filename, "TilemapDataLevel2.json"));
+				hasLoaded = true;
 			} else if(saveHandler.filename == "TilemapDataLevel2.json")
             {
 				NextLevelText.text = "Level 3";
 				StartCoroutine(MultiLevelLoad(saveHandler.filename, "TilemapDataLevel3.json"));
+				hasLoaded = true;
 			}
         }
     }
@@ -89,6 +92,17 @@ public class LevelWarp : MonoBehaviour
 
 				fadeOutUIImage.enabled = false;
 				NextLevelText.enabled = false;
+
+				if(hasLoaded == true)
+                {
+					currentCoin = Coin.totalCoin;
+					currentTime = TimeCounter.timeSeconds;
+
+					PlayerPrefs.SetInt("Coin", currentCoin);
+					PlayerPrefs.SetInt("Time", currentTime);
+
+					hasLoaded = false;
+				}								
 			}
         }
 		yield return null;

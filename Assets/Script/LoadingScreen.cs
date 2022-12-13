@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class LoadingScreen : MonoBehaviour
 {
+    public bool hasLoaded = false;
+
     public void LoadScene(string FirstScene, string SecondScene)
     {
         StartCoroutine(LoadSceneOrder(FirstScene, SecondScene));
@@ -25,6 +27,7 @@ public class LoadingScreen : MonoBehaviour
             {
                 yield return new WaitForSeconds(2.0f);
                 SecondSceneLoad.allowSceneActivation = true;
+                hasLoaded = true;
             }
 
             yield return null;

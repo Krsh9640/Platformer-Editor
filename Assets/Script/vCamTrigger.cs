@@ -6,7 +6,7 @@ using Cinemachine;
 public class vCamTrigger : MonoBehaviour
 {
     [SerializeField] CinemachineBrain vCamBrain;
-    private bool IsEnabled = true;
+    public static bool IsEnabled = true;
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Player"){

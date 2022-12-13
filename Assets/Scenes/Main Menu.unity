@@ -6348,7 +6348,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2826707164ce92488a3b1b5a3e8fa10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textFileURL: 
+  textFileURL1: 
+  textFileURL2: 
+  textFileURL3: 
   loadScreen: {fileID: 1071901056}
 --- !u!4 &1071901055
 Transform:
@@ -6377,6 +6379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e198b7bf415bb14186ddc5e05e23612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasLoaded: 0
 --- !u!114 &1071901057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6393,12 +6396,14 @@ MonoBehaviour:
     m_Position: {x: 0, y: 0, z: 0}
     m_Size: {x: 0, y: 0, z: 0}
   filename: 
-  level1Filename: 
-  level2Filename: 
-  level3Filename: 
+  level1Filename: TilemapDataLevel1.json
+  level2Filename: TilemapDataLevel2.json
+  level3Filename: TilemapDataLevel3.json
   level1Text: {fileID: 5103570719399765273}
   level2Text: {fileID: 5103570719892806654}
   level3Text: {fileID: 5103570720640322373}
+  level2isCreated: 0
+  level3isCreated: 0
 --- !u!1 &1160101962
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ using TMPro;
 public class TimeCounter : MonoBehaviour
 {
     public static float currentTime = 0;
-    private int timeSeconds;
+    public static int timeSeconds;
 
     public TMP_Text timeText;
 

@@ -3,8 +3,8 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
@@ -96,16 +96,42 @@ public class LevelManager : MonoBehaviour
         {
             if (screnshotResponse.success)
             {
-                string textFilePath = filePath + "/tilemapData.json";
-                LootLocker.LootLockerEnums.FilePurpose textFileType = LootLocker.LootLockerEnums.FilePurpose.primary_thumbnail;
+                string textFilePath1 = filePath + "/TilemapDataLevel1.json";
+                LootLocker.LootLockerEnums.FilePurpose textFileType = LootLocker.LootLockerEnums.FilePurpose.file;
 
-                LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, textFilePath, "tilemapData.json", textFileType, (textResponse) =>
+                LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, textFilePath1, "TilemapDataLevel1.json", textFileType, (textResponse) =>
                 {
                     if (textResponse.success)
                     {
-                        LootLockerSDKManager.UpdatingAnAssetCandidate(levelID, true, (updatedResponse) =>
+                        string textFilePath2 = filePath + "/TilemapDataLevel2.json";
+                        LootLocker.LootLockerEnums.FilePurpose textFileType = LootLocker.LootLockerEnums.FilePurpose.file;
+
+                        LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, textFilePath2, "TilemapDataLevel2.json", textFileType, (textResponse) =>
                         {
-                        });
+                            if (textResponse.success)
+                            {
+                                string textFilePath3 = filePath + "/TilemapDataLevel3.json";
+                                LootLocker.LootLockerEnums.FilePurpose textFileType = LootLocker.LootLockerEnums.FilePurpose.file;
+
+                                LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, textFilePath3, "TilemapDataLevel3.json", textFileType, (textResponse) =>
+                                {
+                                    if (textResponse.success)
+                                    {
+                                        LootLockerSDKManager.UpdatingAnAssetCandidate(levelID, true, (updatedResponse) =>
+                                        {
+                                        });
+                                    }
+                                    else
+                                    {
+                                    }
+                                }
+                                );
+                            }
+                            else
+                            {
+                            }
+                        }
+                        );
                     }
                     else
                     {
@@ -126,7 +152,7 @@ public class LevelManager : MonoBehaviour
         {
             if (response.success)
             {
-                foreach(Transform child in levelDataEntryContent)
+                foreach (Transform child in levelDataEntryContent)
                 {
                     GameObject.Destroy(child.gameObject);
                 }
@@ -142,7 +168,9 @@ public class LevelManager : MonoBehaviour
 
                     LootLockerFile[] levelImageFiles = response.assets[i].files;
                     StartCoroutine(LoadLevelIcon(levelImageFiles[0].url.ToString(), displayitem.GetComponent<LevelEntryData>().levelIcon));
-                    GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().textFileURL = levelImageFiles[1].url.ToString();
+                    GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().textFileURL1 = levelImageFiles[1].url.ToString();
+                    GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().textFileURL2 = levelImageFiles[2].url.ToString();
+                    GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().textFileURL3 = levelImageFiles[3].url.ToString();
                 }
             }
         }, null, true);

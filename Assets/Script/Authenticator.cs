@@ -23,7 +23,7 @@ public class Authenticator : MonoBehaviour
     public GameObject resetPasswordPnl, AuthenticatorPnl, HomeButtons,
                       verivyNotifPnl, UsernamePnl;
 
-    private bool signinActive, signupActive;
+    private bool signinActive, signupActive, hasStarted;
 
     private string hasNamed;
 
@@ -104,21 +104,24 @@ public class Authenticator : MonoBehaviour
     {
         StartSession();
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
 
-        GetPlayerName();
-
-        yield return new WaitForSeconds(1f);
-
-        if (CreatorName == CreatorNameTemp && CreatorName != null)
+        if(hasStarted == true)
         {
-            UsernamePnl.SetActive(true);
-        }
-        else
-        {
-            AuthenticatorPnl.SetActive(false);
+            GetPlayerName();
 
-            HomeButtons.SetActive(true);
+            yield return new WaitForSeconds(1f);
+
+            if (CreatorName == CreatorNameTemp && CreatorName != null)
+            {
+                UsernamePnl.SetActive(true);
+            }
+            else
+            {
+                AuthenticatorPnl.SetActive(false);
+
+                HomeButtons.SetActive(true);
+            }
         }
 
         yield return null;
@@ -146,6 +149,10 @@ public class Authenticator : MonoBehaviour
             if (!response.success)
             {
                 return;
+            }
+            else
+            {
+                hasStarted = true;
             }
         });
     }
