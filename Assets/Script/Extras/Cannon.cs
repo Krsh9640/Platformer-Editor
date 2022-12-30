@@ -4,41 +4,45 @@ using UnityEngine;
 
 public class Cannon : MonoBehaviour
 {
-    public GameObject spawnPoint, cannonBall, gameState;
-    public GameObject [] cannonBallPrefabs;
+    public GameObject spawnPoint, cannonBall;
+    public GameObject[] cannonBallPrefabs;
     float timeBetween;
     public float startTimeBetween;
 
-    private void Start() {
-        gameState = GameObject.Find("Manager");
+    private GameState gameState;
+
+    private void Start()
+    {
+        gameState = GameObject.Find("Manager").GetComponent<GameState>();
 
         timeBetween = startTimeBetween;
         timeBetween = 0;
-    }
 
-    private void Update() {
         spawnPoint = GameObject.Find("CannonBallSpawnPoint");
         cannonBall = GameObject.Find("CannonBall");
         cannonBallPrefabs = GameObject.FindGameObjectsWithTag("Extras");
+    }
 
-        if(gameState.TryGetComponent(out GameState gameStateScript)){
-            if(gameStateScript.isPlay == true){
-                if(timeBetween <= 0){
-                    Instantiate(cannonBall, spawnPoint.transform.position, spawnPoint.transform.rotation);
+    private void Update()
+    {
+        if (gameState.isPlay == true)
+        {
+            Debug.Log(timeBetween);
+            if (timeBetween <= 0)
+            {
+                GameObject instCannonBall = Instantiate(cannonBall, spawnPoint.transform.position, spawnPoint.transform.rotation);
+                instCannonBall.transform.SetParent(this.gameObject.transform);
+                instCannonBall.AddComponent<CannonBall>();
+                instCannonBall.GetComponent<CircleCollider2D>().enabled = true;
+                Rigidbody2D rb = instCannonBall.GetComponent<Rigidbody2D>();
+                rb.velocity = -transform.right * 7;
 
-                    foreach(GameObject i in cannonBallPrefabs){
-                        i.AddComponent<CannonBall>();
-                        if(i.TryGetComponent(out CircleCollider2D collider)){
-                            collider.enabled = true;
-                        } else {
-                            i.AddComponent<CircleCollider2D>();
-                        }
-                    }
-                    timeBetween = startTimeBetween;
-                } else {
-                    timeBetween -= Time.deltaTime;
-                }   
+                timeBetween = startTimeBetween;
             }
-        } 
+            else
+            {
+                timeBetween -= Time.deltaTime;
+            }
+        }
     }
 }

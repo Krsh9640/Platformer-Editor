@@ -10,16 +10,14 @@ public class MainMenu : MonoBehaviour
     public GameObject BtnsMainMenu;
     public GameObject PnlLevels;
 
-    private GameObject DownloadSceneManager;
     private LoadingScreen loadingScreen;
 
     private SaveHandler saveHandler;
 
     private void Awake()
     {
-        DownloadSceneManager = GameObject.Find("DownloadSceneManager");
-        saveHandler = DownloadSceneManager.GetComponent<SaveHandler>();
-        loadingScreen = DownloadSceneManager.GetComponent<LoadingScreen>();
+        saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
+        loadingScreen = GameObject.Find("DownloadSceneManager").GetComponent<LoadingScreen>();
     }
 
     //Exit Button//

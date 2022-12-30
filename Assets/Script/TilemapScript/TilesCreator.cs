@@ -44,7 +44,7 @@ public class TilesCreator : Singleton<TilesCreator>
 
     private int UILayer;
 
-    public AudioClip tilePlace, tileDelete, ClearAllTile;
+    public AudioClip tilePlace, tileDelete;
     public AudioSource audioSource;
 
     protected override void Awake()
@@ -144,6 +144,7 @@ public class TilesCreator : Singleton<TilesCreator>
         {
             selectedTile = value;
             tileBase = selectedTile != null ? selectedTile.TileBase : null;
+            Debug.Log("selectedTile = " + selectedTile + ", tilebase = " + tileBase);
 
             UpdatePreview();
         }
@@ -310,7 +311,15 @@ public class TilesCreator : Singleton<TilesCreator>
         {
             for (int y = bounds.yMin; y <= bounds.yMax; y++)
             {
-                DrawItem(map, new Vector3Int(x, y, 0), tileBase);
+                if (tileBase.name == "LockedDoor" || tileBase.name == "UnlockedDoor")
+                {
+                    DrawItem(map, new Vector3Int(x, y + (int)0.2, 0), tileBase);
+                }
+                else
+                {
+                    DrawItem(map, new Vector3Int(x, y, 0), tileBase);
+                }
+
             }
         }
     }
@@ -319,6 +328,7 @@ public class TilesCreator : Singleton<TilesCreator>
     {
         tilemap.SetTile(position, tileBase);
         audioSource.PlayOneShot(tilePlace, 0.5f);
+
     }
 
     public GameObject[] FindGameObjectWithinLayer(int layer)

@@ -4,22 +4,23 @@ public class GameState : MonoBehaviour
 {
     public GameObject character;
     public GameObject tileTabs;
-    public GameObject coinCounter, timeCounter, healthCounter, keyIcon, potionIcon;
+    public GameObject coinCounter, timeElapsed, healthCounter, keyIcon, potionIcon;
     public GameObject stopButton, pauseButton, sidebar, pausePnl;
 
     private CharacterController2D controller;
     private PlayerMovement movement;
     private Animator playerAnimator;
-    private SaveHandler saveHandler;
-    private GameObject DownloadSceneManager;
+    [SerializeField] private SaveHandler saveHandler;
     private TilesCreator tilesCreator;
 
     private GameObject[] enemies;
 
     private bool isPaused = false;
-    public bool isPlay = false, FromEditMode, FromPlayMode;
+    [System.NonSerialized] public bool isPlay = false, FromEditMode, FromPlayMode;
 
     public GameObject particle1, particle2;
+
+    private TimeCounter timeCounter;
 
     public int currentCoins { get; set; }
     public int currentTimes { get; set; }
@@ -31,8 +32,7 @@ public class GameState : MonoBehaviour
         playerAnimator = character.GetComponent<Animator>();
         tilesCreator = GetComponent<TilesCreator>();
 
-        DownloadSceneManager = GameObject.Find("DownloadSceneManager");
-        saveHandler = DownloadSceneManager.GetComponent<SaveHandler>();
+        saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
 
         if (isPlay == false)
         {
@@ -42,6 +42,8 @@ public class GameState : MonoBehaviour
                 particle2.GetComponent<ParticleSystem>().Stop();
             }
         }
+
+        timeCounter = timeElapsed.GetComponent<TimeCounter>();
 
         saveHandler.initTilemaps();
         saveHandler.initTileReference();
@@ -74,7 +76,7 @@ public class GameState : MonoBehaviour
 
         tileTabs.SetActive(false);
         coinCounter.SetActive(true);
-        timeCounter.SetActive(true);
+        timeElapsed.SetActive(true);
         healthCounter.SetActive(true);
         pauseButton.SetActive(true);
         stopButton.SetActive(true);
@@ -85,6 +87,8 @@ public class GameState : MonoBehaviour
 
     public void PlayMode()
     {
+        saveHandler.SaveScoreToDefault();
+
         isPlay = true;
         FromPlayMode = true;
 
@@ -96,39 +100,10 @@ public class GameState : MonoBehaviour
 
         tileTabs.SetActive(false);
         coinCounter.SetActive(true);
-        timeCounter.SetActive(true);
+        timeElapsed.SetActive(true);
         healthCounter.SetActive(true);
         pauseButton.SetActive(true);
         sidebar.SetActive(false);
-
-        saveHandler.OnSave();
-    }
-
-    public void Restart()
-    {
-        currentCoins = PlayerPrefs.GetInt("Coin");
-        Debug.Log(Coin.totalCoin);
-        currentTimes = PlayerPrefs.GetInt("Time");
-        Debug.Log(TimeCounter.timeSeconds);
-
-        tilesCreator.ClearTiles();
-        
-        character.transform.position = movement.startingSpawnPos;
-
-        saveHandler.OnLoad();
-        PauseGame();
-
-        vCamTrigger.IsEnabled = false;
-    }
-
-    public void PauseGame()
-    {
-        pauseButton.SetActive(isPaused);
-        pausePnl.SetActive(!isPaused);
-
-        Time.timeScale = 0f;
-        isPaused = !isPaused;
-        Time.timeScale = isPaused ? 0 : 1;
     }
 
     public void StopPlaying()
@@ -143,7 +118,7 @@ public class GameState : MonoBehaviour
 
         tileTabs.SetActive(true);
         coinCounter.SetActive(false);
-        timeCounter.SetActive(false);
+        timeElapsed.SetActive(false);
         healthCounter.SetActive(false);
         pauseButton.SetActive(false);
         sidebar.SetActive(true);
@@ -151,6 +126,62 @@ public class GameState : MonoBehaviour
 
         particle1.GetComponent<ParticleSystem>().Stop();
         particle2.GetComponent<ParticleSystem>().Stop();
+
+        timeCounter.timerGoing = false;
+
+        character.transform.position = movement.startingSpawnPos;
+        saveHandler.OnLoad();
+    }
+
+    public void Restart()
+    {
+        if(UnlockedDoor.isWin == true)
+        {
+            currentCoins = 0;
+            currentTimes = 0;
+
+            tilesCreator.ClearTiles();
+
+            character.transform.position = movement.startingSpawnPos;
+            saveHandler.filename = "TilemapDataLevel1.json";
+            saveHandler.OnLoad();
+            PauseGame();
+
+            vCamTrigger.IsEnabled = false;
+            UnlockedDoor.isWin = false;
+
+            controller.enabled = true;
+            movement.enabled = true;
+            playerAnimator.enabled = true;
+        }
+        else
+        {
+            currentCoins = PlayerPrefs.GetInt("Coin");
+            currentTimes = PlayerPrefs.GetInt("Time");
+
+            tilesCreator.ClearTiles();
+
+            character.transform.position = movement.startingSpawnPos;
+
+            saveHandler.OnLoad();
+            PauseGame();
+
+            vCamTrigger.IsEnabled = false;
+
+            controller.enabled = true;
+            movement.enabled = true;
+            playerAnimator.enabled = true;
+        }
+    }
+
+    public void PauseGame()
+    {
+        pauseButton.SetActive(isPaused);
+        pausePnl.SetActive(!isPaused);
+
+        Time.timeScale = 0f;
+        isPaused = !isPaused;
+        Time.timeScale = isPaused ? 0 : 1;
     }
 
     public void GetComponentEnemy(bool isEnabled)
