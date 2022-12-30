@@ -8,14 +8,16 @@ using LootLocker.Requests;
 
 public class LevelEntryData : MonoBehaviour
 {
-    public int iD;
-    public string levelName;
-    public string creatorName;
+    [System.NonSerialized] public int iD, bestCoin;
+    [System.NonSerialized] public string levelName, creatorName, bestPlayerName, bestTimeFormat;
     public TMP_Text nameText;
     public TMP_Text creatorText;
     public Image levelIcon;
 
-    private GameObject BrowseUI;
+    public TMP_Text bestPlayerNameText, bestPlayerTimeText, bestPlayerCoinText;
+
+    private SaveHandler saveHandler;
+    private LevelManager levelManager;
 
     private void Start()
     {
@@ -24,35 +26,29 @@ public class LevelEntryData : MonoBehaviour
 
         nameText.text = levelName;
         levelIcon.sprite = levelIcon.sprite;
+        creatorText.text = creatorName;
 
-        PlayerName();
+        Debug.Log(creatorName);
 
-        BrowseUI = GameObject.Find("LevelBrowserPanel");
+        saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
+
+        if(saveHandler.levelName == levelName)
+        {
+            bestPlayerNameText.text = bestPlayerName;
+            bestPlayerTimeText.text = bestTimeFormat;
+            bestPlayerCoinText.text = bestCoin.ToString();
+        }
     }
 
     public void DownloadLevel()
     {
         GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().LoadLevel();
+        saveHandler.levelName = levelName;
     }
 
     public void PlayLevel()
     {
         GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().PlayLevel();
-    }
-
-    public void PlayerName()
-    {
-        LootLockerSDKManager.GetPlayerName((response) =>
-        {
-            if (response.success)
-            {
-                creatorName = response.name;
-                creatorText.text = creatorName;
-            }
-            else
-            {
-
-            }
-        });
+        saveHandler.levelName = levelName;
     }
 }

@@ -12,44 +12,100 @@ public class UnlockedDoor : MonoBehaviour
 
     public GameObject particle1, particle2;
 
-    public bool isWin = false;
+    public static bool isWin = false;
+    private GameObject afterWinPnl;
 
-    private void Update() {
+    private SaveHandler saveHandler;
+    private LevelManager levelManager;
+    [SerializeField] private TimeCounter timeCounter;
+
+    private void Start()
+    {
         manager = GameObject.Find("Manager");
         gameState = manager.GetComponent<GameState>();
         winText = GameObject.Find("WinText");
-        player = GameObject.FindWithTag("Player"); 
+        player = GameObject.FindWithTag("Player");
         movement = player.GetComponent<PlayerMovement>();
         playerAnimator = player.GetComponent<Animator>();
 
         particle1 = GameObject.Find("ParticleSystem1");
         particle2 = GameObject.Find("ParticleSystem2");
 
+        afterWinPnl = GameObject.Find("AfterWin").transform.GetChild(0).gameObject;
+
+        saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
+        levelManager = GameObject.Find("Manager").GetComponent<LevelManager>();
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "Player"){
-            if(gameState.isPlay == true){
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            if (gameState.isPlay == true)
+            {
                 StartCoroutine(COWinText());
-            } 
+            }
         }
     }
 
-    public IEnumerator COWinText(){
-        isWin = true;
-        
-        winText.GetComponent<TMP_Text>().enabled = true;
+    public IEnumerator COWinText()
+    {
+        timeCounter = GameObject.Find("TimeCounter").GetComponent<TimeCounter>();
+        if (gameState.FromPlayMode == true)
+        {
+            isWin = true;
 
-        particle1.GetComponent<ParticleSystem>().Play();
-        particle2.GetComponent<ParticleSystem>().Play();
+            winText.GetComponent<TMP_Text>().enabled = true;
 
-        playerAnimator.SetFloat("Speed", 0);
+            particle1.GetComponent<ParticleSystem>().Play();
+            particle2.GetComponent<ParticleSystem>().Play();
 
-        movement.enabled = false;
-        gameState.GetComponentEnemy(false);
+            playerAnimator.SetFloat("Speed", 0);
 
-        yield return new WaitForSeconds(5);
+            movement.enabled = false;
+            movement.rb.velocity = new Vector2(0, 0);
+            gameState.GetComponentEnemy(false);
+            gameState.isPlay = false;
 
-        gameState.StopPlaying();
+            timeCounter.timerGoing = false;
+
+            PlayerPrefs.SetInt("Coin", Coin.totalCoin);
+            PlayerPrefs.SetInt("Time", timeCounter.currentTimeINTver);
+            PlayerPrefs.SetString("TimeFormat", TimeCounter.currentTimeText);
+
+            saveHandler.CompareScore();
+
+            yield return new WaitForSeconds(2);
+
+            levelManager.UpdateScoreHandler();
+
+            yield return new WaitForSeconds(3);
+
+            afterWinPnl.SetActive(true);
+        }
+        else
+        {
+            isWin = true;
+
+            winText.GetComponent<TMP_Text>().enabled = true;
+
+            particle1.GetComponent<ParticleSystem>().Play();
+            particle2.GetComponent<ParticleSystem>().Play();
+
+            playerAnimator.SetFloat("Speed", 0);
+
+            movement.enabled = false;
+            movement.rb.velocity = new Vector2(0, 0);
+            gameState.GetComponentEnemy(false);
+            gameState.isPlay = false;
+
+            timeCounter.timerGoing = false;
+
+            yield return new WaitForSeconds(1);
+
+            gameState.StopPlaying();
+
+            winText.GetComponent<TMP_Text>().enabled = false;
+        }
     }
 }

@@ -107,7 +107,7 @@ public class MultiLevel : MonoBehaviour
         }
         else if (levelVal.text == "Level 3")
         {
-            saveHandler.filename = level2filename;
+            saveHandler.filename = level3filename;
             tilesCreator.ClearTiles();
             saveHandler.OnLoad();
             saveHandler.level3isCreated = true;

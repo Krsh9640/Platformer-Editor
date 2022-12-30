@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using LootLocker.Requests;
 
 public class LockedDoor : MonoBehaviour
 {
@@ -16,18 +16,25 @@ public class LockedDoor : MonoBehaviour
 
     public GameObject particle1, particle2;
 
-    public bool isWin = false;
+    private GameObject afterWinPnl;
 
-    void Update() {
+    private SaveHandler saveHandler;
+    private TimeCounter timeCounter;
+
+    private LevelManager levelManager;
+
+    private void Update()
+    {
         manager = GameObject.Find("Manager");
         gameState = manager.GetComponent<GameState>();
         winText = GameObject.Find("WinText");
-        player = GameObject.FindWithTag("Player"); 
+        player = GameObject.FindWithTag("Player");
         movement = player.GetComponent<PlayerMovement>();
         playerAnimator = player.GetComponent<Animator>();
-        
+
         key = GameObject.Find("Key");
-        if(key != null){
+        if (key != null)
+        {
             keyScript = key.GetComponent<KeyScript>();
         }
 
@@ -36,37 +43,91 @@ public class LockedDoor : MonoBehaviour
         particle1 = GameObject.Find("ParticleSystem1");
         particle2 = GameObject.Find("ParticleSystem2");
 
+        afterWinPnl = GameObject.Find("AfterWin");
+
+        saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
+        levelManager = GameObject.Find("Manager").GetComponent<LevelManager>();
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "Player"){
-            if(gameState.isPlay == true){
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            if (gameState.isPlay == true)
+            {
                 StartCoroutine(COWinText());
-            } 
+            }
         }
     }
 
-    public IEnumerator COWinText(){
-        if(keyScript != null){
-            if(keyScript.isPicked == true){
-            spriteRenderer.sprite = unlockedDoorSprite;
+    public IEnumerator COWinText()
+    {
+        timeCounter = GameObject.Find("TimeCounter").GetComponent<TimeCounter>();
+        if (keyScript != null)
+        {
+            if (keyScript.isPicked == true)
+            {
+                if (gameState.FromPlayMode == true)
+                {
+                    spriteRenderer.sprite = unlockedDoorSprite;
 
-            isWin = true;
-        
-            winText.GetComponent<TMP_Text>().enabled = true;
+                    UnlockedDoor.isWin = true;
 
-            particle1.GetComponent<ParticleSystem>().Play();
-            particle2.GetComponent<ParticleSystem>().Play();
+                    winText.GetComponent<TMP_Text>().enabled = true;
 
-            playerAnimator.SetFloat("Speed", 0);
+                    particle1.GetComponent<ParticleSystem>().Play();
+                    particle2.GetComponent<ParticleSystem>().Play();
 
-            movement.enabled = false;
-            gameState.GetComponentEnemy(false);
+                    playerAnimator.SetFloat("Speed", 0);
 
-            yield return new WaitForSeconds(5);
+                    movement.enabled = false;
+                    movement.rb.velocity = new Vector2(0, 0);
+                    gameState.GetComponentEnemy(false);
+                    gameState.isPlay = false;
 
-            gameState.StopPlaying();
-        }
+                    timeCounter.timerGoing = false;
+
+                    PlayerPrefs.SetInt("Coin", Coin.totalCoin);
+                    PlayerPrefs.SetInt("Time", timeCounter.currentTimeINTver);
+                    PlayerPrefs.SetString("TimeFormat", TimeCounter.currentTimeText);
+
+                    saveHandler.CompareScore();
+
+                    yield return new WaitForSeconds(2);
+
+                    levelManager.UpdateScoreHandler();
+
+                    yield return new WaitForSeconds(3);
+
+                    afterWinPnl.SetActive(true);
+                }
+                else
+                {
+                    spriteRenderer.sprite = unlockedDoorSprite;
+
+                    UnlockedDoor.isWin = true;
+
+                    winText.GetComponent<TMP_Text>().enabled = true;
+
+                    particle1.GetComponent<ParticleSystem>().Play();
+                    particle2.GetComponent<ParticleSystem>().Play();
+
+                    playerAnimator.SetFloat("Speed", 0);
+
+                    movement.enabled = false;
+                    movement.rb.velocity = new Vector2(0, 0);
+                    gameState.GetComponentEnemy(false);
+                    gameState.isPlay = false;
+
+                    timeCounter.timerGoing = false;
+
+                    yield return new WaitForSeconds(5);
+
+                    gameState.StopPlaying();
+                }
+
+                
+            }
         }
     }
 }

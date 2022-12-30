@@ -25,13 +25,15 @@ public class Authenticator : MonoBehaviour
 
     private bool signinActive, signupActive, hasStarted;
 
-    private string hasNamed;
+    [SerializeField] private string playerID;
+
+    private DownloadScene downloadScene;
 
     private void Awake()
     {
         signupBtn.GetComponent<Image>().color = Color.gray;
 
-        CheckSession();
+        downloadScene = GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>();
     }
 
     public void SignInTab()
@@ -68,8 +70,6 @@ public class Authenticator : MonoBehaviour
     {
         email = EmailInput.text;
         password = PasswordInput.text;
-
-        PlayerPrefs.SetInt(hasNamed, 0);
 
         LootLockerSDKManager.WhiteLabelSignUp(email, password, (response) =>
         {
@@ -112,18 +112,20 @@ public class Authenticator : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
 
-            if (CreatorName == CreatorNameTemp && CreatorName != null)
+            if (downloadScene.hasLoggedin == true)
             {
-                UsernamePnl.SetActive(true);
-            }
-            else
-            {
-                AuthenticatorPnl.SetActive(false);
+                if (CreatorName == CreatorNameTemp && CreatorName != null)
+                {
+                    UsernamePnl.SetActive(true);
+                }
+                else
+                {
+                    AuthenticatorPnl.SetActive(false);
 
-                HomeButtons.SetActive(true);
+                    HomeButtons.SetActive(true);
+                }
             }
         }
-
         yield return null;
     }
 
@@ -164,6 +166,7 @@ public class Authenticator : MonoBehaviour
         CreatorName = CreatorNameTemp;
 
         SetPlayerName(CreatorName);
+        PlayerPrefs.SetString("PlayerID", CreatorName);
 
         AuthenticatorPnl.SetActive(false);
 
@@ -192,6 +195,7 @@ public class Authenticator : MonoBehaviour
             if (response.success)
             {
                 CreatorName = response.name;
+                PlayerPrefs.SetString("PlayerID", CreatorName);
                 Debug.Log(response.name);
             }
             else
@@ -221,9 +225,11 @@ public class Authenticator : MonoBehaviour
         {
             if (response.success)
             {
+
             }
             else
             {
+
             }
         });
 
@@ -232,5 +238,6 @@ public class Authenticator : MonoBehaviour
         SignInTab();
         email = null;
         password = null;
+        downloadScene.hasLoggedin = false;
     }
 }

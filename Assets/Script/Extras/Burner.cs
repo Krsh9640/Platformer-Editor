@@ -29,7 +29,6 @@ public class Burner : MonoBehaviour
         if(other.tag == "Player"){
             isTouching = true;
             StartCoroutine(COSBurnerDamage(other));
-            isTouching = !isTouching;
         }
     }
 
@@ -40,16 +39,17 @@ public class Burner : MonoBehaviour
             movement.SetInvincible(4);
             Invoke("EnableBlink", 0f);
             Invoke("DisableBlink", 0.1f);
-            yield return new WaitForSeconds(4);
             isTouching = !isTouching;
+            yield return new WaitForSeconds(4);
         }
     }
 
     public IEnumerator shootFire(){
         while(true){
             animator.SetBool("isShooting", true);
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(2);
             animator.SetBool("isShooting", false);
+            yield return new WaitForSeconds(3);
         }
     }
 

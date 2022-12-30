@@ -25,9 +25,9 @@ public class SpikeBall : MonoBehaviour
             movement.currentHealth--;
             movement.SetInvincible(3);
             Invoke("EnableBlink", 0f);
-            Invoke("DisableBlink", 0.1f);
-            yield return new WaitForSeconds(3);
+            Invoke("DisableBlink", 0.1f);            
             isTouching = !isTouching;
+            yield return new WaitForSeconds(3);
         }
     }
 

@@ -13,20 +13,25 @@ public class SaveHandler : Singleton<SaveHandler>
     private Dictionary<String, TileBase> guidToTileBase = new Dictionary<string, TileBase>();
 
     [SerializeField] private BoundsInt bounds;
-    public string filename;
+    [System.NonSerialized] public string filename, levelName;
 
-    [SerializeField] private string level1Filename = "TilemapDataLevel1.json", 
-        level2Filename = "TilemapDataLevel2.json", 
+    [SerializeField]
+    private string level1Filename = "TilemapDataLevel1.json",
+        level2Filename = "TilemapDataLevel2.json",
         level3Filename = "TilemapDataLevel3.json";
     public TMP_Text level1Text, level2Text, level3Text;
 
-    public bool level2isCreated, level3isCreated;
+    [System.NonSerialized] public bool level2isCreated, level3isCreated;
+
+    [System.NonSerialized] public string bestPlayerName, bestTimeFormat;
+    
+    [System.NonSerialized] public int bestCoin, bestTime;
 
     public void Createjson(string filename)
     {
         List<TilemapData> data = new List<TilemapData>();
 
-        FileHandler.SaveToJSON<TilemapData>(data, filename);
+        FileHandler.SaveToJSON<TilemapData>(data, levelName, filename);
     }
 
     public void Level2Json()
@@ -69,7 +74,7 @@ public class SaveHandler : Singleton<SaveHandler>
 
     public void initTilemaps()
     {
-         Tilemap[] maps = FindObjectsOfType<Tilemap>();
+        Tilemap[] maps = FindObjectsOfType<Tilemap>();
 
         foreach (var map in maps)
         {
@@ -113,12 +118,36 @@ public class SaveHandler : Singleton<SaveHandler>
             data.Add(mapData);
         }
 
-        FileHandler.SaveToJSON<TilemapData>(data, filename);
+        FileHandler.SaveToJSON<TilemapData>(data, levelName, filename);
+    }
+
+    public void MoveFiles()
+    {
+        string originalPath = Application.persistentDataPath;
+        FileInfo[] getOriginalFiles = new DirectoryInfo(Application.persistentDataPath).GetFiles("*.*");
+        string filepath = Path.Combine(originalPath, levelName);
+        Debug.Log(filepath);
+
+        if (!Directory.Exists(filepath))
+        {
+            Directory.CreateDirectory(filepath);
+        }
+
+        foreach (FileInfo file in getOriginalFiles)
+        {
+            string newFileName = file.Name;
+            string destFile = Path.Combine(filepath, newFileName);
+
+            if(!File.Exists(destFile)){
+                File.Move(file.FullName, destFile);
+            }
+        }
     }
 
     public void OnLoad()
     {
-        List<TilemapData> data = FileHandler.ReadListFromJSON<TilemapData>(filename);
+        Debug.Log(levelName + " " + filename);
+        List<TilemapData> data = FileHandler.ReadListFromJSON<TilemapData>(levelName, filename);
 
         foreach (var mapData in data)
         {
@@ -148,26 +177,58 @@ public class SaveHandler : Singleton<SaveHandler>
         }
     }
 
-    //public GameObject[] FindGameObjectWithinLayer(int layer)
-    //{
-    //    GameObject[] goArray = FindObjectsOfType(typeof(GameObject)) as GameObject[];
+    public void SaveScore()
+    {
+        ScoreData scoreData = new ScoreData();
 
-    //    List<GameObject> goList = new List<GameObject>();
+        scoreData.levelName = levelName;
+        scoreData.playerName = PlayerPrefs.GetString("PlayerID");
+        scoreData.bestCoin = PlayerPrefs.GetInt("Coin");
+        scoreData.bestTime = PlayerPrefs.GetInt("Time");
+        scoreData.bestTimeFormat = PlayerPrefs.GetString("TimeFormat");
 
-    //    for (int i = 0; i < goArray.Length; i++)
-    //    {
-    //        if (goArray[i].layer == layer)
-    //        {
-    //            goList.Add(goArray[i]);
-    //        }
-    //    }
-    //    if (goList.Count == 0)
-    //    {
-    //        return null;
-    //    }
-    //    return goList.ToArray();
-    //}
+        string json = JsonUtility.ToJson(scoreData, true);
+        File.WriteAllText(Application.persistentDataPath + "/" + levelName + "/ScoreData.json", json);
+    }
 
+    public void LoadScore()
+    {
+        string json = File.ReadAllText(Application.persistentDataPath + "/" + levelName + "/ScoreData.json");
+        ScoreData scoreData = JsonUtility.FromJson<ScoreData>(json);
+
+        levelName = scoreData.levelName;
+        bestPlayerName = scoreData.playerName;
+        bestCoin = scoreData.bestCoin;
+        bestTime = scoreData.bestTime;
+        bestTimeFormat = scoreData.bestTimeFormat;
+    }
+
+    public void SaveScoreToDefault()
+    {
+        ScoreData scoreData = new ScoreData();
+
+        scoreData.levelName = levelName;
+        bestPlayerName = "";
+        bestCoin = 0;
+        bestTime = 0;
+        bestTimeFormat = "00:00";
+
+        string json = JsonUtility.ToJson(scoreData, true);
+        File.WriteAllText(Application.persistentDataPath + "/" + levelName + "/ScoreData.json", json);
+    }
+
+    public void CompareScore()
+    {
+        LoadScore();
+
+        if (PlayerPrefs.GetInt("Time") < bestTime || bestTime == 0)
+        {
+            if (PlayerPrefs.GetInt("Coin") > bestCoin || bestCoin == 0)
+            {
+                SaveScore();
+            }
+        }
+    }
 }
 
 [Serializable]
@@ -188,4 +249,14 @@ public class TileInfo
         position = pos;
         guidForBuildable = guid;
     }
+}
+
+[Serializable]
+public class ScoreData
+{
+    public string levelName;
+    public string playerName = "-";
+    public int bestCoin = 0;
+    public int bestTime = 0;
+    public string bestTimeFormat = "00:00";
 }

@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private GameState gameState;
     private SaveHandler saveHandler;
 
-    float horizontalMove = 0f;
+    public float horizontalMove = 0f;
     public float runSpeed = 100f;
 
     public bool jump = false;
@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject blink;
     public TMP_Text healthText;
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     private float jumpTime;
     private float jumpTimeCounter;
@@ -139,8 +139,11 @@ public class PlayerMovement : MonoBehaviour
                 this.gameObject.transform.position = startingSpawnPos;
             }else if(gameState.isPlay == true && gameState.FromPlayMode == true)
             {
-                StartCoroutine(DeathOrder());
-                audioSource.PlayOneShot(deathSound, 0.5f);
+                if (this.gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(DeathOrder());
+                    audioSource.PlayOneShot(deathSound, 0.5f);
+                }
             }
         }
     }

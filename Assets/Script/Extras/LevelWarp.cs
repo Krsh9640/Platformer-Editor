@@ -22,7 +22,8 @@ public class LevelWarp : MonoBehaviour
 
 	public BoxCollider2D boxCollider;
 
-	public static int currentCoin, currentTime;
+	public static int currentCoin;
+	public static int currentTime;
 
 	[SerializeField] private string currentFilename;
 
@@ -82,8 +83,6 @@ public class LevelWarp : MonoBehaviour
 
 				yield return new WaitForSeconds(1f);
 
-				tilesCreator.ClearTiles();
-
 				saveHandler.filename = nextFilename;
 
 				PlayerChar.transform.position = playerMovement.startingSpawnPos;
@@ -95,8 +94,9 @@ public class LevelWarp : MonoBehaviour
 
 				if(hasLoaded == true)
                 {
+
 					currentCoin = Coin.totalCoin;
-					currentTime = TimeCounter.timeSeconds;
+					currentTime = (int)TimeCounter.currentTime;
 
 					PlayerPrefs.SetInt("Coin", currentCoin);
 					PlayerPrefs.SetInt("Time", currentTime);

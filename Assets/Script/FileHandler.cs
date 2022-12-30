@@ -6,19 +6,19 @@ using UnityEngine;
 
 public static class FileHandler {
 
-    public static void SaveToJSON<T> (List<T> toSave, string filename) {
-        Debug.Log (GetPath (filename));
+    public static void SaveToJSON<T> (List<T> toSave, string filepath, string filename) {
+        Debug.Log (GetPath (filepath, filename));
         string content = JsonHelper.ToJson<T> (toSave.ToArray ());
-        WriteFile (GetPath (filename), content);
+        WriteFile (GetPath (filepath, filename), content);
     }
 
-    public static void SaveToJSON<T> (T toSave, string filename) {
+    public static void SaveToJSON<T> (T toSave,string filepath, string filename) {
         string content = JsonUtility.ToJson (toSave);
-        WriteFile (GetPath (filename), content);
+        WriteFile (GetPath (filepath, filename), content);
     }
 
-    public static List<T> ReadListFromJSON<T> (string filename) {
-        string content = ReadFile (GetPath (filename));
+    public static List<T> ReadListFromJSON<T> (string filepath, string filename) {
+        string content = ReadFile (GetPath (filepath, filename));
 
         if (string.IsNullOrEmpty (content) || content == "{}") {
             return new List<T> ();
@@ -30,8 +30,8 @@ public static class FileHandler {
 
     }
 
-    public static T ReadFromJSON<T> (string filename) {
-        string content = ReadFile (GetPath (filename));
+    public static T ReadFromJSON<T> (string filepath, string filename) {
+        string content = ReadFile (GetPath (filepath, filename));
 
         if (string.IsNullOrEmpty (content) || content == "{}") {
             return default (T);
@@ -43,8 +43,12 @@ public static class FileHandler {
 
     }
 
-    public static string GetPath (string filename) {
-        return Application.persistentDataPath + "/" + filename;
+    public static string GetPath (string filepath, string filename) {
+        filepath = Path.Combine(Application.persistentDataPath, filepath);
+        if(!Directory.Exists(filepath)){
+            Directory.CreateDirectory(filepath);
+        }
+        return Path.Combine(filepath, filename);
     }
 
     private static void WriteFile (string path, string content) {

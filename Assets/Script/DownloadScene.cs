@@ -2,6 +2,7 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class DownloadScene : MonoBehaviour
 {
@@ -12,6 +13,14 @@ public class DownloadScene : MonoBehaviour
     private static GameObject instance;
 
     private SaveHandler saveHandler;
+
+    private Authenticator authenticator;
+
+    public GameObject homeButtons;
+
+    public GameState gameState;
+
+    [System.NonSerialized] public bool doneLoad, hasLoggedin;
 
     public void CheckInit()
     {
@@ -27,50 +36,103 @@ public class DownloadScene : MonoBehaviour
     {
         CheckInit();
         saveHandler = GetComponent<SaveHandler>();
+        authenticator = GameObject.Find("Authenticator").GetComponent<Authenticator>();
+
+        Scene scene = SceneManager.GetActiveScene();
+
+        if(hasLoggedin == false)
+        {
+            authenticator.CheckSession();
+            hasLoggedin = true;
+        }
+    }
+
+    private void Update()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+
+        if (scene.name == "Level Editor")
+        {
+            doneLoad = true;
+        }
+        else if (scene.name == "Main Menu")
+        {
+            doneLoad = false;
+        }
     }
 
     public void LoadLevel()
     {
-        StartCoroutine(DownloadLevelTextFile());
+        StartCoroutine(LoadLevelRoutine());
+    }
+
+    public IEnumerator LoadLevelRoutine(){
+        StartCoroutine(DownloadLevelTextFile(saveHandler.levelName));
+
+        loadScreen.LoadScene("Loading Screen", "Level Editor");
+        saveHandler.filename = "TilemapDataLevel1.json";
+
+        yield return new WaitForSeconds(0.6f);
+
+        saveHandler.OnLoad();
     }
 
     public void PlayLevel()
     {
-        StartCoroutine(DownloadLevelTextFile());
+        StartCoroutine(PlayLevelRoutine());
+    }
+
+    public IEnumerator PlayLevelRoutine()
+    {
+        StartCoroutine(DownloadLevelTextFile(saveHandler.levelName));
+
+        loadScreen.LoadScene("Loading Screen", "Level Editor");
+
+        yield return new WaitForSeconds(0.6f);
+
+        saveHandler.filename = "TilemapDataLevel1.json";
+        saveHandler.OnLoad();
+
         StartCoroutine(PlayLevelOrder());
     }
 
     private IEnumerator PlayLevelOrder()
     {
-        yield return new WaitForSeconds(2.0f);
-        GameObject.Find("Manager").GetComponent<GameState>().PlayMode();
+        gameState = GameObject.Find("Manager").GetComponent<GameState>();
+
+        if (gameState != null && saveHandler.filename != null)
+        {
+            if (doneLoad == true)
+            {
+                yield return new WaitForSeconds(0.5f);
+                gameState.PlayMode();
+            }
+        }
     }
 
-    private IEnumerator DownloadLevelTextFile()
+    public IEnumerator DownloadLevelTextFile(string filename)
     {
+        string filepath = Path.Combine(Application.persistentDataPath, filename);
+        if(!Directory.Exists(filepath)){
+            Directory.CreateDirectory(filepath);
+        }
+
         UnityWebRequest www1 = UnityWebRequest.Get(textFileURL1);
         yield return www1.SendWebRequest();
 
-        string filepath1 = Application.persistentDataPath + "/TilemapDataLevel1.json";
+        string filepath1 = filepath + "/TilemapDataLevel1.json";
         File.WriteAllText(filepath1, www1.downloadHandler.text);
 
         UnityWebRequest www2 = UnityWebRequest.Get(textFileURL2);
         yield return www2.SendWebRequest();
 
-        string filepath2 = Application.persistentDataPath + "/TilemapDataLevel2.json";
+        string filepath2 = filepath + "/TilemapDataLevel2.json";
         File.WriteAllText(filepath2, www2.downloadHandler.text);
 
         UnityWebRequest www3 = UnityWebRequest.Get(textFileURL3);
         yield return www3.SendWebRequest();
 
-        string filepath3 = Application.persistentDataPath + "/TilemapDataLevel3.json";
+        string filepath3 = filepath + "/TilemapDataLevel3.json";
         File.WriteAllText(filepath3, www3.downloadHandler.text);
-
-        loadScreen.LoadScene("Loading Screen", "Level Editor");
-
-        yield return new WaitForSeconds(3.0f);
-
-        saveHandler.filename = "TilemapDataLevel1.json";
-        saveHandler.OnLoad();
     }
 }
