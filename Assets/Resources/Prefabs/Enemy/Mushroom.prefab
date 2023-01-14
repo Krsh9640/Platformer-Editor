@@ -47,7 +47,6 @@ GameObject:
   - component: {fileID: 5788015923402983707}
   - component: {fileID: 5788015923402983700}
   - component: {fileID: 468599365}
-  - component: {fileID: 7542141926779600940}
   m_Layer: 8
   m_Name: Mushroom
   m_TagString: Enemy
@@ -231,6 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 35
   mustPatrol: 0
+  mustFlip: 0
   rb: {fileID: 5788015923402983709}
   groundDetection: {fileID: 5788015923080450145}
   platformLayer:
@@ -251,18 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHP: 1
---- !u!114 &7542141926779600940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5788015923402983686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24750fa381279a743a3a3df00e2250f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  deathSound: {fileID: 8300000, guid: b323c31177cb4444dbe952c6704ac11e, type: 3}
 --- !u!1 &6908237516734130074
 GameObject:
   m_ObjectHideFlags: 0

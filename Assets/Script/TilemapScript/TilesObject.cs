@@ -15,7 +15,6 @@ public class TilesObject : ScriptableObject
 {
     [SerializeField] TileCategory category;
     [SerializeField] TileBase tileBase;
-    //[SerializeField] GameObject gameObject;
     [SerializeField] PlaceType placeType;
 
     public TileBase TileBase{
@@ -23,13 +22,6 @@ public class TilesObject : ScriptableObject
             return tileBase;
         }
     }
-
-    //public GameObject GameObject{
-    //    get
-    //    {
-    //        return gameObject;
-    //    }
-    //}
 
     public PlaceType PlaceType{
         get{

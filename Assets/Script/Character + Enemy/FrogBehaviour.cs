@@ -19,7 +19,8 @@ public class FrogBehaviour : MonoBehaviour
     public enum Animations{
         Idle = 0,
         Jumping = 1,
-        Falling = 2
+        Falling = 2,
+        Death = 3
     };
     
     public Animations currentAnim;
@@ -32,19 +33,12 @@ public class FrogBehaviour : MonoBehaviour
     public float currentIdleTime = 0;
     public bool isIdle = true;
 
-    // Start is called before the first frame update
     void Start()
     {
         lastYPosition = transform.position.y;
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void FixedUpdate() {
@@ -92,11 +86,10 @@ public class FrogBehaviour : MonoBehaviour
         rb.velocity = new Vector2(jumpForceX * direction, jumpForceY);
     }
 
-    void ChangeAnimation(Animations newAnim){
+    public void ChangeAnimation(Animations newAnim){
         if (currentAnim != newAnim){
             currentAnim = newAnim;
             anim.SetInteger("state", (int)newAnim);
         }
     }
-
 }

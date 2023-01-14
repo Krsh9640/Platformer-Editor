@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameState : MonoBehaviour
 {
     public GameObject character;
     public GameObject tileTabs;
-    public GameObject coinCounter, timeElapsed, healthCounter, keyIcon, potionIcon;
+    public GameObject coinCounter, timeElapsed, healthCounter, keyIcon;
     public GameObject stopButton, pauseButton, sidebar, pausePnl;
 
     private CharacterController2D controller;
@@ -13,7 +14,7 @@ public class GameState : MonoBehaviour
     [SerializeField] private SaveHandler saveHandler;
     private TilesCreator tilesCreator;
 
-    private GameObject[] enemies;
+    [SerializeField] private GameObject Enemies;
 
     private bool isPaused = false;
     [System.NonSerialized] public bool isPlay = false, FromEditMode, FromPlayMode;
@@ -23,7 +24,9 @@ public class GameState : MonoBehaviour
     private TimeCounter timeCounter;
 
     public int currentCoins { get; set; }
-    public int currentTimes { get; set; }
+    public float currentTimes { get; set; }
+
+    private List<GameObject> go = new List<GameObject>();
 
     private void Start()
     {
@@ -47,11 +50,8 @@ public class GameState : MonoBehaviour
 
         saveHandler.initTilemaps();
         saveHandler.initTileReference();
-    }
 
-    private void FixedUpdate()
-    {
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        Enemies = GameObject.Find("Enemies");
     }
 
     private void LateUpdate()
@@ -59,7 +59,16 @@ public class GameState : MonoBehaviour
         if (movement.currentHealth <= 0)
         {
             StopPlaying();
-            movement.currentHealth = 3;
+            movement.currentHealth = 5;
+        }
+
+        if (isPlay == true)
+        {
+            GetComponentEnemy(true);
+        }
+        else
+        {
+            GetComponentEnemy(false);
         }
     }
 
@@ -67,8 +76,6 @@ public class GameState : MonoBehaviour
     {
         isPlay = true;
         FromEditMode = true;
-
-        GetComponentEnemy(true);
 
         controller.enabled = true;
         movement.enabled = true;
@@ -87,12 +94,8 @@ public class GameState : MonoBehaviour
 
     public void PlayMode()
     {
-        saveHandler.SaveScoreToDefault();
-
         isPlay = true;
         FromPlayMode = true;
-
-        GetComponentEnemy(true);
 
         controller.enabled = true;
         movement.enabled = true;
@@ -109,8 +112,6 @@ public class GameState : MonoBehaviour
     public void StopPlaying()
     {
         isPlay = false;
-
-        GetComponentEnemy(false);
 
         controller.enabled = false;
         movement.enabled = false;
@@ -135,7 +136,7 @@ public class GameState : MonoBehaviour
 
     public void Restart()
     {
-        if(UnlockedDoor.isWin == true)
+        if (UnlockedDoor.isWin == true)
         {
             currentCoins = 0;
             currentTimes = 0;
@@ -157,7 +158,7 @@ public class GameState : MonoBehaviour
         else
         {
             currentCoins = PlayerPrefs.GetInt("Coin");
-            currentTimes = PlayerPrefs.GetInt("Time");
+            currentTimes = PlayerPrefs.GetFloat("Time");
 
             tilesCreator.ClearTiles();
 
@@ -186,41 +187,46 @@ public class GameState : MonoBehaviour
 
     public void GetComponentEnemy(bool isEnabled)
     {
-        foreach (GameObject e in enemies)
+        Rigidbody2D[] rbs = Enemies.transform.GetComponentsInChildren<Rigidbody2D>();
+
+        foreach (Rigidbody2D rb in rbs)
         {
-            if (e != null)
+            if (rb != null && rb.gameObject.name != "Enemies")
             {
-                if (e.TryGetComponent(out MushroomBehaviour mushroom))
+                if (isEnabled == true)
                 {
-                    mushroom.enabled = isEnabled;
-                    e.GetComponent<Animator>().enabled = isEnabled;
-                    if (isEnabled == true)
-                    {
-                        e.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-                    }
-                    else
-                    {
-                        e.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                    }
+                    rb.bodyType = RigidbodyType2D.Dynamic;
                 }
-                else if (e.TryGetComponent(out FrogBehaviour frog))
+                else
                 {
-                    frog.enabled = isEnabled;
-                    e.GetComponent<Animator>().enabled = isEnabled;
-                    if (isEnabled == true)
-                    {
-                        e.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-                    }
-                    else
-                    {
-                        e.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                    }
-                }
-                else if (e.TryGetComponent(out Animator animator))
-                {
-                    animator.enabled = isEnabled;
+                    rb.bodyType = RigidbodyType2D.Static;
                 }
             }
+        }
+
+        Animator[] anims = Enemies.transform.GetComponentsInChildren<Animator>();
+
+        if (anims != null)
+        {
+            foreach (Animator anim in anims)
+            {
+                if (anim != null)
+                {
+                    anim.enabled = isEnabled;
+                }
+            }
+        }
+
+        MushroomBehaviour mushroom = Enemies.transform.GetComponentInChildren<MushroomBehaviour>();
+        if (mushroom != null)
+        {
+            mushroom.enabled = isEnabled;
+        }
+
+        FrogBehaviour frog = Enemies.transform.GetComponentInChildren<FrogBehaviour>();
+        if (frog != null)
+        {
+            frog.enabled = isEnabled;
         }
     }
 }

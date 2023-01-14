@@ -8,6 +8,7 @@ TagManager:
   - Items
   - Extras
   - UI
+  - hasPlaced
   layers:
   - Default
   - TransparentFX

@@ -88,7 +88,7 @@ public class LockedDoor : MonoBehaviour
                     timeCounter.timerGoing = false;
 
                     PlayerPrefs.SetInt("Coin", Coin.totalCoin);
-                    PlayerPrefs.SetInt("Time", timeCounter.currentTimeINTver);
+                    PlayerPrefs.SetFloat("Time", timeCounter.currentTimeCompare);
                     PlayerPrefs.SetString("TimeFormat", TimeCounter.currentTimeText);
 
                     saveHandler.CompareScore();

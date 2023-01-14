@@ -72,7 +72,6 @@ GameObject:
   - component: {fileID: 788266697173630205}
   - component: {fileID: 788266697173630179}
   - component: {fileID: 788266697173630177}
-  - component: {fileID: 160375430042633564}
   m_Layer: 8
   m_Name: Bee
   m_TagString: Enemy
@@ -228,15 +227,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHP: 1
---- !u!114 &160375430042633564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 788266697173630206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24750fa381279a743a3a3df00e2250f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  deathSound: {fileID: 8300000, guid: b323c31177cb4444dbe952c6704ac11e, type: 3}

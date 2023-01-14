@@ -13,7 +13,7 @@ public class SaveHandler : Singleton<SaveHandler>
     private Dictionary<String, TileBase> guidToTileBase = new Dictionary<string, TileBase>();
 
     [SerializeField] private BoundsInt bounds;
-    [System.NonSerialized] public string filename, levelName;
+    public string filename, levelName;
 
     [SerializeField]
     private string level1Filename = "TilemapDataLevel1.json",
@@ -25,7 +25,9 @@ public class SaveHandler : Singleton<SaveHandler>
 
     [System.NonSerialized] public string bestPlayerName, bestTimeFormat;
     
-    [System.NonSerialized] public int bestCoin, bestTime;
+    [System.NonSerialized] public int bestCoin;
+    
+    [System.NonSerialized] public float bestTime;
 
     public void Createjson(string filename)
     {
@@ -39,7 +41,7 @@ public class SaveHandler : Singleton<SaveHandler>
         Createjson(level2Filename);
 
         level2Text.text = "Level 2";
-        level2Text.fontSize = 35;
+        level2Text.fontSize = 40;
 
         level2isCreated = true;
     }
@@ -49,7 +51,7 @@ public class SaveHandler : Singleton<SaveHandler>
         Createjson(level3Filename);
 
         level3Text.text = "Level 3";
-        level3Text.fontSize = 35;
+        level3Text.fontSize = 30;
 
         level3isCreated = true;
     }
@@ -123,7 +125,7 @@ public class SaveHandler : Singleton<SaveHandler>
 
     public void MoveFiles()
     {
-        string originalPath = Application.persistentDataPath;
+        string originalPath = Application.persistentDataPath + "/" + levelName;
         FileInfo[] getOriginalFiles = new DirectoryInfo(Application.persistentDataPath).GetFiles("*.*");
         string filepath = Path.Combine(originalPath, levelName);
         Debug.Log(filepath);
@@ -184,7 +186,7 @@ public class SaveHandler : Singleton<SaveHandler>
         scoreData.levelName = levelName;
         scoreData.playerName = PlayerPrefs.GetString("PlayerID");
         scoreData.bestCoin = PlayerPrefs.GetInt("Coin");
-        scoreData.bestTime = PlayerPrefs.GetInt("Time");
+        scoreData.bestTime = PlayerPrefs.GetFloat("Time");
         scoreData.bestTimeFormat = PlayerPrefs.GetString("TimeFormat");
 
         string json = JsonUtility.ToJson(scoreData, true);
@@ -257,6 +259,6 @@ public class ScoreData
     public string levelName;
     public string playerName = "-";
     public int bestCoin = 0;
-    public int bestTime = 0;
+    public float bestTime = 0;
     public string bestTimeFormat = "00:00";
 }

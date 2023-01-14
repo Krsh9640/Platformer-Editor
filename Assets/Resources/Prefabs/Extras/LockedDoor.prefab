@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2724148311728937456}
   - component: {fileID: 2724148311728937459}
   - component: {fileID: 2078602076}
-  - component: {fileID: -7984066493702584725}
   m_Layer: 8
   m_Name: LockedDoor
   m_TagString: Untagged
@@ -103,7 +102,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 0.3}
     oldSize: {x: 0.5714286, y: 1.0204082}
     newSize: {x: 0.5714286, y: 1.0204082}
     adaptiveTilingThreshold: 0.5
@@ -137,16 +136,3 @@ MonoBehaviour:
   unlockedDoorSprite: {fileID: 1062665566, guid: 6b265fe8c881fa64e8bcf5ef086defeb, type: 3}
   particle1: {fileID: 0}
   particle2: {fileID: 0}
-  isWin: 0
---- !u!114 &-7984066493702584725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2724148311728937458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24750fa381279a743a3a3df00e2250f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
