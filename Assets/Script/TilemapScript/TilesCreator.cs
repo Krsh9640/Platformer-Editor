@@ -15,7 +15,7 @@ public class TilesCreator : Singleton<TilesCreator>
     private PlayerInput playerInput;
 
     private TileBase tileBase;
-    private TilesObject selectedTile;
+    public TilesObject selectedTile;
 
     private Camera _camera;
 
@@ -40,12 +40,16 @@ public class TilesCreator : Singleton<TilesCreator>
     private GameObject manager;
     private GameState gameState;
 
-    private GameObject instantiatedPrefab;
-
     private int UILayer;
 
     public AudioClip tilePlace, tileDelete;
     public AudioSource audioSource;
+
+    public GameObject[] prefabObject;
+    [SerializeField] private GameObject selectedTileGameobject, instantiatedTileGameObject;
+    public bool isSelected = false, isFlipped = false;
+
+    [SerializeField] private Vector3 originalXScale, newXScale;
 
     protected override void Awake()
     {
@@ -138,7 +142,7 @@ public class TilesCreator : Singleton<TilesCreator>
         }
     }
 
-    private TilesObject SelectedTile
+    public TilesObject SelectedTile
     {
         set
         {
@@ -166,6 +170,19 @@ public class TilesCreator : Singleton<TilesCreator>
     {
         if (gameState.isPlay == false)
         {
+            prefabObject = FindGameObjectsWithLayer(8);
+
+            if (prefabObject != null)
+            {
+                foreach (GameObject go in prefabObject)
+                {
+                    if (go.transform.parent != previewMap.transform)
+                    {
+                        go.tag = "hasPlaced";
+                    }
+                }
+            }
+
             if (selectedTile != null)
             {
                 Vector3 pos = _camera.ScreenToWorldPoint(mousePos);
@@ -177,6 +194,32 @@ public class TilesCreator : Singleton<TilesCreator>
                     currentGridPosition = gridPos;
 
                     UpdatePreview();
+
+                    if (previewMap.transform.childCount > 0 && previewMap.transform.GetChild(0).gameObject != null)
+                    {
+                        selectedTileGameobject = previewMap.transform.GetChild(0).gameObject;
+
+                        originalXScale = selectedTileGameobject.gameObject.transform.localScale;
+                        Debug.Log(selectedTileGameobject + ", " + originalXScale);
+
+                        if (selectedTileGameobject != null && isSelected == true)
+                        {
+                            if (selectedTileGameobject.tag != "hasPlaced" && isFlipped == false)
+                            {
+                                newXScale = new Vector3(-selectedTileGameobject.transform.localScale.x,
+                                selectedTileGameobject.transform.localScale.y, 0);
+
+                                selectedTileGameobject.transform.localScale = newXScale;
+                                Debug.Log(selectedTileGameobject + ", " + newXScale);
+
+                            }
+                            else if (selectedTileGameobject.tag != "hasPlaced" && isFlipped == true)
+                            {
+                                newXScale = originalXScale;
+                                selectedTileGameobject.transform.localScale = newXScale;
+                            }
+                        }
+                    }
 
                     if (holdActive)
                     {
@@ -190,6 +233,24 @@ public class TilesCreator : Singleton<TilesCreator>
                 selectedTile = null;
             }
         }
+    }
+
+    public GameObject[] FindGameObjectsWithLayer(int layer)
+    {
+        GameObject[] goArray = FindObjectsOfType(typeof(GameObject)) as GameObject[];
+        List<GameObject> goList = new List<GameObject>();
+        for (var i = 0; i < goArray.Length; i++)
+        {
+            if (goArray[i].layer == layer)
+            {
+                goList.Add(goArray[i]);
+            }
+        }
+        if (goList.Count == 0)
+        {
+            return null;
+        }
+        return goList.ToArray();
     }
 
     private void OnMouseMove(InputAction.CallbackContext ctx)
@@ -234,12 +295,27 @@ public class TilesCreator : Singleton<TilesCreator>
             if (selectedTile != null)
             {
                 SelectedTile = null;
+                isSelected = false;
+                isFlipped = false;
             }
             else if (selectedTile == null)
             {
                 Eraser(gridPos);
             }
         }
+    }
+
+    public void FlipTile()
+    {
+        if (isSelected == false)
+        {
+            isSelected = true;
+        }
+    }
+
+    public void TileSelected(TilesObject tile)
+    {
+        SelectedTile = tile;
     }
 
     public void Eraser(Vector3Int position)
@@ -250,15 +326,12 @@ public class TilesCreator : Singleton<TilesCreator>
         });
     }
 
-    public void TileSelected(TilesObject tile)
-    {
-        SelectedTile = tile;
-    }
-
     private void UpdatePreview()
     {
         previewMap.SetTile(lastGridPosition, null);
         previewMap.SetTile(currentGridPosition, tileBase);
+
+        Debug.Log(previewMap.GetTile(currentGridPosition));
     }
 
     private void HandleDrawing()
@@ -311,15 +384,7 @@ public class TilesCreator : Singleton<TilesCreator>
         {
             for (int y = bounds.yMin; y <= bounds.yMax; y++)
             {
-                if (tileBase.name == "LockedDoor" || tileBase.name == "UnlockedDoor")
-                {
-                    DrawItem(map, new Vector3Int(x, y + (int)0.2, 0), tileBase);
-                }
-                else
-                {
-                    DrawItem(map, new Vector3Int(x, y, 0), tileBase);
-                }
-
+                DrawItem(map, new Vector3Int(x, y, 0), tileBase);
             }
         }
     }
@@ -327,27 +392,14 @@ public class TilesCreator : Singleton<TilesCreator>
     private void DrawItem(Tilemap map, Vector3Int position, TileBase tileBase)
     {
         tilemap.SetTile(position, tileBase);
+        
+        instantiatedTileGameObject = map.GetInstantiatedObject(position);
+        Debug.Log(instantiatedTileGameObject);
+
+        if (instantiatedTileGameObject != null)
+        {
+            instantiatedTileGameObject.transform.localScale = selectedTileGameobject.transform.localScale;
+        }
         audioSource.PlayOneShot(tilePlace, 0.5f);
-
-    }
-
-    public GameObject[] FindGameObjectWithinLayer(int layer)
-    {
-        GameObject[] goArray = FindObjectsOfType(typeof(GameObject)) as GameObject[];
-
-        List<GameObject> goList = new List<GameObject>();
-
-        for (int i = 0; i < goArray.Length; i++)
-        {
-            if (goArray[i].layer == layer)
-            {
-                goList.Add(goArray[i]);
-            }
-        }
-        if (goList.Count == 0)
-        {
-            return null;
-        }
-        return goList.ToArray();
     }
 }

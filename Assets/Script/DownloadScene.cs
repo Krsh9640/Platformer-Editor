@@ -40,7 +40,7 @@ public class DownloadScene : MonoBehaviour
 
         Scene scene = SceneManager.GetActiveScene();
 
-        if(hasLoggedin == false)
+        if (hasLoggedin == false)
         {
             authenticator.CheckSession();
             hasLoggedin = true;
@@ -66,7 +66,25 @@ public class DownloadScene : MonoBehaviour
         StartCoroutine(LoadLevelRoutine());
     }
 
-    public IEnumerator LoadLevelRoutine(){
+    public void LocalLoadLevel()
+    {
+        string filepath = Application.persistentDataPath + "/Downloaded" + "/" + saveHandler.levelName;
+        StartCoroutine(LocalLoadLevelRoutine(filepath));
+    }
+
+    public IEnumerator LocalLoadLevelRoutine(string filename)
+    {
+        loadScreen.LoadScene("Loading Screen", "Level Editor");
+        saveHandler.levelName = filename;
+        saveHandler.filename = "TilemapDataLevel1.json";
+
+        yield return new WaitForSeconds(0.6f);
+
+        saveHandler.OnLoad();
+    }
+
+    public IEnumerator LoadLevelRoutine()
+    {
         StartCoroutine(DownloadLevelTextFile(saveHandler.levelName));
 
         loadScreen.LoadScene("Loading Screen", "Level Editor");
@@ -113,7 +131,8 @@ public class DownloadScene : MonoBehaviour
     public IEnumerator DownloadLevelTextFile(string filename)
     {
         string filepath = Path.Combine(Application.persistentDataPath, filename);
-        if(!Directory.Exists(filepath)){
+        if (!Directory.Exists(filepath))
+        {
             Directory.CreateDirectory(filepath);
         }
 

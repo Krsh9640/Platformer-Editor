@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public bool jump = false;
     public bool isGrounded = true;
 
-    public int playerHealth = 3;
+    public int playerHealth = 5;
     public int currentHealth;
 
     bool isInvincible = false;
@@ -41,7 +41,8 @@ public class PlayerMovement : MonoBehaviour
     public TMP_Text DeathCounter;
     private int DeathCounterVal;
 
-    void Awake() {
+    void Awake()
+    {
         currentHealth = playerHealth;
         rb = gameObject.GetComponent<Rigidbody2D>();
         manager = GameObject.Find("Manager");
@@ -54,14 +55,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if(healthText.text != currentHealth.ToString()){
+        if (healthText.text != currentHealth.ToString())
+        {
             healthText.text = currentHealth.ToString();
         }
 
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
-        
-        if (Input.GetButtonDown("Jump") && isGrounded == true){
+
+        if (Input.GetButtonDown("Jump") && isGrounded == true)
+        {
             isGrounded = false;
             isJumping = true;
             jumpTimeCounter = jumpTime;
@@ -70,14 +73,17 @@ public class PlayerMovement : MonoBehaviour
             audioSource.PlayOneShot(jumpSound, 0.5f);
         }
 
-        if(isJumping == true){
-            if(jumpTimeCounter > 0){
+        if (isJumping == true)
+        {
+            if (jumpTimeCounter > 0)
+            {
                 rb.velocity = Vector2.up * jumpForce;
-                jumpTimeCounter  -= Time.deltaTime;
+                jumpTimeCounter -= Time.deltaTime;
             }
         }
 
-        if(Input.GetButtonDown("Jump")){
+        if (Input.GetButtonDown("Jump"))
+        {
             isJumping = false;
         }
     }
@@ -90,17 +96,21 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump);
-            jump = false;
-    }
-    
-    private void OnCollisionEnter2D(Collision2D collision) {
-        if(collision.collider.gameObject.layer == LayerMask.NameToLayer("Platform")){
-            isGrounded = true;
-        }   
+        jump = false;
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "Enemy" && isInvincible == false && isGrounded == true){
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Platform"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Enemy" && isInvincible == false && isGrounded == true)
+        {
             currentHealth -= 1;
             SetInvincible(3);
             Invoke("EnableBlink", 0f);
@@ -108,41 +118,55 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void SetInvincible(float invincibleTime){
+    public void SetInvincible(float invincibleTime)
+    {
         isInvincible = true;
 
         StartCoroutine(COSetInvincible(invincibleTime));
     }
 
-    void SetDamageable(){
+    void SetDamageable()
+    {
         isInvincible = false;
     }
 
-    public IEnumerator COSetInvincible (float invincibleTime){
+    public IEnumerator COSetInvincible(float invincibleTime)
+    {
         yield return new WaitForSeconds(invincibleTime);
         SetDamageable();
     }
 
-    private void EnableBlink(){
+    private void EnableBlink()
+    {
         blink.GetComponent<SpriteRenderer>().enabled = true;
     }
 
-    private void DisableBlink(){
+    private void DisableBlink()
+    {
         blink.GetComponent<SpriteRenderer>().enabled = false;
     }
 
-    private void OnBecameInvisible() {
-        if(this.gameObject.tag == "Player"){
-            if(gameState.isPlay == true && gameState.FromEditMode == true){
-                gameState.StopPlaying();
-
-                this.gameObject.transform.position = startingSpawnPos;
-            }else if(gameState.isPlay == true && gameState.FromPlayMode == true)
+    private void OnBecameInvisible()
+    {
+        if (this.gameObject.tag == "Player")
+        {
+            if (this.gameObject.transform.position.y <= -4)
             {
-                if (this.gameObject.activeInHierarchy)
+                if (gameState.isPlay == true && gameState.FromEditMode == true)
                 {
-                    StartCoroutine(DeathOrder());
-                    audioSource.PlayOneShot(deathSound, 0.5f);
+                    gameState.StopPlaying();
+
+                    this.gameObject.transform.position = startingSpawnPos;
+                }
+                else if (gameState.isPlay == true && gameState.FromPlayMode == true)
+                {
+                    if (this.gameObject.activeInHierarchy)
+                    {
+                        StartCoroutine(DeathOrder());
+                        audioSource.PlayOneShot(deathSound, 0.5f);
+
+                        saveHandler.OnLoad();
+                    }
                 }
             }
         }
@@ -162,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
             DeathInterval.SetActive(false);
             yield return new WaitForSeconds(2.0f);
         }
-        
+
         this.gameObject.transform.position = startingSpawnPos;
 
         yield return null;

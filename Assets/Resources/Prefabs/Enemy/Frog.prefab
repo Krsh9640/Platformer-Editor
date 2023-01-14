@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 3262148990009311061}
   - component: {fileID: 3262148990009311071}
   - component: {fileID: 6795755223922075126}
-  - component: {fileID: -256922356006729104}
   m_Layer: 8
   m_Name: Frog
   m_TagString: Enemy
@@ -31,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3262148990009311062}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.1726, y: 0.1249, z: 0}
+  m_LocalScale: {x: 1.3674139, y: 1.3674139, z: 1.3674139}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3262148991899911517}
@@ -99,7 +98,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3262148990009311062}
-  m_BodyType: 2
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -125,6 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyHP: 1
+  deathSound: {fileID: 8300000, guid: b323c31177cb4444dbe952c6704ac11e, type: 3}
 --- !u!95 &3262148990009311061
 Animator:
   serializedVersion: 4
@@ -207,18 +207,6 @@ PolygonCollider2D:
       - {x: 0.380161, y: -0.26154944}
       - {x: 0.47741148, y: -0.041801237}
       - {x: 0.3607594, y: 0.33509675}
---- !u!114 &-256922356006729104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3262148990009311062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24750fa381279a743a3a3df00e2250f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3262148991899911518
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,9 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92da7ccc338d027428879043bbf52216, type: 3}
-  m_Name: Spikeball
+  m_Name: WarpPortal
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: e1ac414c14ad68044b31f24bbb9e5f4d, type: 2}
-  tileBase: {fileID: 11400000, guid: 36720fa6d44fdca40968e257921e4436, type: 2}
-  gameObject: {fileID: 7317811306643335379, guid: 30849e77810be954d818b6b2e4def608, type: 3}
+  tileBase: {fileID: 11400000, guid: bdadda1ea3f2ea24c8062589163b7f78, type: 2}
   placeType: 1

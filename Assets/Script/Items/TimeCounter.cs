@@ -6,7 +6,7 @@ using UnityEngine;
 public class TimeCounter : MonoBehaviour
 {
     public static float currentTime;
-    public int currentTimeINTver;
+    public float currentTimeCompare;
     public static string currentTimeText;
 
     public bool timerGoing;
@@ -45,7 +45,7 @@ public class TimeCounter : MonoBehaviour
     {
         while(timerGoing == true)
         {
-            currentTimeINTver += (int)Time.smoothDeltaTime;
+            currentTimeCompare += Time.smoothDeltaTime;
             currentTime += Time.smoothDeltaTime;
 
             if(currentTime < 0)

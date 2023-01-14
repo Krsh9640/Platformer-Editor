@@ -36,11 +36,13 @@ public class CameraDrag : MonoBehaviour
 
     private void LateUpdate()
     {
-        PanCamera();
-
         if (gameState.isPlay == true)
         {
             cam.transform.position = ResetCamera;
+        }
+        else if (gameState.isPlay == false)
+        {
+            PanCamera();
         }
     }
 

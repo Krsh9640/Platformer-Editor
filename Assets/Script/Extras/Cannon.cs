@@ -18,7 +18,6 @@ public class Cannon : MonoBehaviour
         timeBetween = startTimeBetween;
         timeBetween = 0;
 
-        spawnPoint = GameObject.Find("CannonBallSpawnPoint");
         cannonBall = GameObject.Find("CannonBall");
         cannonBallPrefabs = GameObject.FindGameObjectsWithTag("Extras");
     }
@@ -27,7 +26,6 @@ public class Cannon : MonoBehaviour
     {
         if (gameState.isPlay == true)
         {
-            Debug.Log(timeBetween);
             if (timeBetween <= 0)
             {
                 GameObject instCannonBall = Instantiate(cannonBall, spawnPoint.transform.position, spawnPoint.transform.rotation);
@@ -35,7 +33,7 @@ public class Cannon : MonoBehaviour
                 instCannonBall.AddComponent<CannonBall>();
                 instCannonBall.GetComponent<CircleCollider2D>().enabled = true;
                 Rigidbody2D rb = instCannonBall.GetComponent<Rigidbody2D>();
-                rb.velocity = -transform.right * 7;
+                rb.velocity = this.gameObject.transform.localScale.x * transform.right * 7;
 
                 timeBetween = startTimeBetween;
             }
