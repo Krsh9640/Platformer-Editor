@@ -26,28 +26,49 @@ public class EnemyHP : MonoBehaviour
         {
             if (this.gameObject.name == "Frog(Clone)" && frogBehaviour != null)
             {
-                frogBehaviour.ChangeAnimation(FrogBehaviour.Animations.Death);
-
-                Destroy(this.gameObject);
-                audioSource.PlayOneShot(deathSound, 0.5f);
+                StartCoroutine(FrogAnimRoutine());
             }
             else if (this.gameObject.name == "Mushroom(Clone)")
             {
-                Animator anim = this.gameObject.GetComponent<Animator>();
-                anim.SetBool("isDead", true);
-
-                Destroy(this.gameObject);
-                audioSource.PlayOneShot(deathSound, 0.5f);
+                StartCoroutine(MushroomAnimRoutine());
             }
             else if (this.gameObject.name == "Bee(Clone)")
             {
-                Animator anim = this.gameObject.GetComponent<Animator>();
-                anim.SetBool("isDead", true);
-
-                Destroy(this.gameObject);
-                audioSource.PlayOneShot(deathSound, 0.5f);
+                StartCoroutine(BeeAnimRoutine());
             }
         }
+    }
+
+    public IEnumerator FrogAnimRoutine()
+    {
+        frogBehaviour.ChangeAnimation(FrogBehaviour.Animations.Death);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Destroy(this.gameObject);
+        audioSource.PlayOneShot(deathSound, 0.5f);
+    }
+
+    public IEnumerator MushroomAnimRoutine()
+    {
+        Animator anim = this.gameObject.GetComponent<Animator>();
+        anim.SetBool("isDead", true);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Destroy(this.gameObject);
+        audioSource.PlayOneShot(deathSound, 0.5f);
+    }
+
+    public IEnumerator BeeAnimRoutine()
+    {
+        Animator anim = this.gameObject.GetComponent<Animator>();
+        anim.SetBool("isDead", true);
+
+        yield return new WaitForSeconds(0.5f);
+
+        Destroy(this.gameObject);
+        audioSource.PlayOneShot(deathSound, 0.5f);
     }
 
     public void TakeDamage(int damage)

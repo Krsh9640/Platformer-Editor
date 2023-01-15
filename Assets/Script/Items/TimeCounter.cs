@@ -24,7 +24,7 @@ public class TimeCounter : MonoBehaviour
             BeginTimer();
         }
 
-        Debug.Log(currentTime);
+        Debug.Log(currentTimeCompare);
     }
 
     public void BeginTimer()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KeyScript : MonoBehaviour
 {
-    public bool isPicked = false;
+    public static bool isPicked = false;
     public GameObject keyIcon;
 
     void Start() {

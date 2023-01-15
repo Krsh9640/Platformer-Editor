@@ -133,6 +133,6 @@ MonoBehaviour:
   playerAnimator: {fileID: 0}
   keyScript: {fileID: 0}
   spriteRenderer: {fileID: 0}
-  unlockedDoorSprite: {fileID: 1062665566, guid: 6b265fe8c881fa64e8bcf5ef086defeb, type: 3}
+  unlockedDoorSprite: {fileID: -1431039944, guid: d8c485b15a779804983fa2f580a1ca54, type: 3}
   particle1: {fileID: 0}
   particle2: {fileID: 0}

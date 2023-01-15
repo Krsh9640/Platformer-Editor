@@ -10137,7 +10137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31df1bb4d9f81bd4da4519106c51e52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentTimeINTver: 0
+  currentTimeCompare: 0
   timerGoing: 0
   timeText: {fileID: 1798292483}
   gameState: {fileID: 2007835175}
@@ -21301,15 +21301,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1023304390, guid: 6b265fe8c881fa64e8bcf5ef086defeb, type: 3}
+  m_Sprite: {fileID: 1202843496, guid: d8c485b15a779804983fa2f580a1ca54, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.0204082, y: 1.0204082}
+  m_Size: {x: 0.9591837, y: 0.9183673}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1605487072
@@ -21320,12 +21320,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1605487070}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.711, y: 4.647, z: -0.058138732}
+  m_LocalPosition: {x: 4.711, y: 4.647, z: 9.941861}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_Father: {fileID: 1622641257}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1622641254
 GameObject:
@@ -21409,7 +21409,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1635994681}
+  - {fileID: 1605487072}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -21520,15 +21522,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2046159906, guid: 6b265fe8c881fa64e8bcf5ef086defeb, type: 3}
+  m_Sprite: {fileID: -28599065, guid: d8c485b15a779804983fa2f580a1ca54, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.0204082, y: 1.0204082}
+  m_Size: {x: 0.877551, y: 0.8367347}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1635994681
@@ -21539,12 +21541,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635994679}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.4484987, y: 4.63, z: -0.058138732}
+  m_LocalPosition: {x: 5.4484987, y: 4.63, z: 9.941861}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_Father: {fileID: 1622641257}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1640722183
 GameObject:
@@ -30830,7 +30832,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2007835173
 MonoBehaviour:
@@ -30867,6 +30869,12 @@ MonoBehaviour:
   tileDelete: {fileID: 8300000, guid: 05d8934b4ad25a54095727fae3bf391b, type: 3}
   audioSource: {fileID: 2007835179}
   prefabObject: []
+  selectedTileGameobject: {fileID: 0}
+  instantiatedTileGameObject: {fileID: 0}
+  isSelected: 0
+  isFlipped: 0
+  originalXScale: {x: 0, y: 0, z: 0}
+  newXScale: {x: 0, y: 0, z: 0}
 --- !u!114 &2007835174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30908,6 +30916,7 @@ MonoBehaviour:
   sidebar: {fileID: 1640722183}
   pausePnl: {fileID: 1848871097}
   saveHandler: {fileID: 0}
+  Enemies: {fileID: 0}
   particle1: {fileID: 290526802}
   particle2: {fileID: 1855205738}
 --- !u!114 &2007835177
@@ -33514,6 +33523,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.90489, y: -0.010864}
-  m_SizeDelta: {x: 1918.8, y: 1079.2}
+  m_AnchoredPosition: {x: 0.6431, y: -0.010864}
+  m_SizeDelta: {x: 1921.9, y: 1079.2}
   m_Pivot: {x: 0.5, y: 0.5}

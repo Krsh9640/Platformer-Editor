@@ -101,7 +101,7 @@ public class UnlockedDoor : MonoBehaviour
 
             timeCounter.timerGoing = false;
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(5f);
 
             gameState.StopPlaying();
 
