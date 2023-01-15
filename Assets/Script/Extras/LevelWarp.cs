@@ -12,99 +12,122 @@ public class LevelWarp : MonoBehaviour
 
     private GameObject Manager;
     private GameState gameState;
-	private TilesCreator tilesCreator;
+    private TilesCreator tilesCreator;
 
-	public GameObject NextLevel, NextLevelTextObj, PlayerChar;
-	public TMP_Text NextLevelText;
-	private Image fadeOutUIImage;
-	public float fadeSpeed = 0.8f;
-	private PlayerMovement playerMovement;
+    public GameObject NextLevel, NextLevelTextObj, PlayerChar;
+    public TMP_Text NextLevelText;
+    private Image fadeOutUIImage;
+    public float fadeSpeed = 0.8f;
+    private PlayerMovement playerMovement;
+    private TimeCounter timeCounter;
 
-	public BoxCollider2D boxCollider;
+    public BoxCollider2D boxCollider;
 
-	public static int currentCoin;
-	public static int currentTime;
+    public static int currentCoin;
+    public static float currentTime;
 
-	[SerializeField] private string currentFilename;
-
-	public bool hasLoaded = true;
-
-	public enum FadeDirection
-	{
-		In, //Alpha = 1
-		Out // Alpha = 0
-	}
+    public bool hasLoaded = true;
 
     private void Awake()
     {
-		DownloadSceneManager = GameObject.Find("DownloadSceneManager");
-		saveHandler = DownloadSceneManager.GetComponent<SaveHandler>();
-		Manager = GameObject.Find("Manager");
-		gameState = Manager.GetComponent<GameState>();
-		tilesCreator = Manager.GetComponent<TilesCreator>();
+        DownloadSceneManager = GameObject.Find("DownloadSceneManager");
+        saveHandler = DownloadSceneManager.GetComponent<SaveHandler>();
+        Manager = GameObject.Find("Manager");
+        gameState = Manager.GetComponent<GameState>();
+        tilesCreator = Manager.GetComponent<TilesCreator>();
 
-		NextLevel = GameObject.Find("NextLevel");
-		fadeOutUIImage = NextLevel.GetComponent<Image>();
+        NextLevel = GameObject.Find("NextLevel");
+        fadeOutUIImage = NextLevel.GetComponent<Image>();
 
-		NextLevelTextObj = GameObject.Find("NextLevelText");
-		NextLevelText = NextLevelTextObj.GetComponent<TMP_Text>();
+        NextLevelTextObj = GameObject.Find("NextLevelText");
+        NextLevelText = NextLevelTextObj.GetComponent<TMP_Text>();
 
-		PlayerChar = GameObject.FindWithTag("Player");
-		playerMovement = PlayerChar.GetComponent<PlayerMovement>();
-	}
+        PlayerChar = GameObject.FindWithTag("Player");
+        playerMovement = PlayerChar.GetComponent<PlayerMovement>();
+    }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void Update()
     {
-        if(collision.tag == "Player")
+        if (saveHandler.filename == "TilemapDataLevel1.json")
         {
-            if(saveHandler.filename == "TilemapDataLevel1.json")
+            NextLevelText.text = "Level 1";
+        }
+        else if (saveHandler.filename == "TilemapDataLevel2.json")
+        {
+            NextLevelText.text = "Level 2";
+        }
+        else if (saveHandler.filename == "TilemapDataLevel3.json")
+        {
+            NextLevelText.text = "Level 3";
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            if (NextLevelText.text == "Level 1" && saveHandler.filename == "TilemapDataLevel1.json")
             {
-				NextLevelText.text = "Level 2";
-				StartCoroutine(MultiLevelLoad(saveHandler.filename, "TilemapDataLevel2.json"));
-				hasLoaded = true;
-			} else if(saveHandler.filename == "TilemapDataLevel2.json")
+                NextLevelText.text = "Level 2";
+                StartCoroutine(MultiLevelLoad(saveHandler.filename, "TilemapDataLevel2.json"));
+                hasLoaded = true;
+            }
+            else if (NextLevelText.text == "Level 2" && saveHandler.filename == "TilemapDataLevel2.json")
             {
-				NextLevelText.text = "Level 3";
-				StartCoroutine(MultiLevelLoad(saveHandler.filename, "TilemapDataLevel3.json"));
-				hasLoaded = true;
-			}
+                NextLevelText.text = "Level 3";
+                StartCoroutine(MultiLevelLoad(saveHandler.filename, "TilemapDataLevel3.json"));
+                hasLoaded = true;
+            }
+        }
+        else if (other.gameObject.tag != "Player")
+        {
+            boxCollider.isTrigger = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.tag != "Player")
+        {
+            boxCollider.isTrigger = false;
         }
     }
 
 
     public IEnumerator MultiLevelLoad(string currentFilename, string nextFilename)
     {
-        if(gameState.isPlay == true)
+        if (gameState.isPlay == true)
         {
-            if(saveHandler.filename == currentFilename)
+            timeCounter = GameObject.Find("TimeCounter").GetComponent<TimeCounter>();
+            if (saveHandler.filename == currentFilename)
             {
-				fadeOutUIImage.enabled = true;
-				NextLevelText.enabled = true;
+                // playerMovement.rb.velocity = new Vector2(0, 0);
+                fadeOutUIImage.enabled = true;
+                NextLevelText.enabled = true;
 
-				yield return new WaitForSeconds(1f);
+                saveHandler.filename = nextFilename;
 
-				saveHandler.filename = nextFilename;
+                yield return new WaitForSeconds(0.5f);
 
-				PlayerChar.transform.position = playerMovement.startingSpawnPos;
+                PlayerChar.transform.position = playerMovement.startingSpawnPos;
 
-				saveHandler.OnLoad();
+                saveHandler.OnLoad();
 
-				fadeOutUIImage.enabled = false;
-				NextLevelText.enabled = false;
+                fadeOutUIImage.enabled = false;
+                NextLevelText.enabled = false;
 
-				if(hasLoaded == true)
+                if (hasLoaded == true && gameState.FromPlayMode == true)
                 {
+                    currentCoin = Coin.totalCoin;
+                    currentTime = timeCounter.currentTimeCompare;
 
-					currentCoin = Coin.totalCoin;
-					currentTime = (int)TimeCounter.currentTime;
+                    PlayerPrefs.SetInt("Coin", currentCoin);
+                    PlayerPrefs.SetFloat("Time", currentTime);
 
-					PlayerPrefs.SetInt("Coin", currentCoin);
-					PlayerPrefs.SetInt("Time", currentTime);
-
-					hasLoaded = false;
-				}								
-			}
+                    hasLoaded = false;
+                }
+            }
         }
-		yield return null;
+        yield return null;
     }
 }

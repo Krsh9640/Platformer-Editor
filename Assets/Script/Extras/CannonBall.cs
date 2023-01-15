@@ -41,7 +41,6 @@ public class CannonBall : MonoBehaviour
     public IEnumerator COSCannonBallDamage(Collider2D other)
     {
         PlayerMovement movement = other.GetComponent<PlayerMovement>();
-        movement.currentHealth--;
         movement.SetInvincible(4);
         Invoke("EnableBlink", 0f);
         Invoke("DisableBlink", 0.1f);

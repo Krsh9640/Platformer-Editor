@@ -28,6 +28,7 @@ public class Authenticator : MonoBehaviour
     [SerializeField] private string playerID;
 
     private DownloadScene downloadScene;
+    public GameObject loading;
 
     private void Awake()
     {
@@ -114,6 +115,7 @@ public class Authenticator : MonoBehaviour
 
             if (downloadScene.hasLoggedin == true)
             {
+                loading.SetActive(false);
                 if (CreatorName == CreatorNameTemp && CreatorName != null)
                 {
                     UsernamePnl.SetActive(true);
@@ -131,6 +133,7 @@ public class Authenticator : MonoBehaviour
 
     public void CheckSession()
     {
+        loading.gameObject.SetActive(true);
         LootLockerSDKManager.CheckWhiteLabelSession(response =>
         {
             if (response)

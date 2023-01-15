@@ -86,6 +86,12 @@ public class PlayerMovement : MonoBehaviour
         {
             isJumping = false;
         }
+
+        DeathCheck();
+
+        if(gameState.isPlay == false){
+            DisableBlink();
+        }
     }
 
     public void OnLanding()
@@ -101,9 +107,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Platform"))
+        if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Platform") || collision.collider.gameObject.layer == LayerMask.NameToLayer("Prefab"))
         {
-            isGrounded = true;
+            if (collision.collider.gameObject.name != "Spring(Clone)")
+            {
+                isGrounded = true;
+            }
         }
     }
 
@@ -111,7 +120,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.tag == "Enemy" && isInvincible == false && isGrounded == true)
         {
-            currentHealth -= 1;
             SetInvincible(3);
             Invoke("EnableBlink", 0f);
             Invoke("DisableBlink", 0.1f);
@@ -120,6 +128,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void SetInvincible(float invincibleTime)
     {
+        currentHealth -= 1;
         isInvincible = true;
 
         StartCoroutine(COSetInvincible(invincibleTime));
@@ -146,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
         blink.GetComponent<SpriteRenderer>().enabled = false;
     }
 
-    private void OnBecameInvisible()
+    private void DeathCheck()
     {
         if (this.gameObject.tag == "Player")
         {

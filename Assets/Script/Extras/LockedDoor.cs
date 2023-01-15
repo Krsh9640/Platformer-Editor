@@ -5,11 +5,10 @@ using LootLocker.Requests;
 
 public class LockedDoor : MonoBehaviour
 {
-    public GameObject manager, winText, player, key;
+    public GameObject manager, winText, player;
     public GameState gameState;
     public PlayerMovement movement;
     public Animator playerAnimator;
-    public KeyScript keyScript;
 
     public SpriteRenderer spriteRenderer;
     public Sprite unlockedDoorSprite;
@@ -31,12 +30,6 @@ public class LockedDoor : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         movement = player.GetComponent<PlayerMovement>();
         playerAnimator = player.GetComponent<Animator>();
-
-        key = GameObject.Find("Key");
-        if (key != null)
-        {
-            keyScript = key.GetComponent<KeyScript>();
-        }
 
         spriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
 
@@ -63,11 +56,9 @@ public class LockedDoor : MonoBehaviour
     public IEnumerator COWinText()
     {
         timeCounter = GameObject.Find("TimeCounter").GetComponent<TimeCounter>();
-        if (keyScript != null)
+        if (KeyScript.isPicked == true)
         {
-            if (keyScript.isPicked == true)
-            {
-                if (gameState.FromPlayMode == true)
+            if (gameState.FromPlayMode == true)
                 {
                     spriteRenderer.sprite = unlockedDoorSprite;
 
@@ -121,13 +112,10 @@ public class LockedDoor : MonoBehaviour
 
                     timeCounter.timerGoing = false;
 
-                    yield return new WaitForSeconds(5);
+                    yield return new WaitForSeconds(5f);
 
                     gameState.StopPlaying();
                 }
-
-                
-            }
         }
     }
 }
