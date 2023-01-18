@@ -20,7 +20,7 @@ public class DownloadScene : MonoBehaviour
 
     public GameState gameState;
 
-    [System.NonSerialized] public bool doneLoad, hasLoggedin;
+    public bool doneLoad, hasLoggedin;
 
     public void CheckInit()
     {
@@ -37,8 +37,6 @@ public class DownloadScene : MonoBehaviour
         CheckInit();
         saveHandler = GetComponent<SaveHandler>();
         authenticator = GameObject.Find("Authenticator").GetComponent<Authenticator>();
-
-        Scene scene = SceneManager.GetActiveScene();
 
         if (hasLoggedin == false)
         {

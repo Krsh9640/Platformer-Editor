@@ -165,7 +165,7 @@ MonoBehaviour:
   isFalling: 0
   isJumping: 0
   jumpForceX: 3
-  jumpForceY: 5
+  jumpForceY: 3
   lastYPosition: 0
   currentAnim: 0
   rb: {fileID: 0}

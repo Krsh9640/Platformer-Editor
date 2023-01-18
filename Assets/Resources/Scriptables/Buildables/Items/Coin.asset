@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Coin
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 322e7c5fb35d1654a989b38c2997efee, type: 2}
-  tileBase: {fileID: 11400000, guid: e26c3cc9b5db1bc4dab3866b18e884e0, type: 2}
-  gameObject: {fileID: 5574741395780784922, guid: a513383463f53e64c945090c6853a7d2, type: 3}
+  tile: {fileID: 11400000, guid: e26c3cc9b5db1bc4dab3866b18e884e0, type: 2}
   placeType: 1

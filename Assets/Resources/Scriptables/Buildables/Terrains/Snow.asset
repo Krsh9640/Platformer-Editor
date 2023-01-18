@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Snow
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 46830e01175aa524190ee82cb79ab212, type: 2}
-  tileBase: {fileID: 11400000, guid: f3179ddc995303443bb2a1c6bad0957d, type: 2}
+  tile: {fileID: 11400000, guid: f3179ddc995303443bb2a1c6bad0957d, type: 2}
   placeType: 2

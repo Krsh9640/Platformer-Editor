@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SnowCracked
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 46830e01175aa524190ee82cb79ab212, type: 2}
-  tileBase: {fileID: 11400000, guid: 7f63ad0e7718fb54687bd13ba8b09af9, type: 2}
+  tile: {fileID: 11400000, guid: 7f63ad0e7718fb54687bd13ba8b09af9, type: 2}
   placeType: 2

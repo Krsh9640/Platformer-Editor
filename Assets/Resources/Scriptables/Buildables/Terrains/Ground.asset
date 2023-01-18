@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ground
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 46830e01175aa524190ee82cb79ab212, type: 2}
-  tileBase: {fileID: 11400000, guid: 196ba6647277f31488bc937416d6895c, type: 2}
+  tile: {fileID: 11400000, guid: 196ba6647277f31488bc937416d6895c, type: 2}
   placeType: 2

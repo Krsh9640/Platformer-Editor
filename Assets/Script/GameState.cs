@@ -17,7 +17,7 @@ public class GameState : MonoBehaviour
     [SerializeField] private GameObject Enemies;
 
     private bool isPaused = false;
-    [System.NonSerialized] public bool isPlay = false, FromEditMode, FromPlayMode;
+    public bool isPlay = false, FromEditMode, FromPlayMode;
 
     public GameObject particle1, particle2;
 

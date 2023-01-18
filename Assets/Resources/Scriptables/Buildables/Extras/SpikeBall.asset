@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Spikeball
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: e1ac414c14ad68044b31f24bbb9e5f4d, type: 2}
-  tileBase: {fileID: 11400000, guid: 36720fa6d44fdca40968e257921e4436, type: 2}
-  gameObject: {fileID: 7317811306643335379, guid: 30849e77810be954d818b6b2e4def608, type: 3}
+  tile: {fileID: 11400000, guid: 36720fa6d44fdca40968e257921e4436, type: 2}
   placeType: 1

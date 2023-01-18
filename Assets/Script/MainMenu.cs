@@ -10,14 +10,21 @@ public class MainMenu : MonoBehaviour
     public GameObject BtnsMainMenu;
     public GameObject PnlLevels;
 
-    private LoadingScreen loadingScreen;
+    [SerializeField] private LoadingScreen loadingScreen;
 
-    private SaveHandler saveHandler;
+    [SerializeField] private SaveHandler saveHandler;
 
-    private void Awake()
+    private void Update()
     {
-        saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
-        loadingScreen = GameObject.Find("DownloadSceneManager").GetComponent<LoadingScreen>();
+        if (saveHandler == null)
+        {
+            saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
+        }
+
+        if (loadingScreen == null)
+        {
+            loadingScreen = GameObject.Find("DownloadSceneManager").GetComponent<LoadingScreen>();
+        }
     }
 
     //Exit Button//
@@ -42,7 +49,8 @@ public class MainMenu : MonoBehaviour
         loadingScreen.LoadScene("Loading Screen", "Level Editor");
     }
 
-    public void HomeButton(){
+    public void HomeButton()
+    {
         loadingScreen.LoadScene("Loading Screen", "Main Menu");
     }
 }
