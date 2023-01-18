@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7182857587710928651}
   - component: {fileID: 7182857587710928648}
   m_Layer: 8
-  m_Name: WingedBoots
+  m_Name: Boots
   m_TagString: Items
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -23,18 +23,39 @@ public class Authenticator : MonoBehaviour
     public GameObject resetPasswordPnl, AuthenticatorPnl, HomeButtons,
                       verivyNotifPnl, UsernamePnl;
 
-    private bool signinActive, signupActive, hasStarted;
-
-    [SerializeField] private string playerID;
+    [SerializeField] private bool signinActive, signupActive, hasStarted;
 
     private DownloadScene downloadScene;
     public GameObject loading;
+    [SerializeField] private TMP_Text loadingText;
 
     private void Awake()
     {
         signupBtn.GetComponent<Image>().color = Color.gray;
 
         downloadScene = GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>();
+        loadingText = loading.GetComponent<TMP_Text>();
+    }
+
+    private void Update()
+    {
+        if (loading.activeInHierarchy == true)
+        {
+            StartCoroutine(loadingTextRoutine());
+        }
+    }
+
+    private IEnumerator loadingTextRoutine()
+    {
+        while (true)
+        {
+            loadingText.text = "Loading.";
+ 
+            loadingText.text = "Loading..";
+
+            loadingText.text = "Loading...";
+            yield return new WaitForSeconds(1);
+        }
     }
 
     public void SignInTab()
@@ -107,25 +128,22 @@ public class Authenticator : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        if(hasStarted == true)
+        if (hasStarted == true)
         {
             GetPlayerName();
 
             yield return new WaitForSeconds(1f);
 
-            if (downloadScene.hasLoggedin == true)
+            loading.SetActive(false);
+            if (CreatorName == CreatorNameTemp && CreatorName != null)
             {
-                loading.SetActive(false);
-                if (CreatorName == CreatorNameTemp && CreatorName != null)
-                {
-                    UsernamePnl.SetActive(true);
-                }
-                else
-                {
-                    AuthenticatorPnl.SetActive(false);
+                UsernamePnl.SetActive(true);
+            }
+            else
+            {
+                AuthenticatorPnl.SetActive(false);
 
-                    HomeButtons.SetActive(true);
-                }
+                HomeButtons.SetActive(true);
             }
         }
         yield return null;
@@ -136,6 +154,7 @@ public class Authenticator : MonoBehaviour
         loading.gameObject.SetActive(true);
         LootLockerSDKManager.CheckWhiteLabelSession(response =>
         {
+            Debug.Log("Checking Session");
             if (response)
             {
                 StartCoroutine(SigninOrder());
@@ -158,6 +177,7 @@ public class Authenticator : MonoBehaviour
             else
             {
                 hasStarted = true;
+                downloadScene.hasLoggedin = true;
             }
         });
     }

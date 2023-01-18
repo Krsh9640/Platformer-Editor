@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Soil
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 46830e01175aa524190ee82cb79ab212, type: 2}
-  tileBase: {fileID: 11400000, guid: bec59faae3d21584284954573feb6ca2, type: 2}
+  tile: {fileID: 11400000, guid: bec59faae3d21584284954573feb6ca2, type: 2}
   placeType: 2

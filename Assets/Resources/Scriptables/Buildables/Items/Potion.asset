@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: Potion
   m_EditorClassIdentifier: 
   category: {fileID: 11400000, guid: 322e7c5fb35d1654a989b38c2997efee, type: 2}
-  tileBase: {fileID: 11400000, guid: ed20826baab462e4eb2301b8c61de614, type: 2}
-  gameObject: {fileID: 5528733270394682923, guid: c1cb30a120768a04790398e7d4a925d9, type: 3}
+  tile: {fileID: 11400000, guid: ed20826baab462e4eb2301b8c61de614, type: 2}
   placeType: 1

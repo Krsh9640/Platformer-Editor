@@ -5,12 +5,13 @@ using UnityEngine.Tilemaps;
 using System.IO;
 using System.Linq;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class SaveHandler : Singleton<SaveHandler>
 {
     private Dictionary<string, Tilemap> tilemaps = new Dictionary<string, Tilemap>();
-    private Dictionary<TileBase, TilesObject> tileBaseToTilesObject = new Dictionary<TileBase, TilesObject>();
-    private Dictionary<String, TileBase> guidToTileBase = new Dictionary<string, TileBase>();
+    private Dictionary<Tile, TilesObject> tileToTilesObject = new Dictionary<Tile, TilesObject>();
+    private Dictionary<String, Tile> guidTotile = new Dictionary<string, Tile>();
 
     [SerializeField] private BoundsInt bounds;
     public string filename, levelName;
@@ -24,10 +25,15 @@ public class SaveHandler : Singleton<SaveHandler>
     [System.NonSerialized] public bool level2isCreated, level3isCreated;
 
     [System.NonSerialized] public string bestPlayerName, bestTimeFormat;
-    
+
     [System.NonSerialized] public int bestCoin;
-    
+
     [System.NonSerialized] public float bestTime;
+
+    public GameObject[] prefabObject;
+
+    [SerializeField] private Grid grid;
+    private Vector3 newScale = new Vector3(0, 0, 0);
 
     public void Createjson(string filename)
     {
@@ -56,20 +62,30 @@ public class SaveHandler : Singleton<SaveHandler>
         level3isCreated = true;
     }
 
+    private void Update()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+
+        if (scene.name == "Level Editor")
+        {
+            grid = GameObject.Find("Grid").GetComponent<Grid>();
+        }
+    }
+
     public void initTileReference()
     {
         TilesObject[] buildables = Resources.LoadAll<TilesObject>("Scriptables/Buildables/");
 
         foreach (TilesObject buildable in buildables)
         {
-            if (!tileBaseToTilesObject.ContainsKey(buildable.TileBase))
+            if (!tileToTilesObject.ContainsKey(buildable.Tile))
             {
-                tileBaseToTilesObject.Add(buildable.TileBase, buildable);
-                guidToTileBase.Add(buildable.name, buildable.TileBase);
+                tileToTilesObject.Add(buildable.Tile, buildable);
+                guidTotile.Add(buildable.name, buildable.Tile);
             }
             else
             {
-                Debug.LogError("TileBase " + buildable.TileBase.name + " is already in use by " + tileBaseToTilesObject[buildable.TileBase].name);
+                Debug.LogError("tile " + buildable.Tile.name + " is already in use by " + tileToTilesObject[buildable.Tile].name);
             }
         }
     }
@@ -106,17 +122,36 @@ public class SaveHandler : Singleton<SaveHandler>
                 for (int y = boundsForThisMap.yMin; y < boundsForThisMap.yMax; y++)
                 {
                     Vector3Int pos = new Vector3Int(x, y, 0);
-                    TileBase tile = mapObj.Value.GetTile(pos);
+                    Tile tile = mapObj.Value.GetTile<Tile>(pos);
 
-                    if (tile != null && tileBaseToTilesObject.ContainsKey(tile))
+                    prefabObject = FindGameObjectsWithLayer(8);
+
+                    if (tile != null && tileToTilesObject.ContainsKey(tile))
                     {
-                        string guid = tileBaseToTilesObject[tile].name;
-                        TileInfo ti = new TileInfo(pos, guid);
+                        string guid = tileToTilesObject[tile].name;
+
+                        if (prefabObject != null)
+                        {
+                            foreach (GameObject go in prefabObject)
+                            {
+                                Vector3 cellPos = grid.WorldToCell(go.transform.position);
+                                Vector3 scale = go.transform.localScale;
+
+                                if (go.name == guid)
+                                {
+                                    if (cellPos == pos)
+                                    {
+                                        newScale = scale;
+                                        Debug.Log(newScale);
+                                    }
+                                }
+                            }
+                        }
+                        TileInfo ti = new TileInfo(pos, newScale, guid);
                         mapData.tiles.Add(ti);
                     }
                 }
             }
-
             data.Add(mapData);
         }
 
@@ -125,7 +160,7 @@ public class SaveHandler : Singleton<SaveHandler>
 
     public void MoveFiles()
     {
-        string originalPath = Application.persistentDataPath + "/" + levelName;
+        string originalPath = Application.persistentDataPath;
         FileInfo[] getOriginalFiles = new DirectoryInfo(Application.persistentDataPath).GetFiles("*.*");
         string filepath = Path.Combine(originalPath, levelName);
         Debug.Log(filepath);
@@ -140,7 +175,8 @@ public class SaveHandler : Singleton<SaveHandler>
             string newFileName = file.Name;
             string destFile = Path.Combine(filepath, newFileName);
 
-            if(!File.Exists(destFile)){
+            if (!File.Exists(destFile))
+            {
                 File.Move(file.FullName, destFile);
             }
         }
@@ -166,17 +202,54 @@ public class SaveHandler : Singleton<SaveHandler>
             {
                 foreach (var tile in mapData.tiles)
                 {
-                    if (guidToTileBase.ContainsKey(tile.guidForBuildable))
+                    if (guidTotile.ContainsKey(tile.guidForBuildable))
                     {
-                        map.SetTile(tile.position, guidToTileBase[tile.guidForBuildable]);
-                    }
-                    else
-                    {
-                        Debug.LogError("Reference " + tile.guidForBuildable + " could not be found");
+                        map.SetTile(tile.position, guidTotile[tile.guidForBuildable]);
+
+                        prefabObject = FindGameObjectsWithLayer(8);
+
+                        if (prefabObject != null)
+                        {
+                            foreach (GameObject go in prefabObject)
+                            {
+                                go.name = go.name.Replace("(Clone)", "").Trim();
+                                Vector3 cellPos = grid.WorldToCell(go.transform.position);
+
+                                if (go.name == guidTotile[tile.guidForBuildable].name)
+                                {
+                                    if (cellPos == tile.position)
+                                    {
+                                        go.transform.localScale = tile.localScale;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogError("Reference " + tile.guidForBuildable + " could not be found");
+                        }
                     }
                 }
             }
         }
+    }
+
+    public GameObject[] FindGameObjectsWithLayer(int layer)
+    {
+        GameObject[] goArray = FindObjectsOfType(typeof(GameObject)) as GameObject[];
+        List<GameObject> goList = new List<GameObject>();
+        for (var i = 0; i < goArray.Length; i++)
+        {
+            if (goArray[i].layer == layer)
+            {
+                goList.Add(goArray[i]);
+            }
+        }
+        if (goList.Count == 0)
+        {
+            return null;
+        }
+        return goList.ToArray();
     }
 
     public void SaveScore()
@@ -245,10 +318,12 @@ public class TileInfo
 {
     public string guidForBuildable;
     public Vector3Int position;
+    public Vector3 localScale;
 
-    public TileInfo(Vector3Int pos, string guid)
+    public TileInfo(Vector3Int pos, Vector3 scale, string guid)
     {
         position = pos;
+        localScale = scale;
         guidForBuildable = guid;
     }
 }

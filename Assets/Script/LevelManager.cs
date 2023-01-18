@@ -82,10 +82,6 @@ public class LevelManager : MonoBehaviour
                     Debug.Log(player.name);
                 }
             }
-            else
-            {
-
-            }
         });
     }
 
@@ -93,7 +89,8 @@ public class LevelManager : MonoBehaviour
     {
         UItabs.SetActive(false);
         sidebar.SetActive(false);
-        string SSfilepath = filePath + levelName + "/Level-Screenshot.png";
+        string SSfilepath = filePath + "/" + levelName + "/Level-Screenshot.png";
+        Debug.Log(SSfilepath);
         ScreenCapture.CaptureScreenshot(SSfilepath);
         saveHandler.OnSave();
     }
@@ -224,6 +221,11 @@ public class LevelManager : MonoBehaviour
     {
         string localFilepath = Application.persistentDataPath + "/Downloaded";
 
+        if (!Directory.Exists(localFilepath))
+        {
+            Directory.CreateDirectory(localFilepath);
+        }
+
         DirectoryInfo dirInfo = new DirectoryInfo(localFilepath);
 
         DirectoryInfo[] dirArray = dirInfo.GetDirectories();
@@ -260,7 +262,10 @@ public class LevelManager : MonoBehaviour
             {
                 foreach (Transform child in levelDataEntryContent)
                 {
-                    GameObject.Destroy(child.gameObject);
+                    if (child != null)
+                    {
+                        GameObject.Destroy(child.gameObject);
+                    }
                 }
 
                 for (int i = 0; i < response.assets.Length; i++)
@@ -307,10 +312,7 @@ public class LevelManager : MonoBehaviour
         yield return www.SendWebRequest();
 
         string filepath = Application.persistentDataPath + "/" + filename;
-        if (!Directory.Exists(filepath))
-        {
-            Directory.CreateDirectory(filepath);
-        }
+
         string newFilepath = filePath + "/" + filename + "/ScoreData.json";
         File.WriteAllText(newFilepath, www.downloadHandler.text);
 

@@ -8495,7 +8495,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 3.5
+  m_GravityScale: 3
   m_Material: {fileID: 6200000, guid: 15141f1828b9f46489d802300728d6de, type: 2}
   m_Interpolate: 1
   m_SleepingMode: 1
@@ -8549,7 +8549,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1968929097}
-  - {fileID: 1197568746}
   m_Father: {fileID: 1640722184}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10329,7 +10328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40732894384a93d40a93e5d3bd399267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 35fa95f4d3909e54e879dd94679a66f7, type: 2}
+  item: {fileID: 11400000, guid: 80b38146a35409147b923ccfc9831f33, type: 2}
   Panel: {fileID: 726396407}
 --- !u!114 &545958789
 MonoBehaviour:
@@ -13913,7 +13912,7 @@ RectTransform:
   - {fileID: 532220337}
   - {fileID: 676369165}
   m_Father: {fileID: 1640722184}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -17452,13 +17451,13 @@ RectTransform:
   - {fileID: 1065158832}
   - {fileID: 1080357661}
   - {fileID: 832917826}
-  m_Father: {fileID: 377883156}
-  m_RootOrder: 1
+  m_Father: {fileID: 1640722184}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -851.8891, y: 70.82099}
-  m_SizeDelta: {x: 492.349, y: 141.64}
+  m_AnchoredPosition: {x: -852.389, y: 75.82102}
+  m_SizeDelta: {x: 444.8971, y: -694.1017}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1197568747
 MonoBehaviour:
@@ -21584,6 +21583,7 @@ RectTransform:
   - {fileID: 1769882517}
   - {fileID: 324358612}
   - {fileID: 377883156}
+  - {fileID: 1197568746}
   - {fileID: 871266492}
   m_Father: {fileID: 1732908797}
   m_RootOrder: 0

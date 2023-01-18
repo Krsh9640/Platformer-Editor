@@ -14,12 +14,12 @@ public enum Category{
 public class TilesObject : ScriptableObject
 {
     [SerializeField] TileCategory category;
-    [SerializeField] TileBase tileBase;
+    [SerializeField] Tile tile;
     [SerializeField] PlaceType placeType;
 
-    public TileBase TileBase{
+    public Tile Tile{
         get{
-            return tileBase;
+            return tile;
         }
     }
 

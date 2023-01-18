@@ -147,8 +147,7 @@ public class TilesCreator : Singleton<TilesCreator>
         set
         {
             selectedTile = value;
-            tileBase = selectedTile != null ? selectedTile.TileBase : null;
-            Debug.Log("selectedTile = " + selectedTile + ", tilebase = " + tileBase);
+            tileBase = selectedTile != null ? selectedTile.Tile : null;
 
             UpdatePreview();
         }
@@ -200,7 +199,6 @@ public class TilesCreator : Singleton<TilesCreator>
                         selectedTileGameobject = previewMap.transform.GetChild(0).gameObject;
 
                         originalXScale = selectedTileGameobject.gameObject.transform.localScale;
-                        Debug.Log(selectedTileGameobject + ", " + originalXScale);
 
                         if (selectedTileGameobject != null && isSelected == true)
                         {
@@ -210,8 +208,6 @@ public class TilesCreator : Singleton<TilesCreator>
                                 selectedTileGameobject.transform.localScale.y, 0);
 
                                 selectedTileGameobject.transform.localScale = newXScale;
-                                Debug.Log(selectedTileGameobject + ", " + newXScale);
-
                             }
                             else if (selectedTileGameobject.tag != "hasPlaced" && isFlipped == true)
                             {
@@ -227,11 +223,11 @@ public class TilesCreator : Singleton<TilesCreator>
                     }
                 }
             }
-
-            if (gameState.isPlay == true)
-            {
-                selectedTile = null;
-            }
+        }
+        if (gameState.isPlay == true)
+        {
+            selectedTile = null;
+            SelectedTile = null;
         }
     }
 
@@ -330,8 +326,6 @@ public class TilesCreator : Singleton<TilesCreator>
     {
         previewMap.SetTile(lastGridPosition, null);
         previewMap.SetTile(currentGridPosition, tileBase);
-
-        Debug.Log(previewMap.GetTile(currentGridPosition));
     }
 
     private void HandleDrawing()
@@ -392,12 +386,13 @@ public class TilesCreator : Singleton<TilesCreator>
     private void DrawItem(Tilemap map, Vector3Int position, TileBase tileBase)
     {
         tilemap.SetTile(position, tileBase);
-        
+
         instantiatedTileGameObject = map.GetInstantiatedObject(position);
         Debug.Log(instantiatedTileGameObject);
 
         if (instantiatedTileGameObject != null)
         {
+            instantiatedTileGameObject.name = tileBase.name;
             instantiatedTileGameObject.transform.localScale = selectedTileGameobject.transform.localScale;
         }
         audioSource.PlayOneShot(tilePlace, 0.5f);
