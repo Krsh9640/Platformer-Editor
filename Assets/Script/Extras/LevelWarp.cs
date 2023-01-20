@@ -66,6 +66,7 @@ public class LevelWarp : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
+            other.gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
             if (NextLevelText.text == "Level 1" && saveHandler.filename == "TilemapDataLevel1.json")
             {
                 NextLevelText.text = "Level 2";
@@ -99,9 +100,10 @@ public class LevelWarp : MonoBehaviour
         if (gameState.isPlay == true)
         {
             timeCounter = GameObject.Find("TimeCounter").GetComponent<TimeCounter>();
+
             if (saveHandler.filename == currentFilename)
             {
-                // playerMovement.rb.velocity = new Vector2(0, 0);
+                playerMovement.rb.velocity = new Vector2(0, 0);
                 fadeOutUIImage.enabled = true;
                 NextLevelText.enabled = true;
 
@@ -112,6 +114,8 @@ public class LevelWarp : MonoBehaviour
                 PlayerChar.transform.position = playerMovement.startingSpawnPos;
 
                 saveHandler.OnLoad();
+
+                PlayerChar.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 
                 fadeOutUIImage.enabled = false;
                 NextLevelText.enabled = false;

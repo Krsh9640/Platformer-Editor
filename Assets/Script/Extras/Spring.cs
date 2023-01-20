@@ -14,7 +14,8 @@ public class Spring : MonoBehaviour
     private float timeElapsed;
     public GameObject player;
 
-    private void Update() {
+    private void Update()
+    {
         animator = this.gameObject.GetComponent<Animator>();
 
         manager = GameObject.Find("Manager");
@@ -22,12 +23,15 @@ public class Spring : MonoBehaviour
 
         timeElapsed += Time.deltaTime;
     }
-    
-    private void OnCollisionEnter2D(Collision2D other) {
-        if(gameState.isPlay == true)
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (gameState.isPlay == true)
         {
             if (other.transform.CompareTag("Player"))
             {
+                other.gameObject.GetComponent<PlayerMovement>().isGrounded = false;
+
                 if (isJumped == false)
                 {
                     animator.SetBool("isJumping", true);
@@ -47,14 +51,12 @@ public class Spring : MonoBehaviour
                     animator.SetBool("isJumping", true);
                 }
             }
-        }else
-        {
-
         }
     }
 
-    private void OnCollisionExit2D(Collision2D other) {
-        if(gameState.isPlay == true)
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        if (gameState.isPlay == true)
         {
             if (other.transform.CompareTag("Player"))
             {

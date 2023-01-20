@@ -27,35 +27,12 @@ public class Authenticator : MonoBehaviour
 
     private DownloadScene downloadScene;
     public GameObject loading;
-    [SerializeField] private TMP_Text loadingText;
 
     private void Awake()
     {
         signupBtn.GetComponent<Image>().color = Color.gray;
 
         downloadScene = GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>();
-        loadingText = loading.GetComponent<TMP_Text>();
-    }
-
-    private void Update()
-    {
-        if (loading.activeInHierarchy == true)
-        {
-            StartCoroutine(loadingTextRoutine());
-        }
-    }
-
-    private IEnumerator loadingTextRoutine()
-    {
-        while (true)
-        {
-            loadingText.text = "Loading.";
- 
-            loadingText.text = "Loading..";
-
-            loadingText.text = "Loading...";
-            yield return new WaitForSeconds(1);
-        }
     }
 
     public void SignInTab()
@@ -135,6 +112,7 @@ public class Authenticator : MonoBehaviour
             yield return new WaitForSeconds(1f);
 
             loading.SetActive(false);
+
             if (CreatorName == CreatorNameTemp && CreatorName != null)
             {
                 UsernamePnl.SetActive(true);

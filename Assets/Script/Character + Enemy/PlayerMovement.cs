@@ -89,8 +89,10 @@ public class PlayerMovement : MonoBehaviour
 
         DeathCheck();
 
-        if(gameState.isPlay == false){
+        if (gameState.isPlay == false)
+        {
             DisableBlink();
+            currentHealth = 5;
         }
     }
 
@@ -128,7 +130,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void SetInvincible(float invincibleTime)
     {
-        currentHealth -= 1;
+        if (isInvincible == false)
+        {
+            currentHealth--;
+        }
         isInvincible = true;
 
         StartCoroutine(COSetInvincible(invincibleTime));

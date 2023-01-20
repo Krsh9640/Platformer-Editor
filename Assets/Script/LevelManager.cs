@@ -116,24 +116,30 @@ public class LevelManager : MonoBehaviour
             if (response.success)
             {
                 Debug.Log("Score removed");
+
+                string scoreDataPath = filePath + "/" + levelName + "/ScoreData.json";
+                LootLocker.LootLockerEnums.FilePurpose textFileType = LootLocker.LootLockerEnums.FilePurpose.file;
+
+                if (scoreDataPath != null)
+                {
+                    LootLockerSDKManager.AddingFilesToAssetCandidates(assetID, scoreDataPath, "ScoreData.json", textFileType, (response) =>
+                    {
+                        if (response.success)
+                        {
+                            Debug.Log("Score added");
+                            LootLockerSDKManager.UpdatingAnAssetCandidate(assetID, true, (updatedResponse) =>
+                            {
+                                Debug.Log("Score updated");
+                            });
+                        }
+                    });
+                }
             }
         });
 
-        string scoreDataPath = filePath + "/" + levelName + "/ScoreData.json";
-        LootLocker.LootLockerEnums.FilePurpose textFileType = LootLocker.LootLockerEnums.FilePurpose.file;
 
-        LootLockerSDKManager.AddingFilesToAssetCandidates(assetID, scoreDataPath, "ScoreData.json", textFileType, (response) =>
-        {
-            if (response.success)
-            {
-                Debug.Log("Score added");
-            }
-        });
 
-        LootLockerSDKManager.UpdatingAnAssetCandidate(assetID, true, (updatedResponse) =>
-        {
-            Debug.Log("Score updated");
-        });
+
     }
 
     public IEnumerator UploadDataAfterMoveFiles(int levelID)
@@ -147,74 +153,88 @@ public class LevelManager : MonoBehaviour
         UploadLevelData(levelID);
     }
 
-    public void UploadLevelData(int levelID)
+    public IEnumerator UploadLevelData(int levelID)
     {
         assetID = levelID;
         string screenshotFilePath = filePath + "/" + levelName + "/Level-Screenshot.png";
         LootLocker.LootLockerEnums.FilePurpose screenshotFileType = LootLocker.LootLockerEnums.FilePurpose.primary_thumbnail;
 
-        LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, screenshotFilePath, "Level-Screenshot.png", screenshotFileType, (screnshotResponse) =>
+        if (screenshotFilePath != null)
         {
-            if (screnshotResponse.success)
+            LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, screenshotFilePath, "Level-Screenshot.png", screenshotFileType, (screnshotResponse) =>
             {
-                Debug.Log("screenshot uploaded");
-            }
-        }
-        );
-
-        string textFilePath1 = filePath + "/" + levelName + "/TilemapDataLevel1.json";
-        LootLocker.LootLockerEnums.FilePurpose textFileType = LootLocker.LootLockerEnums.FilePurpose.file;
-
-        LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, textFilePath1, "TilemapDataLevel1.json", textFileType, (textResponse) =>
-        {
-            if (textResponse.success)
-            {
-                Debug.Log("level1 uploaded");
-            }
-        }
-        );
-
-        string textFilePath2 = filePath + "/" + levelName + "/TilemapDataLevel2.json";
-        LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, textFilePath2, "TilemapDataLevel2.json", textFileType, (textResponse) =>
-        {
-            if (textResponse.success)
-            {
-                Debug.Log("level2 uploaded");
-            }
-        }
-        );
-
-        string textFilePath3 = filePath + "/" + levelName + "/TilemapDataLevel3.json";
-        LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, textFilePath3, "TilemapDataLevel3.json", textFileType, (textResponse) =>
-        {
-            if (textResponse.success)
-            {
-                Debug.Log("level3 uploaded");
-            }
-        }
-        );
-
-        string scoreDataPath = filePath + "/" + levelName + "/ScoreData.json";
-        LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, scoreDataPath, "ScoreData.json", textFileType, (textResponse) =>
-        {
-            if (textResponse.success)
-            {
-                LootLockerAssetFile[] assetFiles = textResponse.asset_candidate.files;
-                for (int i = 0; i < assetFiles.Length; i++)
+                if (screnshotResponse.success)
                 {
-                    fileID = assetFiles[i].id;
-                    scoreFileID = assetFiles[4].id;
+                    Debug.Log("screenshot uploaded");
+
+                    string textFilePath1 = filePath + "/" + levelName + "/TilemapDataLevel1.json";
+                    LootLocker.LootLockerEnums.FilePurpose textFileType = LootLocker.LootLockerEnums.FilePurpose.file;
+
+                    if (textFilePath1 != null)
+                    {
+                        LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, textFilePath1, "TilemapDataLevel1.json", textFileType, (textResponse) =>
+                        {
+                            if (textResponse.success)
+                            {
+                                Debug.Log("level1 uploaded");
+
+                                string textFilePath2 = filePath + "/" + levelName + "/TilemapDataLevel2.json";
+
+                                if (textFilePath2 != null)
+                                {
+                                    LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, textFilePath2, "TilemapDataLevel2.json", textFileType, (textResponse) =>
+                                    {
+                                        if (textResponse.success)
+                                        {
+                                            Debug.Log("level2 uploaded");
+
+                                            string textFilePath3 = filePath + "/" + levelName + "/TilemapDataLevel3.json";
+
+                                            if (textFilePath3 != null)
+                                            {
+                                                LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, textFilePath3, "TilemapDataLevel3.json", textFileType, (textResponse) =>
+                                                {
+                                                    if (textResponse.success)
+                                                    {
+                                                        Debug.Log("level3 uploaded");
+
+                                                        string scoreDataPath = filePath + "/" + levelName + "/ScoreData.json";
+
+                                                        if (scoreDataPath != null)
+                                                        {
+                                                            LootLockerSDKManager.AddingFilesToAssetCandidates(levelID, scoreDataPath, "ScoreData.json", textFileType, (textResponse) =>
+                                                            {
+                                                                if (textResponse.success)
+                                                                {
+                                                                    LootLockerAssetFile[] assetFiles = textResponse.asset_candidate.files;
+                                                                    for (int i = 0; i < assetFiles.Length; i++)
+                                                                    {
+                                                                        fileID = assetFiles[i].id;
+                                                                        scoreFileID = assetFiles[4].id;
+                                                                    }
+                                                                    Debug.Log("score uploaded");
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
                 }
+            });
 
-                Debug.Log("score uploaded");
-            }
+            yield return new WaitForSeconds(0f);
+
+            LootLockerSDKManager.UpdatingAnAssetCandidate(levelID, true, (updatedResponse) =>
+            {
+                notifUploadComplete.SetActive(true);
+            });
         }
-        );
-
-        LootLockerSDKManager.UpdatingAnAssetCandidate(levelID, true, (updatedResponse) =>
-        {
-            notifUploadComplete.SetActive(true);
-        });
     }
 
     public void MyLevelLoader()
@@ -311,9 +331,7 @@ public class LevelManager : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Get(scoreDataURL);
         yield return www.SendWebRequest();
 
-        string filepath = Application.persistentDataPath + "/" + filename;
-
-        string newFilepath = filePath + "/" + filename + "/ScoreData.json";
+        string newFilepath = Application.persistentDataPath + "/" + filename + "/ScoreData.json";
         File.WriteAllText(newFilepath, www.downloadHandler.text);
 
         yield return new WaitForSeconds(2f);

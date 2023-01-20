@@ -5,16 +5,16 @@ public class GameState : MonoBehaviour
 {
     public GameObject character;
     public GameObject tileTabs;
-    public GameObject coinCounter, timeElapsed, healthCounter, keyIcon;
+    public GameObject coinCounter, timeElapsed, healthCounter, keyIcon, bootsIcon;
     public GameObject stopButton, pauseButton, sidebar, pausePnl;
 
     private CharacterController2D controller;
     private PlayerMovement movement;
     private Animator playerAnimator;
-    [SerializeField] private SaveHandler saveHandler;
+    private SaveHandler saveHandler;
     private TilesCreator tilesCreator;
 
-    [SerializeField] private GameObject Enemies;
+    private GameObject Enemies;
 
     private bool isPaused = false;
     public bool isPlay = false, FromEditMode, FromPlayMode;
@@ -69,6 +69,8 @@ public class GameState : MonoBehaviour
         else
         {
             GetComponentEnemy(false);
+            bootsIcon.GetComponent<SpriteRenderer>().enabled = false;
+            keyIcon.GetComponent<SpriteRenderer>().enabled = false;
         }
     }
 
@@ -191,7 +193,7 @@ public class GameState : MonoBehaviour
 
         foreach (Rigidbody2D rb in rbs)
         {
-            if (rb != null && rb.gameObject.name != "Enemies")
+            if (rb != null && rb.gameObject.name != "Enemies" && rb.gameObject.name != "Bee")
             {
                 if (isEnabled == true)
                 {
