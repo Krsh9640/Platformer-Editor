@@ -11,23 +11,37 @@ public class TilesButtonHandler : MonoBehaviour, IPointerEnterHandler, IPointerE
     [SerializeField] TilesObject item;
     Button button;
     public GameObject Panel;
+    public GameObject needLevel2or3Panel;
     TilesCreator tilesCreator;
+
+    private SaveHandler saveHandler;
 
     private void Awake()
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(ButtonClicked);
         tilesCreator = TilesCreator.GetInstance();
-    }
-
-    private void Update()
-    {
-
+        saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
     }
 
     private void ButtonClicked()
     {
         tilesCreator.TileSelected(item);
+
+        if (this.gameObject.name == "Tile_LevelWarp")
+        {
+            if (saveHandler.level2isCreated == false && saveHandler.filename == "TilemapDataLevel1.json")
+            {
+                tilesCreator.TileSelected(null);
+                needLevel2or3Panel.SetActive(true);
+            }
+            else if (saveHandler.level3isCreated == false && saveHandler.filename == "TilemapDataLevel2.json")
+            {
+                tilesCreator.TileSelected(null);
+                needLevel2or3Panel.SetActive(true);
+            }
+        }
+
 
         if (tilesCreator.selectedTile != null)
         {
@@ -55,7 +69,8 @@ public class TilesButtonHandler : MonoBehaviour, IPointerEnterHandler, IPointerE
         StartCoroutine(PointerExitRoutine());
     }
 
-    private IEnumerator PointerExitRoutine(){
+    private IEnumerator PointerExitRoutine()
+    {
         yield return new WaitForSeconds(0.15f);
 
         Panel.SetActive(false);

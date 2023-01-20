@@ -40,6 +40,10 @@ public class LockedDoor : MonoBehaviour
 
         saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
         levelManager = GameObject.Find("Manager").GetComponent<LevelManager>();
+
+        if(gameState.isPlay == false){
+            winText.GetComponent<TMP_Text>().enabled = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

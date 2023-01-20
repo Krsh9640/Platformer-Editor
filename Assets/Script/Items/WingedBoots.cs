@@ -6,19 +6,28 @@ public class WingedBoots : MonoBehaviour
 {
     public bool isPicked = false;
     public GameObject bootsIcon;
+    private GameState gameState;
 
-    void Start() {
+    void Start()
+    {
         bootsIcon = GameObject.Find("BootsIcon");
+        gameState = GameObject.Find("Manager").GetComponent<GameState>();
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "Player"){
-            isPicked = true;
-            StartCoroutine(COBootsFunc(other, 10));
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (gameState.isPlay == true)
+        {
+            if (other.tag == "Player")
+            {
+                isPicked = true;
+                StartCoroutine(COBootsFunc(other, 10));
+            }
         }
     }
 
-    public IEnumerator COBootsFunc(Collider2D player, float duration){
+    public IEnumerator COBootsFunc(Collider2D player, float duration)
+    {
         bootsIcon.GetComponent<SpriteRenderer>().enabled = true;
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
         CharacterController2D controller2D = player.GetComponent<CharacterController2D>();

@@ -22,7 +22,7 @@ public class SaveHandler : Singleton<SaveHandler>
         level3Filename = "TilemapDataLevel3.json";
     public TMP_Text level1Text, level2Text, level3Text;
 
-    [System.NonSerialized] public bool level2isCreated, level3isCreated;
+    public bool level2isCreated, level3isCreated;
 
     [System.NonSerialized] public string bestPlayerName, bestTimeFormat;
 
@@ -33,7 +33,7 @@ public class SaveHandler : Singleton<SaveHandler>
     public GameObject[] prefabObject;
 
     [SerializeField] private Grid grid;
-    private Vector3 newScale = new Vector3(0, 0, 0);
+    private Vector3 newScale = new Vector3(1, 1, 1);
 
     public void Createjson(string filename)
     {
@@ -147,6 +147,7 @@ public class SaveHandler : Singleton<SaveHandler>
                                 }
                             }
                         }
+
                         TileInfo ti = new TileInfo(pos, newScale, guid);
                         mapData.tiles.Add(ti);
                     }
@@ -224,10 +225,10 @@ public class SaveHandler : Singleton<SaveHandler>
                                 }
                             }
                         }
-                        else
-                        {
-                            Debug.LogError("Reference " + tile.guidForBuildable + " could not be found");
-                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("Reference " + tile.guidForBuildable + " could not be found");
                     }
                 }
             }

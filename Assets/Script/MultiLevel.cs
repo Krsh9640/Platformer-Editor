@@ -15,6 +15,9 @@ public class MultiLevel : MonoBehaviour
 
     public GameObject CreateLevel2or3Pnl;
 
+    public Camera mainCamera;
+    private Vector3 startingCamPos;
+
     [SerializeField] private string level1filename = "TilemapDataLevel1.json", 
         level2filename = "TilemapDataLevel2.json", 
         level3filename = "TilemapDataLevel3.json";
@@ -25,6 +28,8 @@ public class MultiLevel : MonoBehaviour
         saveHandler = DownloadSceneManager.GetComponent<SaveHandler>();
         Manager = GameObject.Find("Manager");
         tilesCreator = Manager.GetComponent<TilesCreator>();
+
+        startingCamPos = mainCamera.transform.position;
     }
 
     public void MultiLevelPanel()
@@ -79,6 +84,8 @@ public class MultiLevel : MonoBehaviour
         tilesCreator.ClearTiles();
 
         saveHandler.OnLoad();
+
+        mainCamera.transform.position = startingCamPos;
 
         yield return null;
     }
