@@ -23,6 +23,10 @@ public class TimeCounter : MonoBehaviour
         {
             BeginTimer();
         }
+        else
+        {
+            EndTimer();
+        }
 
         Debug.Log(currentTimeCompare);
     }
@@ -43,16 +47,16 @@ public class TimeCounter : MonoBehaviour
 
     public IEnumerator UpdateTimer()
     {
-        while(timerGoing == true)
+        while (timerGoing == true)
         {
             currentTimeCompare += Time.smoothDeltaTime;
             currentTime += Time.smoothDeltaTime;
 
-            if(currentTime < 0)
+            if (currentTime < 0)
             {
                 currentTime = 0;
             }
-            else if(currentTime > 0)
+            else if (currentTime > 0)
             {
                 currentTime += 1;
             }
@@ -64,7 +68,7 @@ public class TimeCounter : MonoBehaviour
 
             timeText.text = currentTimeText;
 
-            yield return null;           
-        }      
+            yield return null;
+        }
     }
 }

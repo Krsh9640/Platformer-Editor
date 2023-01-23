@@ -66,7 +66,7 @@ public class DownloadScene : MonoBehaviour
 
     public void LocalLoadLevel()
     {
-        string filepath = Application.persistentDataPath + "/Downloaded" + "/" + saveHandler.levelName;
+        string filepath = Application.persistentDataPath + "/" + saveHandler.levelName;
         StartCoroutine(LocalLoadLevelRoutine(filepath));
     }
 
@@ -83,6 +83,8 @@ public class DownloadScene : MonoBehaviour
 
     public IEnumerator LoadLevelRoutine()
     {
+        yield return new WaitForSeconds(0.5f);
+        
         StartCoroutine(DownloadLevelTextFile(saveHandler.levelName));
 
         loadScreen.LoadScene("Loading Screen", "Level Editor");
@@ -120,7 +122,7 @@ public class DownloadScene : MonoBehaviour
         {
             if (doneLoad == true)
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.3f);
                 gameState.PlayMode();
             }
         }
@@ -128,7 +130,8 @@ public class DownloadScene : MonoBehaviour
 
     public IEnumerator DownloadLevelTextFile(string filename)
     {
-        string filepath = Path.Combine(Application.persistentDataPath, filename);
+        string filepath = Application.persistentDataPath + "/Downloaded/" + filename;
+
         if (!Directory.Exists(filepath))
         {
             Directory.CreateDirectory(filepath);

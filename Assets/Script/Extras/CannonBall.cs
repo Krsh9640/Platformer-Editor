@@ -32,9 +32,27 @@ public class CannonBall : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (gameState.isPlay == true)
         {
-            StartCoroutine(COSCannonBallDamage(other));
+            if (other.tag == "Player")
+            {
+                StartCoroutine(COSCannonBallDamage(other));
+            }
+            else if (other.tag != "Player")
+            {
+                this.gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (gameState.isPlay == true)
+        {
+            if (other.tag != "Player")
+            {
+                this.gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
+            }
         }
     }
 
