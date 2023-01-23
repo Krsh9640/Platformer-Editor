@@ -42,12 +42,14 @@ public class LevelEntryData : MonoBehaviour
 
     public void DownloadLevel()
     {
+        saveHandler.levelNameOnly = levelName;
         saveHandler.levelName = "Downloaded/" + saveHandler.levelName;
         GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().LoadLevel();
     }
 
     public void PlayLevel()
     {
+        saveHandler.levelNameOnly = levelName;
         saveHandler.levelName = "Downloaded/" + saveHandler.levelName;
         GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().PlayLevel();
     }

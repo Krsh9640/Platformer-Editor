@@ -56,7 +56,10 @@ public static class FileHandler {
 
         using (StreamWriter writer = new StreamWriter (fileStream)) {
             writer.Write (content);
+
+            writer.Close();
         }
+        fileStream.Close();
     }
 
     private static string ReadFile (string path) {

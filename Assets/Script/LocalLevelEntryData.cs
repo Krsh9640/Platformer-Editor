@@ -30,6 +30,7 @@ public class LocalLevelEntryData : MonoBehaviour
 
     public void LoadLevel()
     {
+        saveHandler.levelNameOnly = levelName;
         saveHandler.levelName = levelName;
         GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().LocalLoadLevel();
     }
