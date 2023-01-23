@@ -13,6 +13,4 @@ public class CoinCounter : MonoBehaviour
             coinText.text = Coin.totalCoin.ToString();
         }
     }
-
-
 }

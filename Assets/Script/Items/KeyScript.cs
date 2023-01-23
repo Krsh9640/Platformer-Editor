@@ -15,6 +15,13 @@ public class KeyScript : MonoBehaviour
         gameState = GameObject.Find("Manager").GetComponent<GameState>();
     }
 
+    private void Update() {
+        if(gameState.isPlay == false){
+            GetComponent<SpriteRenderer>().enabled = true;
+        GetComponent<BoxCollider2D>().enabled = true;
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (gameState.isPlay == true)
@@ -30,7 +37,6 @@ public class KeyScript : MonoBehaviour
 
     public IEnumerator COKeyFunc()
     {
-
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<BoxCollider2D>().enabled = false;
 

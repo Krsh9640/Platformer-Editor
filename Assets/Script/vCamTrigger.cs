@@ -6,12 +6,28 @@ using Cinemachine;
 public class vCamTrigger : MonoBehaviour
 {
     [SerializeField] CinemachineBrain vCamBrain;
-    public static bool IsEnabled = true;
+    public bool IsEnabled = true;
+    private GameState gameState;
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "Player"){
-            vCamBrain.GetComponent<CinemachineBrain>().enabled = IsEnabled;
+    private void Start()
+    {
+        gameState = GameObject.Find("Manager").GetComponent<GameState>();
+
+        if (gameState.isPlay == false)
+        {
+            vCamBrain.GetComponent<CinemachineBrain>().enabled = false;
         }
-        IsEnabled = !IsEnabled;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (gameState.isPlay == true)
+        {
+            if (other.tag == "Player")
+            {
+                vCamBrain.GetComponent<CinemachineBrain>().enabled = IsEnabled;
+            }
+            IsEnabled = !IsEnabled;
+        }
     }
 }

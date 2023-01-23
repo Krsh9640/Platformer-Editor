@@ -2556,7 +2556,6 @@ MonoBehaviour:
   signupActive: 0
   hasStarted: 0
   loading: {fileID: 1881582390}
-  loadingText: {fileID: 0}
 --- !u!1 &242622028
 GameObject:
   m_ObjectHideFlags: 0
@@ -7161,6 +7160,9 @@ MonoBehaviour:
   level1Text: {fileID: 5103570719399765273}
   level2Text: {fileID: 5103570719892806654}
   level3Text: {fileID: 5103570720640322373}
+  level2isCreated: 0
+  level3isCreated: 0
+  moveLevelComplete: 0
   prefabObject: []
   grid: {fileID: 0}
 --- !u!1 &1099540626
@@ -7752,7 +7754,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5788015923402983700, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
       propertyPath: walkSpeed
-      value: -35
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 5788015923402983700, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
       propertyPath: mustPatrol

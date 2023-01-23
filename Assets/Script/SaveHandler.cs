@@ -22,7 +22,7 @@ public class SaveHandler : Singleton<SaveHandler>
         level3Filename = "TilemapDataLevel3.json";
     public TMP_Text level1Text, level2Text, level3Text;
 
-    public bool level2isCreated, level3isCreated;
+    public bool level2isCreated = false, level3isCreated = false, moveLevelComplete = false;
 
     [System.NonSerialized] public string bestPlayerName, bestTimeFormat;
 
@@ -179,14 +179,15 @@ public class SaveHandler : Singleton<SaveHandler>
             if (!File.Exists(destFile))
             {
                 File.Move(file.FullName, destFile);
+                moveLevelComplete = true;
             }
         }
     }
 
     public void OnLoad()
     {
-        Debug.Log(levelName + " " + filename);
         List<TilemapData> data = FileHandler.ReadListFromJSON<TilemapData>(levelName, filename);
+        Debug.Log(Path.Combine(levelName, filename));
 
         foreach (var mapData in data)
         {
@@ -264,12 +265,12 @@ public class SaveHandler : Singleton<SaveHandler>
         scoreData.bestTimeFormat = PlayerPrefs.GetString("TimeFormat");
 
         string json = JsonUtility.ToJson(scoreData, true);
-        File.WriteAllText(Application.persistentDataPath + "/" + levelName + "/ScoreData.json", json);
+        File.WriteAllText(Application.persistentDataPath + "/Donwloaded/" + levelName + "/ScoreData.json", json);
     }
 
     public void LoadScore()
     {
-        string json = File.ReadAllText(Application.persistentDataPath + "/" + levelName + "/ScoreData.json");
+        string json = File.ReadAllText(Application.persistentDataPath + "/Downloaded/" + levelName + "/ScoreData.json");
         ScoreData scoreData = JsonUtility.FromJson<ScoreData>(json);
 
         levelName = scoreData.levelName;

@@ -146,14 +146,19 @@ public class LevelManager : MonoBehaviour
     {
         saveHandler.levelName = levelName;
         saveHandler.MoveFiles();
-        saveHandler.SaveScoreToDefault();
+
+        if (saveHandler.moveLevelComplete == true)
+        {
+            saveHandler.SaveScoreToDefault();
+            saveHandler.moveLevelComplete = false;
+        }
 
         yield return new WaitForSeconds(2f);
 
         UploadLevelData(levelID);
     }
 
-    public IEnumerator UploadLevelData(int levelID)
+    public void UploadLevelData(int levelID)
     {
         assetID = levelID;
         string screenshotFilePath = filePath + "/" + levelName + "/Level-Screenshot.png";
@@ -211,6 +216,11 @@ public class LevelManager : MonoBehaviour
                                                                     {
                                                                         fileID = assetFiles[i].id;
                                                                         scoreFileID = assetFiles[4].id;
+
+                                                                        LootLockerSDKManager.UpdatingAnAssetCandidate(levelID, true, (updatedResponse) =>
+                                                                        {
+                                                                            notifUploadComplete.SetActive(true);
+                                                                        });
                                                                     }
                                                                     Debug.Log("score uploaded");
                                                                 }
@@ -227,24 +237,12 @@ public class LevelManager : MonoBehaviour
                     }
                 }
             });
-
-            yield return new WaitForSeconds(0f);
-
-            LootLockerSDKManager.UpdatingAnAssetCandidate(levelID, true, (updatedResponse) =>
-            {
-                notifUploadComplete.SetActive(true);
-            });
         }
     }
 
     public void MyLevelLoader()
     {
-        string localFilepath = Application.persistentDataPath + "/Downloaded";
-
-        if (!Directory.Exists(localFilepath))
-        {
-            Directory.CreateDirectory(localFilepath);
-        }
+        string localFilepath = Application.persistentDataPath;
 
         DirectoryInfo dirInfo = new DirectoryInfo(localFilepath);
 
@@ -257,26 +255,33 @@ public class LevelManager : MonoBehaviour
 
         foreach (DirectoryInfo dir in dirArray)
         {
-            string levelName = dir.Name;
-
-            displayLocalSave = Instantiate(localLevelEntryDisplayItem, transform.position, Quaternion.identity);
-            displayLocalSave.name = levelName;
-            displayLocalSave.transform.SetParent(localLevelDataEntryContent);
-
-            displayLocalSave.GetComponent<LocalLevelEntryData>().levelName = levelName;
-
-            FileInfo[] image = dir.GetFiles("*.png");
-            foreach (FileInfo file in image)
+            if (dir.Name != "Downloaded")
             {
-                StartCoroutine(LocalLoadLevelIcon(file.FullName, displayLocalSave.GetComponent<LocalLevelEntryData>().levelIcon, levelName));
+                string levelName = dir.Name;
+
+                displayLocalSave = Instantiate(localLevelEntryDisplayItem, transform.position, Quaternion.identity);
+                displayLocalSave.name = levelName;
+                displayLocalSave.transform.SetParent(localLevelDataEntryContent);
+
+                displayLocalSave.GetComponent<LocalLevelEntryData>().levelName = levelName;
+
+                FileInfo[] image = dir.GetFiles("*.png");
+                foreach (FileInfo file in image)
+                {
+                    StartCoroutine(LocalLoadLevelIcon(file.FullName, displayLocalSave.GetComponent<LocalLevelEntryData>().levelIcon, levelName));
+                }
+                displayLocalSave.GetComponent<LocalLevelEntryData>().creatorName = creatorName;
             }
-            displayLocalSave.GetComponent<LocalLevelEntryData>().creatorName = creatorName;
         }
     }
 
-    public void DownloadLevelData()
+    public void DownloadLevelData(){
+        StartCoroutine(DownloadLevelDataRoutine());
+    }
+
+    public IEnumerator DownloadLevelDataRoutine()
     {
-        LootLockerSDKManager.GetAssetListWithCount(10, (response) =>
+        LootLockerSDKManager.GetAssetListWithCount(20, (response) =>
         {
             if (response.success)
             {
@@ -285,6 +290,10 @@ public class LevelManager : MonoBehaviour
                     if (child != null)
                     {
                         GameObject.Destroy(child.gameObject);
+                    }
+                    else
+                    {
+                        continue;
                     }
                 }
 
@@ -324,6 +333,8 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }, null, true, null);
+
+        yield return null;
     }
 
     private IEnumerator DownloadScoreData(string filename)
@@ -331,7 +342,7 @@ public class LevelManager : MonoBehaviour
         UnityWebRequest www = UnityWebRequest.Get(scoreDataURL);
         yield return www.SendWebRequest();
 
-        string newFilepath = Application.persistentDataPath + "/" + filename + "/ScoreData.json";
+        string newFilepath = Application.persistentDataPath + "/Downloaded" + "/" + filename + "/ScoreData.json";
         File.WriteAllText(newFilepath, www.downloadHandler.text);
 
         yield return new WaitForSeconds(2f);
@@ -346,7 +357,7 @@ public class LevelManager : MonoBehaviour
 
         Texture2D loadedImage = DownloadHandlerTexture.GetContent(www);
         levelImage.sprite = Sprite.Create(loadedImage, new Rect(0.0f, 0.0f, loadedImage.width, loadedImage.height), Vector2.zero);
-        File.WriteAllBytes(Application.persistentDataPath + "/" + filename + "/Level-Screenshot.png", loadedImage.EncodeToPNG());
+        File.WriteAllBytes(Application.persistentDataPath + "/Downloaded" + "/" + filename + "/Level-Screenshot.png", loadedImage.EncodeToPNG());
     }
 
     private IEnumerator LocalLoadLevelIcon(string imageURL, Image levelImage, string filename)
@@ -356,6 +367,6 @@ public class LevelManager : MonoBehaviour
 
         Texture2D loadedImage = DownloadHandlerTexture.GetContent(www);
         levelImage.sprite = Sprite.Create(loadedImage, new Rect(0.0f, 0.0f, loadedImage.width, loadedImage.height), Vector2.zero);
-        File.WriteAllBytes(Application.persistentDataPath + "/Downloaded" + "/" + filename + "/Level-Screenshot.png", loadedImage.EncodeToPNG());
+        File.WriteAllBytes(Application.persistentDataPath + "/" + filename + "/Level-Screenshot.png", loadedImage.EncodeToPNG());
     }
 }

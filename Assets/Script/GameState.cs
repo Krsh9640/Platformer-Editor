@@ -71,6 +71,7 @@ public class GameState : MonoBehaviour
             GetComponentEnemy(false);
             bootsIcon.GetComponent<SpriteRenderer>().enabled = false;
             keyIcon.GetComponent<SpriteRenderer>().enabled = false;
+            movement.currentHealth = 5;
         }
     }
 
@@ -150,7 +151,7 @@ public class GameState : MonoBehaviour
             saveHandler.OnLoad();
             PauseGame();
 
-            vCamTrigger.IsEnabled = false;
+            GameObject.Find("CamTrigger").GetComponent<vCamTrigger>().IsEnabled = false;
             UnlockedDoor.isWin = false;
 
             controller.enabled = true;
@@ -169,7 +170,7 @@ public class GameState : MonoBehaviour
             saveHandler.OnLoad();
             PauseGame();
 
-            vCamTrigger.IsEnabled = false;
+            GameObject.Find("CamTrigger").GetComponent<vCamTrigger>().IsEnabled = false;
 
             controller.enabled = true;
             movement.enabled = true;
@@ -184,6 +185,7 @@ public class GameState : MonoBehaviour
 
         Time.timeScale = 0f;
         isPaused = !isPaused;
+        timeCounter.timerGoing = isPaused;
         Time.timeScale = isPaused ? 0 : 1;
     }
 
@@ -219,16 +221,22 @@ public class GameState : MonoBehaviour
             }
         }
 
-        MushroomBehaviour mushroom = Enemies.transform.GetComponentInChildren<MushroomBehaviour>();
+        MushroomBehaviour[] mushroom = Enemies.transform.GetComponentsInChildren<MushroomBehaviour>();
         if (mushroom != null)
         {
-            mushroom.enabled = isEnabled;
+            foreach (MushroomBehaviour mushroomBehaviour in mushroom)
+            {
+                mushroomBehaviour.enabled = isEnabled;
+            }
         }
 
-        FrogBehaviour frog = Enemies.transform.GetComponentInChildren<FrogBehaviour>();
+        FrogBehaviour[] frog = Enemies.transform.GetComponentsInChildren<FrogBehaviour>();
         if (frog != null)
         {
-            frog.enabled = isEnabled;
+            foreach (FrogBehaviour frogBehaviour in frog)
+            {
+                frogBehaviour.enabled = isEnabled;
+            }
         }
     }
 }

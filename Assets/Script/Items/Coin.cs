@@ -6,11 +6,31 @@ public class Coin : MonoBehaviour
 {
     public static int totalCoin = 0;
 
-    void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "Player"){
-            totalCoin++;
+    private GameState gameState;
 
-            Destroy(gameObject);
+    private void Start()
+    {
+        gameState = GameObject.Find("Manager").GetComponent<GameState>();
+    }
+
+    private void Update()
+    {
+        if (gameState == false)
+        {
+            totalCoin = 0;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (gameState.isPlay == true)
+        {
+            if (other.tag == "Player")
+            {
+                totalCoin++;
+
+                Destroy(gameObject);
+            }
         }
     }
 }
