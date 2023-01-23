@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.IO;
-using System.Linq;
+
 using TMPro;
 using UnityEngine.SceneManagement;
 
@@ -14,7 +14,7 @@ public class SaveHandler : Singleton<SaveHandler>
     private Dictionary<String, Tile> guidTotile = new Dictionary<string, Tile>();
 
     [SerializeField] private BoundsInt bounds;
-    public string filename, levelName;
+    public string filename, levelName, levelNameOnly;
 
     [SerializeField]
     private string level1Filename = "TilemapDataLevel1.json",
@@ -33,6 +33,8 @@ public class SaveHandler : Singleton<SaveHandler>
     public GameObject[] prefabObject;
 
     [SerializeField] private Grid grid;
+
+    private DownloadScene downloadScene;
     private Vector3 newScale = new Vector3(1, 1, 1);
 
     public void Createjson(string filename)
@@ -69,6 +71,7 @@ public class SaveHandler : Singleton<SaveHandler>
         if (scene.name == "Level Editor")
         {
             grid = GameObject.Find("Grid").GetComponent<Grid>();
+            downloadScene = GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>();
         }
     }
 
@@ -159,11 +162,28 @@ public class SaveHandler : Singleton<SaveHandler>
         FileHandler.SaveToJSON<TilemapData>(data, levelName, filename);
     }
 
-    public void MoveFiles()
+
+
+    public void MoveFilesCheck()
     {
-        string originalPath = Application.persistentDataPath;
+        if (downloadScene.fromLocal == true)
+        {
+            string originalPath = Application.persistentDataPath + "/" + levelNameOnly;
+            Debug.Log("FromLocal: " + originalPath);
+            MoveFiles(originalPath);
+        }
+        else if(downloadScene.fromEditor == true)
+        {
+            string originalPath = Application.persistentDataPath;
+            Debug.Log("FromEditor: " + originalPath);
+            MoveFiles(originalPath);
+        }
+    }
+
+    public void MoveFiles(string path)
+    {
         FileInfo[] getOriginalFiles = new DirectoryInfo(Application.persistentDataPath).GetFiles("*.*");
-        string filepath = Path.Combine(originalPath, levelName);
+        string filepath = Path.Combine(path, levelName);
         Debug.Log(filepath);
 
         if (!Directory.Exists(filepath))
@@ -174,12 +194,16 @@ public class SaveHandler : Singleton<SaveHandler>
         foreach (FileInfo file in getOriginalFiles)
         {
             string newFileName = file.Name;
-            string destFile = Path.Combine(filepath, newFileName);
+            string destFile = filepath + "/" + newFileName;
 
-            if (!File.Exists(destFile))
+            if (!File.Exists(destFile) && file.Extension != ".log")
             {
                 File.Move(file.FullName, destFile);
-                moveLevelComplete = true;
+
+                if (File.Exists(destFile))
+                {
+                    moveLevelComplete = true;
+                }
             }
         }
     }
@@ -265,7 +289,7 @@ public class SaveHandler : Singleton<SaveHandler>
         scoreData.bestTimeFormat = PlayerPrefs.GetString("TimeFormat");
 
         string json = JsonUtility.ToJson(scoreData, true);
-        File.WriteAllText(Application.persistentDataPath + "/Donwloaded/" + levelName + "/ScoreData.json", json);
+        File.WriteAllText(Application.persistentDataPath + "/" + levelName + "/ScoreData.json", json);
     }
 
     public void LoadScore()

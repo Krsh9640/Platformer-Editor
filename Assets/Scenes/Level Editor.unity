@@ -2499,7 +2499,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -977.9, y: -537}
+  m_AnchoredPosition: {x: -517, y: 69}
   m_SizeDelta: {x: 363.475, y: 363.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!199 &290526804
@@ -24555,7 +24555,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -941.4, y: -537}
+  m_AnchoredPosition: {x: 449, y: 34}
   m_SizeDelta: {x: 363.475, y: 363.475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!199 &1855205740
@@ -30752,6 +30752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vCamBrain: {fileID: 1622641259}
+  IsEnabled: 1
 --- !u!1 &1937848555
 GameObject:
   m_ObjectHideFlags: 0

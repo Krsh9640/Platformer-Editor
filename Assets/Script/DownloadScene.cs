@@ -20,7 +20,7 @@ public class DownloadScene : MonoBehaviour
 
     public GameState gameState;
 
-    public bool doneLoad, hasLoggedin;
+    public bool doneLoad, hasLoggedin, fromLocal, fromEditor;
 
     public void CheckInit()
     {
@@ -56,6 +56,8 @@ public class DownloadScene : MonoBehaviour
         else if (scene.name == "Main Menu")
         {
             doneLoad = false;
+            fromEditor = false;
+            fromLocal = false;
         }
     }
 
@@ -73,11 +75,13 @@ public class DownloadScene : MonoBehaviour
     public IEnumerator LocalLoadLevelRoutine(string filename)
     {
         loadScreen.LoadScene("Loading Screen", "Level Editor");
+    
         saveHandler.levelName = filename;
         saveHandler.filename = "TilemapDataLevel1.json";
 
         yield return new WaitForSeconds(0.6f);
 
+        fromLocal = true;
         saveHandler.OnLoad();
     }
 
@@ -130,11 +134,11 @@ public class DownloadScene : MonoBehaviour
 
     public IEnumerator DownloadLevelTextFile(string filename)
     {
-        string filepath = Application.persistentDataPath + "/Downloaded/" + filename;
+        string filepath = Application.persistentDataPath + filename;
 
-        if (!Directory.Exists(filepath))
+        if (!Directory.Exists(Application.persistentDataPath + "/Downloaded"))
         {
-            Directory.CreateDirectory(filepath);
+            Directory.CreateDirectory(Application.persistentDataPath + "/Downloaded");
         }
 
         UnityWebRequest www1 = UnityWebRequest.Get(textFileURL1);

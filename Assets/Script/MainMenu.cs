@@ -14,6 +14,8 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private SaveHandler saveHandler;
 
+    private DownloadScene downloadScene;
+
     private void Update()
     {
         if (saveHandler == null)
@@ -24,6 +26,10 @@ public class MainMenu : MonoBehaviour
         if (loadingScreen == null)
         {
             loadingScreen = GameObject.Find("DownloadSceneManager").GetComponent<LoadingScreen>();
+        }
+
+        if(downloadScene == null){
+            downloadScene = GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>();
         }
     }
 
@@ -45,6 +51,7 @@ public class MainMenu : MonoBehaviour
     public void MakeaLevel()
     {
         saveHandler.filename = "TilemapDataLevel1.json";
+        downloadScene.fromEditor = true;
 
         loadingScreen.LoadScene("Loading Screen", "Level Editor");
     }

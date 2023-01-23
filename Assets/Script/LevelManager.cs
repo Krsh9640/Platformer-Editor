@@ -107,6 +107,7 @@ public class LevelManager : MonoBehaviour
     public void OpenUploadLevelUI()
     {
         StartCoroutine(waitScreenshot());
+        saveHandler.OnSave();
     }
 
     public void UpdateScoreHandler()
@@ -136,24 +137,19 @@ public class LevelManager : MonoBehaviour
                 }
             }
         });
-
-
-
-
     }
 
     public IEnumerator UploadDataAfterMoveFiles(int levelID)
     {
         saveHandler.levelName = levelName;
-        saveHandler.MoveFiles();
+        saveHandler.MoveFilesCheck();
 
         if (saveHandler.moveLevelComplete == true)
         {
             saveHandler.SaveScoreToDefault();
             saveHandler.moveLevelComplete = false;
         }
-
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         UploadLevelData(levelID);
     }
@@ -276,6 +272,7 @@ public class LevelManager : MonoBehaviour
     }
 
     public void DownloadLevelData(){
+        
         StartCoroutine(DownloadLevelDataRoutine());
     }
 
