@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class DownloadScene : MonoBehaviour
 {
-    public string textFileURL1, textFileURL2, textFileURL3;
-
     public LoadingScreen loadScreen;
 
     private static GameObject instance;
@@ -52,6 +50,11 @@ public class DownloadScene : MonoBehaviour
         if (scene.name == "Level Editor")
         {
             doneLoad = true;
+
+            if (fromLocal != true)
+            {
+                fromEditor = true;
+            }
         }
         else if (scene.name == "Main Menu")
         {
@@ -75,7 +78,7 @@ public class DownloadScene : MonoBehaviour
     public IEnumerator LocalLoadLevelRoutine(string filename)
     {
         loadScreen.LoadScene("Loading Screen", "Level Editor");
-    
+
         saveHandler.levelName = filename;
         saveHandler.filename = "TilemapDataLevel1.json";
 
@@ -87,10 +90,6 @@ public class DownloadScene : MonoBehaviour
 
     public IEnumerator LoadLevelRoutine()
     {
-        yield return new WaitForSeconds(0.5f);
-        
-        StartCoroutine(DownloadLevelTextFile(saveHandler.levelName));
-
         loadScreen.LoadScene("Loading Screen", "Level Editor");
         saveHandler.filename = "TilemapDataLevel1.json";
 
@@ -106,8 +105,6 @@ public class DownloadScene : MonoBehaviour
 
     public IEnumerator PlayLevelRoutine()
     {
-        StartCoroutine(DownloadLevelTextFile(saveHandler.levelName));
-
         loadScreen.LoadScene("Loading Screen", "Level Editor");
 
         yield return new WaitForSeconds(0.6f);
@@ -132,28 +129,33 @@ public class DownloadScene : MonoBehaviour
         }
     }
 
-    public IEnumerator DownloadLevelTextFile(string filename)
+    public IEnumerator DownloadLevelTextFile(string filename, string url1, string url2, string url3)
     {
-        string filepath = Application.persistentDataPath + filename;
+        string filepath = Application.persistentDataPath + "/Downloaded/" + filename;
 
         if (!Directory.Exists(Application.persistentDataPath + "/Downloaded"))
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/Downloaded");
+
+            if (!Directory.Exists(filepath))
+            {
+                Directory.CreateDirectory(filepath);
+            }
         }
 
-        UnityWebRequest www1 = UnityWebRequest.Get(textFileURL1);
+        UnityWebRequest www1 = UnityWebRequest.Get(url1);
         yield return www1.SendWebRequest();
 
         string filepath1 = filepath + "/TilemapDataLevel1.json";
         File.WriteAllText(filepath1, www1.downloadHandler.text);
 
-        UnityWebRequest www2 = UnityWebRequest.Get(textFileURL2);
+        UnityWebRequest www2 = UnityWebRequest.Get(url2);
         yield return www2.SendWebRequest();
 
         string filepath2 = filepath + "/TilemapDataLevel2.json";
         File.WriteAllText(filepath2, www2.downloadHandler.text);
 
-        UnityWebRequest www3 = UnityWebRequest.Get(textFileURL3);
+        UnityWebRequest www3 = UnityWebRequest.Get(url3);
         yield return www3.SendWebRequest();
 
         string filepath3 = filepath + "/TilemapDataLevel3.json";

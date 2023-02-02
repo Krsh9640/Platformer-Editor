@@ -388,7 +388,6 @@ public class TilesCreator : Singleton<TilesCreator>
         tilemap.SetTile(position, tileBase);
 
         instantiatedTileGameObject = map.GetInstantiatedObject(position);
-        Debug.Log(instantiatedTileGameObject);
 
         if (instantiatedTileGameObject != null)
         {

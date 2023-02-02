@@ -10,7 +10,6 @@ public class LocalLevelEntryData : MonoBehaviour
 {
     public string levelName, creatorName;
     public TMP_Text nameText;
-    public TMP_Text creatorText;
     public Image levelIcon;
 
     private SaveHandler saveHandler;
@@ -23,7 +22,6 @@ public class LocalLevelEntryData : MonoBehaviour
 
         nameText.text = levelName;
         levelIcon.sprite = levelIcon.sprite;
-        creatorText.text = creatorName;
 
         saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
     }

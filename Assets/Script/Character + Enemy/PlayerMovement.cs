@@ -93,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
         {
             DisableBlink();
             currentHealth = 5;
+            this.gameObject.transform.position = startingSpawnPos;
         }
     }
 

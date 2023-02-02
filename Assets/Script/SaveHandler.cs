@@ -14,7 +14,7 @@ public class SaveHandler : Singleton<SaveHandler>
     private Dictionary<String, Tile> guidTotile = new Dictionary<string, Tile>();
 
     [SerializeField] private BoundsInt bounds;
-    public string filename, levelName, levelNameOnly;
+    public string filename, levelName, levelNameOnly, playerName;
 
     [SerializeField]
     private string level1Filename = "TilemapDataLevel1.json",
@@ -23,13 +23,6 @@ public class SaveHandler : Singleton<SaveHandler>
     public TMP_Text level1Text, level2Text, level3Text;
 
     public bool level2isCreated = false, level3isCreated = false, moveLevelComplete = false;
-
-    [System.NonSerialized] public string bestPlayerName, bestTimeFormat;
-
-    [System.NonSerialized] public int bestCoin;
-
-    [System.NonSerialized] public float bestTime;
-
     public GameObject[] prefabObject;
 
     [SerializeField] private Grid grid;
@@ -145,7 +138,6 @@ public class SaveHandler : Singleton<SaveHandler>
                                     if (cellPos == pos)
                                     {
                                         newScale = scale;
-                                        Debug.Log(newScale);
                                     }
                                 }
                             }
@@ -169,42 +161,49 @@ public class SaveHandler : Singleton<SaveHandler>
         if (downloadScene.fromLocal == true)
         {
             string originalPath = Application.persistentDataPath + "/" + levelNameOnly;
-            Debug.Log("FromLocal: " + originalPath);
+
             MoveFiles(originalPath);
         }
-        else if(downloadScene.fromEditor == true)
+        else if (downloadScene.fromEditor == true)
         {
             string originalPath = Application.persistentDataPath;
-            Debug.Log("FromEditor: " + originalPath);
+
             MoveFiles(originalPath);
         }
     }
 
     public void MoveFiles(string path)
     {
-        FileInfo[] getOriginalFiles = new DirectoryInfo(Application.persistentDataPath).GetFiles("*.*");
-        string filepath = Path.Combine(path, levelName);
-        Debug.Log(filepath);
-
-        if (!Directory.Exists(filepath))
+        if (downloadScene.fromEditor == true)
         {
-            Directory.CreateDirectory(filepath);
-        }
+            FileInfo[] getOriginalFiles = new DirectoryInfo(path).GetFiles("*.*");
 
-        foreach (FileInfo file in getOriginalFiles)
-        {
-            string newFileName = file.Name;
-            string destFile = filepath + "/" + newFileName;
-
-            if (!File.Exists(destFile) && file.Extension != ".log")
+            foreach (FileInfo file in getOriginalFiles)
             {
-                File.Move(file.FullName, destFile);
+                string newFileName = file.Name;
+                string destFile = Application.persistentDataPath + "/" + levelName + "/" + newFileName;
 
-                if (File.Exists(destFile))
+                if (!File.Exists(destFile) && file.Extension != ".log")
                 {
-                    moveLevelComplete = true;
+                    Directory.CreateDirectory(path + "/" + levelName);
+                    Debug.Log(file.FullName + " destFile : " + destFile);
+                    File.Move(file.FullName, destFile);
+
+                    if (File.Exists(destFile))
+                    {
+                        moveLevelComplete = true;
+                        SaveScoreToDefault();
+                    }
                 }
             }
+        }
+        else if (downloadScene.fromLocal == true)
+        {
+            string destPath = Application.persistentDataPath + "/" + levelName;
+
+            Directory.Move(path, destPath);
+
+            SaveScoreToDefault();
         }
     }
 
@@ -282,26 +281,53 @@ public class SaveHandler : Singleton<SaveHandler>
     {
         ScoreData scoreData = new ScoreData();
 
-        scoreData.levelName = levelName;
-        scoreData.playerName = PlayerPrefs.GetString("PlayerID");
+        scoreData.playerName = playerName;
         scoreData.bestCoin = PlayerPrefs.GetInt("Coin");
         scoreData.bestTime = PlayerPrefs.GetFloat("Time");
         scoreData.bestTimeFormat = PlayerPrefs.GetString("TimeFormat");
 
         string json = JsonUtility.ToJson(scoreData, true);
-        File.WriteAllText(Application.persistentDataPath + "/" + levelName + "/ScoreData.json", json);
+        File.WriteAllText(Application.persistentDataPath + "/Downloaded/" + levelNameOnly + "/ScoreData.json", json);
     }
 
-    public void LoadScore()
+    public string LoadScoreCreatorName()
     {
-        string json = File.ReadAllText(Application.persistentDataPath + "/Downloaded/" + levelName + "/ScoreData.json");
+        string json = File.ReadAllText(Application.persistentDataPath + "/Downloaded/" + levelNameOnly + "/ScoreData.json");
         ScoreData scoreData = JsonUtility.FromJson<ScoreData>(json);
 
-        levelName = scoreData.levelName;
-        bestPlayerName = scoreData.playerName;
-        bestCoin = scoreData.bestCoin;
-        bestTime = scoreData.bestTime;
-        bestTimeFormat = scoreData.bestTimeFormat;
+        return scoreData.creatorName;
+    }
+
+    public string LoadScoreBestPlayerName()
+    {
+        string json = File.ReadAllText(Application.persistentDataPath + "/Downloaded/" + levelNameOnly + "/ScoreData.json");
+        ScoreData scoreData = JsonUtility.FromJson<ScoreData>(json);
+
+        return scoreData.playerName;
+    }
+
+    public int LoadScoreBestCoin()
+    {
+        string json = File.ReadAllText(Application.persistentDataPath + "/Downloaded/" + levelNameOnly + "/ScoreData.json");
+        ScoreData scoreData = JsonUtility.FromJson<ScoreData>(json);
+
+        return scoreData.bestCoin;
+    }
+
+    public float LoadScoreBestTime()
+    {
+        string json = File.ReadAllText(Application.persistentDataPath + "/Downloaded/" + levelNameOnly + "/ScoreData.json");
+        ScoreData scoreData = JsonUtility.FromJson<ScoreData>(json);
+
+        return scoreData.bestTime;
+    }
+
+    public string LoadScoreTimeFormat()
+    {
+        string json = File.ReadAllText(Application.persistentDataPath + "/Downloaded/" + levelNameOnly + "/ScoreData.json");
+        ScoreData scoreData = JsonUtility.FromJson<ScoreData>(json);
+
+        return scoreData.bestTimeFormat;
     }
 
     public void SaveScoreToDefault()
@@ -309,10 +335,11 @@ public class SaveHandler : Singleton<SaveHandler>
         ScoreData scoreData = new ScoreData();
 
         scoreData.levelName = levelName;
-        bestPlayerName = "";
-        bestCoin = 0;
-        bestTime = 0;
-        bestTimeFormat = "00:00";
+        scoreData.creatorName = playerName;
+        scoreData.playerName = "";
+        scoreData.bestCoin = 0;
+        scoreData.bestTime = 0;
+        scoreData.bestTimeFormat = "00:00";
 
         string json = JsonUtility.ToJson(scoreData, true);
         File.WriteAllText(Application.persistentDataPath + "/" + levelName + "/ScoreData.json", json);
@@ -320,11 +347,9 @@ public class SaveHandler : Singleton<SaveHandler>
 
     public void CompareScore()
     {
-        LoadScore();
-
-        if (PlayerPrefs.GetInt("Time") < bestTime || bestTime == 0)
+        if (PlayerPrefs.GetInt("Time") < LoadScoreBestTime() || LoadScoreBestTime() == 0)
         {
-            if (PlayerPrefs.GetInt("Coin") > bestCoin || bestCoin == 0)
+            if (PlayerPrefs.GetInt("Coin") >= LoadScoreBestCoin() || LoadScoreBestCoin() == 0)
             {
                 SaveScore();
             }
@@ -358,6 +383,7 @@ public class TileInfo
 public class ScoreData
 {
     public string levelName;
+    public string creatorName;
     public string playerName = "-";
     public int bestCoin = 0;
     public float bestTime = 0;
