@@ -1,3 +1,4 @@
+
 using LootLocker.Requests;
 using System.Collections;
 using TMPro;
@@ -10,7 +11,7 @@ using System.IO;
 public class LevelManager : MonoBehaviour
 {
     public TMP_InputField levelNameInput;
-    public string levelName, scoreDataURL, creatorName;
+    public string levelName, scoreDataURL;
 
     public GameObject levelUploadUI, notifUploadComplete;
 
@@ -28,7 +29,6 @@ public class LevelManager : MonoBehaviour
     private SaveHandler saveHandler;
 
     [System.NonSerialized] public string bestPlayer, bestTimeFormat;
-    [System.NonSerialized] public ulong creatorIDUlong;
     [System.NonSerialized] public int fileID, assetID, scoreFileID, bestCoin;
 
     private void Awake()
@@ -69,30 +69,13 @@ public class LevelManager : MonoBehaviour
         levelUploadUI.SetActive(false);
     }
 
-    public void PlayerName(int creatorID)
-    {
-        creatorIDUlong = (ulong)creatorID;
-        LootLockerSDKManager.LookupPlayerNamesByPlayerIds(new ulong[] { creatorIDUlong }, response =>
-        {
-            if (response.success)
-            {
-                foreach (var player in response.players)
-                {
-                    creatorName = player.name;
-                    Debug.Log(player.name);
-                }
-            }
-        });
-    }
-
     public void TakeScreenshot()
     {
         UItabs.SetActive(false);
         sidebar.SetActive(false);
-        string SSfilepath = filePath + "/" + levelName + "/Level-Screenshot.png";
-        Debug.Log(SSfilepath);
+        string SSfilepath = filePath + "/" + saveHandler.levelNameOnly + "/Level-Screenshot.png";
+
         ScreenCapture.CaptureScreenshot(SSfilepath);
-        saveHandler.OnSave();
     }
 
     private IEnumerator waitScreenshot()
@@ -266,13 +249,13 @@ public class LevelManager : MonoBehaviour
                 {
                     StartCoroutine(LocalLoadLevelIcon(file.FullName, displayLocalSave.GetComponent<LocalLevelEntryData>().levelIcon, levelName));
                 }
-                displayLocalSave.GetComponent<LocalLevelEntryData>().creatorName = creatorName;
             }
         }
     }
 
-    public void DownloadLevelData(){
-        
+    public void DownloadLevelData()
+    {
+
         StartCoroutine(DownloadLevelDataRoutine());
     }
 
@@ -302,29 +285,23 @@ public class LevelManager : MonoBehaviour
 
                     StartCoroutine(DownloadScoreData(response.assets[i].name));
 
-                    GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().textFileURL1 = levelImageFiles[1].url.ToString();
-                    GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().textFileURL2 = levelImageFiles[2].url.ToString();
-                    GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>().textFileURL3 = levelImageFiles[3].url.ToString();
-
-                    StartCoroutine(downloadScene.DownloadLevelTextFile(response.assets[i].name));
-
-                    LootLockerAssetCandidate candidate = response.assets[i].asset_candidate;
-                    PlayerName(candidate.created_by_player_id);
+                    StartCoroutine(downloadScene.DownloadLevelTextFile(response.assets[i].name, levelImageFiles[1].url.ToString(), levelImageFiles[2].url.ToString(), levelImageFiles[3].url.ToString()));
 
                     displayitem = Instantiate(LevelEntryDisplayItem, transform.position, Quaternion.identity);
                     displayitem.name = displayitem.GetComponent<LevelEntryData>().levelName = response.assets[i].name;
                     displayitem.transform.SetParent(levelDataEntryContent);
 
                     saveHandler.levelName = response.assets[i].name;
+                    saveHandler.levelNameOnly = response.assets[i].name;
 
                     displayitem.GetComponent<LevelEntryData>().iD = i;
                     displayitem.GetComponent<LevelEntryData>().levelName = response.assets[i].name;
 
-                    displayitem.GetComponent<LevelEntryData>().creatorName = creatorName;
+                    displayitem.GetComponent<LevelEntryData>().creatorText.text = saveHandler.LoadScoreCreatorName();
 
-                    displayitem.GetComponent<LevelEntryData>().bestPlayerName = saveHandler.bestPlayerName;
-                    displayitem.GetComponent<LevelEntryData>().bestCoin = saveHandler.bestCoin;
-                    displayitem.GetComponent<LevelEntryData>().bestTimeFormat = saveHandler.bestTimeFormat;
+                    displayitem.GetComponent<LevelEntryData>().bestPlayerNameText.text = saveHandler.LoadScoreBestPlayerName();
+                    displayitem.GetComponent<LevelEntryData>().bestPlayerCoinText.text = saveHandler.LoadScoreBestCoin().ToString();
+                    displayitem.GetComponent<LevelEntryData>().bestTimeFormat = saveHandler.LoadScoreTimeFormat();
 
                     StartCoroutine(LoadLevelIcon(levelImageFiles[0].url.ToString(), displayitem.GetComponent<LevelEntryData>().levelIcon, response.assets[i].name));
                 }
@@ -340,11 +317,13 @@ public class LevelManager : MonoBehaviour
         yield return www.SendWebRequest();
 
         string newFilepath = Application.persistentDataPath + "/Downloaded" + "/" + filename + "/ScoreData.json";
+        Debug.Log(newFilepath);
+        if (!Directory.Exists(Application.persistentDataPath + "/Downloaded/" + filename))
+        {
+            Directory.CreateDirectory(Application.persistentDataPath + "/Downloaded/" + filename);
+        }
+
         File.WriteAllText(newFilepath, www.downloadHandler.text);
-
-        yield return new WaitForSeconds(2f);
-
-        saveHandler.LoadScore();
     }
 
     private IEnumerator LoadLevelIcon(string imageURL, Image levelImage, string filename)

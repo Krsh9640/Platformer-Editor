@@ -26,6 +26,8 @@ public class Authenticator : MonoBehaviour
     [SerializeField] private bool signinActive, signupActive, hasStarted;
 
     private DownloadScene downloadScene;
+
+    private SaveHandler saveHandler;
     public GameObject loading;
 
     private void Awake()
@@ -33,6 +35,7 @@ public class Authenticator : MonoBehaviour
         signupBtn.GetComponent<Image>().color = Color.gray;
 
         downloadScene = GameObject.Find("DownloadSceneManager").GetComponent<DownloadScene>();
+        saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
     }
 
     public void SignInTab()
@@ -167,7 +170,6 @@ public class Authenticator : MonoBehaviour
         CreatorName = CreatorNameTemp;
 
         SetPlayerName(CreatorName);
-        PlayerPrefs.SetString("PlayerID", CreatorName);
 
         AuthenticatorPnl.SetActive(false);
 
@@ -181,6 +183,7 @@ public class Authenticator : MonoBehaviour
             if (response.success)
             {
                 Debug.Log("Success setting Player Name");
+                saveHandler.playerName = CreatorName;
             }
             else
             {
@@ -196,8 +199,7 @@ public class Authenticator : MonoBehaviour
             if (response.success)
             {
                 CreatorName = response.name;
-                PlayerPrefs.SetString("PlayerID", CreatorName);
-                Debug.Log(response.name);
+                saveHandler.playerName = CreatorName;
             }
             else
             {
