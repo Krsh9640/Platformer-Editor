@@ -143,22 +143,31 @@ public class DownloadScene : MonoBehaviour
             }
         }
 
-        UnityWebRequest www1 = UnityWebRequest.Get(url1);
-        yield return www1.SendWebRequest();
+        if (url1 != null)
+        {
+            UnityWebRequest www1 = UnityWebRequest.Get(url1);
+            yield return www1.SendWebRequest();
 
-        string filepath1 = filepath + "/TilemapDataLevel1.json";
-        File.WriteAllText(filepath1, www1.downloadHandler.text);
+            string filepath1 = filepath + "/TilemapDataLevel1.json";
+            File.WriteAllText(filepath1, www1.downloadHandler.text);
+        }
 
-        UnityWebRequest www2 = UnityWebRequest.Get(url2);
-        yield return www2.SendWebRequest();
+        if (url2 != null)
+        {
+            UnityWebRequest www2 = UnityWebRequest.Get(url2);
+            yield return www2.SendWebRequest();
 
-        string filepath2 = filepath + "/TilemapDataLevel2.json";
-        File.WriteAllText(filepath2, www2.downloadHandler.text);
+            string filepath2 = filepath + "/TilemapDataLevel2.json";
+            File.WriteAllText(filepath2, www2.downloadHandler.text);
+        }
 
-        UnityWebRequest www3 = UnityWebRequest.Get(url3);
-        yield return www3.SendWebRequest();
+        if (url3 != null)
+        {
+            UnityWebRequest www3 = UnityWebRequest.Get(url3);
+            yield return www3.SendWebRequest();
 
-        string filepath3 = filepath + "/TilemapDataLevel3.json";
-        File.WriteAllText(filepath3, www3.downloadHandler.text);
+            string filepath3 = filepath + "/TilemapDataLevel3.json";
+            File.WriteAllText(filepath3, www3.downloadHandler.text);
+        }
     }
 }

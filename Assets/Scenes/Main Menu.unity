@@ -4613,7 +4613,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Downloaded Level
+  m_Text: My Level
 --- !u!222 &568740390
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5571,7 +5571,6 @@ MonoBehaviour:
   levelNameInput: {fileID: 0}
   levelName: 
   scoreDataURL: 
-  creatorName: 
   levelUploadUI: {fileID: 0}
   notifUploadComplete: {fileID: 0}
   displayitem: {fileID: 0}
@@ -7102,14 +7101,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2826707164ce92488a3b1b5a3e8fa10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textFileURL1: 
-  textFileURL2: 
-  textFileURL3: 
   loadScreen: {fileID: 1071901056}
   homeButtons: {fileID: 9086515}
   gameState: {fileID: 0}
   doneLoad: 0
   hasLoggedin: 0
+  fromLocal: 0
+  fromEditor: 0
 --- !u!4 &1071901055
 Transform:
   m_ObjectHideFlags: 0
@@ -7154,6 +7152,8 @@ MonoBehaviour:
     m_Size: {x: 0, y: 0, z: 0}
   filename: 
   levelName: 
+  levelNameOnly: 
+  playerName: 
   level1Filename: TilemapDataLevel1.json
   level2Filename: TilemapDataLevel2.json
   level3Filename: TilemapDataLevel3.json
