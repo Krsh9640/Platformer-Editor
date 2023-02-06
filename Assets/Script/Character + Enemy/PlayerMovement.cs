@@ -121,11 +121,14 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Enemy" && isInvincible == false && isGrounded == true)
+        if (isInvincible == false)
         {
-            SetInvincible(3);
-            Invoke("EnableBlink", 0f);
-            Invoke("DisableBlink", 0.1f);
+            if (other.name == "Frog" || other.name == "Bee" || other.name == "Mushroom")
+            {
+                SetInvincible(3);
+                Invoke("EnableBlink", 0f);
+                Invoke("DisableBlink", 0.1f);
+            }
         }
     }
 

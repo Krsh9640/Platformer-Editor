@@ -5570,7 +5570,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelNameInput: {fileID: 0}
   levelName: 
-  scoreDataURL: 
   levelUploadUI: {fileID: 0}
   notifUploadComplete: {fileID: 0}
   displayitem: {fileID: 0}
@@ -7738,7 +7737,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5788015923402983686, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
       propertyPath: m_Name
-      value: Mushroom (1)
+      value: Mushroom
       objectReference: {fileID: 0}
     - target: {fileID: 5788015923402983686, guid: f170e97aedbeff843a20d5d216028dca, type: 3}
       propertyPath: m_Layer

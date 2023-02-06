@@ -24,15 +24,15 @@ public class EnemyHP : MonoBehaviour
     {
         if (currentHP <= 0)
         {
-            if (this.gameObject.name == "Frog(Clone)" && frogBehaviour != null)
+            if (this.gameObject.name == "Frog" && frogBehaviour != null)
             {
                 StartCoroutine(FrogAnimRoutine());
             }
-            else if (this.gameObject.name == "Mushroom(Clone)")
+            else if (this.gameObject.name == "Mushroom")
             {
                 StartCoroutine(MushroomAnimRoutine());
             }
-            else if (this.gameObject.name == "Bee(Clone)")
+            else if (this.gameObject.name == "Bee")
             {
                 StartCoroutine(BeeAnimRoutine());
             }
