@@ -157,6 +157,7 @@ public class GameState : MonoBehaviour
             controller.enabled = true;
             movement.enabled = true;
             playerAnimator.enabled = true;
+            Time.timeScale = 1f;
         }
         else
         {
@@ -175,6 +176,7 @@ public class GameState : MonoBehaviour
             controller.enabled = true;
             movement.enabled = true;
             playerAnimator.enabled = true;
+            Time.timeScale = 1f;
         }
     }
 

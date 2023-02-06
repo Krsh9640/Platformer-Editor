@@ -184,7 +184,7 @@ public class SaveHandler : Singleton<SaveHandler>
 
                 if (!File.Exists(destFile) && file.Extension != ".log")
                 {
-                    Directory.CreateDirectory(path + "/" + levelName);
+                    Directory.CreateDirectory(Application.persistentDataPath + "/" + levelName);
                     Debug.Log(file.FullName + " destFile : " + destFile);
                     File.Move(file.FullName, destFile);
 

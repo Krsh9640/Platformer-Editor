@@ -75,7 +75,7 @@ public class MushroomBehaviour : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Enemy" && collision != null)
+        if (collision.gameObject.name == "Frog" || collision.gameObject.name == "Bee" || collision.gameObject.name == "Mushroom" && collision != null)
         {
             Flip();
         }

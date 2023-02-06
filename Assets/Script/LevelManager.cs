@@ -300,8 +300,6 @@ public class LevelManager : MonoBehaviour
 
                     StartCoroutine(DownloadScoreData(response.assets[i].name, levelImageFiles[1].url.ToString()));
 
-                    StartCoroutine(downloadScene.DownloadLevelTextFile(response.assets[i].name, levelImageFiles[1].url.ToString(), levelImageFiles[2].url.ToString(), levelImageFiles[3].url.ToString()));
-
                     displayitem.name = displayitem.GetComponent<LevelEntryData>().levelName = response.assets[i].name;
                     displayitem.transform.SetParent(levelDataEntryContent);
 
@@ -319,6 +317,8 @@ public class LevelManager : MonoBehaviour
                         displayitem.GetComponent<LevelEntryData>().bestPlayerCoinText.text = saveHandler.LoadScoreBestCoin().ToString();
                         displayitem.GetComponent<LevelEntryData>().bestTimeFormat = saveHandler.LoadScoreTimeFormat();
                     }
+
+                    StartCoroutine(downloadScene.DownloadLevelTextFile(response.assets[i].name, levelImageFiles[2].url.ToString(), levelImageFiles[3].url.ToString(), levelImageFiles[4].url.ToString()));
                 }
             }
         }, null, true, null);

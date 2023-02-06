@@ -15,7 +15,7 @@ public class Coin : MonoBehaviour
 
     private void Update()
     {
-        if (gameState == false)
+        if (gameState.isPlay == false)
         {
             totalCoin = 0;
         }

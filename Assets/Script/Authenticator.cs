@@ -38,6 +38,10 @@ public class Authenticator : MonoBehaviour
         saveHandler = GameObject.Find("DownloadSceneManager").GetComponent<SaveHandler>();
     }
 
+    private void Update() {
+        saveHandler.playerName = CreatorName;
+    }
+
     public void SignInTab()
     {
         if (signinActive == false)

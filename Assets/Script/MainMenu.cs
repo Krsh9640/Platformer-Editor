@@ -59,5 +59,6 @@ public class MainMenu : MonoBehaviour
     public void HomeButton()
     {
         loadingScreen.LoadScene("Loading Screen", "Main Menu");
+        Time.timeScale = 1f;
     }
 }
